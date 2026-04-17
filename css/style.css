@@ -1,0 +1,122 @@
+/* ================= 전체 ================= */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #0b1220;
+    color: #fff;
+}
+
+/* ================= 상단 ================= */
+header {
+    background: #0f1b33;
+    padding: 20px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    border-bottom: 2px solid #1f3b66;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 20px;
+    color: #4aa3ff;
+}
+
+/* 메뉴 */
+nav a {
+    color: #cfe6ff;
+    margin-left: 15px;
+    text-decoration: none;
+    font-weight: bold;
+    transition: 0.3s;
+}
+
+nav a:hover {
+    color: #4aa3ff;
+}
+
+/* ================= 중단 ================= */
+main {
+    display: flex;
+    justify-content: center;
+    padding: 40px 0;
+    background: url("../images/pattern.png");
+    background-size: cover;
+}
+
+/* 가운데 컨테이너 */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    display: flex;
+    gap: 30px;
+}
+
+/* ================= 좌측 게시판 ================= */
+.board {
+    flex: 1;
+    background: rgba(15, 27, 51, 0.85);
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #1f3b66;
+}
+
+.board h2 {
+    color: #4aa3ff;
+}
+
+/* 테이블 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    background: #14284a;
+    color: #cfe6ff;
+    padding: 10px;
+    font-size: 14px;
+}
+
+td {
+    padding: 10px;
+    border-bottom: 1px solid #1f3b66;
+    font-size: 13px;
+    color: #e6f1ff;
+}
+
+tr:hover {
+    background: #162d55;
+}
+
+/* ================= 우측 ================= */
+.side {
+    flex: 1;
+    background: rgba(15, 27, 51, 0.85);
+    padding: 20px;
+    border-radius: 10px;
+    border: 1px solid #1f3b66;
+    text-align: center;
+}
+
+.side img {
+    width: 100%;
+    border-radius: 10px;
+    border: 1px solid #1f3b66;
+}
+
+.side p {
+    margin-top: 15px;
+    line-height: 1.6;
+    color: #cfe6ff;
+}
+
+/* ================= 하단 ================= */
+footer {
+    background: #0f1b33;
+    text-align: center;
+    padding: 20px;
+    font-size: 13px;
+    color: #a9c7e6;
+    border-top: 2px solid #1f3b66;
+}

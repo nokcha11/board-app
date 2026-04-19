@@ -120,3 +120,34 @@ footer {
     color: #a9c7e6;
     border-top: 2px solid #1f3b66;
 }
+
+/* ================= Admin 페이지네이션 ================= */
+.pagination {
+    margin-top: 20px;
+    text-align: center;
+}
+
+.pagination a {
+    display: inline-block;
+    min-width: 32px;
+    padding: 8px 12px;
+    margin: 0 4px;
+    border-radius: 6px;
+    background: #14284a;
+    color: #cfe6ff;
+    text-decoration: none;
+    font-size: 13px;
+    font-weight: bold;
+    border: 1px solid #1f3b66;
+    transition: 0.3s;
+}
+
+.pagination a:hover {
+    background: #1c3b6d;
+    color: #4aa3ff;
+}
+
+.pagination a.active {
+    background: #4aa3ff;
+    color: #0b1220;
+}

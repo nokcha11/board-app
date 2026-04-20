@@ -122,32 +122,100 @@ footer {
 }
 
 /* ================= Admin 페이지네이션 ================= */
-.pagination {
-    margin-top: 20px;
+/* 전체 */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background-color: #0b1e3a;
+    color: #fff;
+}
+
+/* 상단 */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 40px;
+    background-color: #0f2a50;
+}
+
+header h1 {
+    margin: 0;
+    color: #4da3ff;
+}
+
+nav a {
+    color: #fff;
+    margin-left: 15px;
+    text-decoration: none;
+    font-size: 14px;
+}
+
+/* 중앙 정렬 핵심 */
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 80vh;
+    padding: 20px; /* 👉 추가 */
+}
+
+/* 카드 */
+.board {
+    width: 600px;   /* 👉 900 → 600으로 줄임 */
+    max-width: 90%; /* 👉 작은 화면 대응 */
+    background-color: #122b52;
+    padding: 20px;
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.5);
+}
+
+.board h2 {
+    color: #4da3ff;
+}
+
+/* 테이블 */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+}
+
+th {
+    background-color: #1c3c6b;
+    padding: 10px;
+}
+
+td {
+    padding: 10px;
     text-align: center;
+    border-bottom: 1px solid #2a4a7b;
+}
+
+/* 페이지네이션 */
+.pagination {
+    text-align: center;
+    margin-top: 15px;
 }
 
 .pagination a {
     display: inline-block;
-    min-width: 32px;
     padding: 8px 12px;
-    margin: 0 4px;
-    border-radius: 6px;
-    background: #14284a;
-    color: #cfe6ff;
+    margin: 0 3px;
+    background-color: #1c3c6b;
+    color: #fff;
     text-decoration: none;
+    border-radius: 5px;
+}
+
+.pagination .active {
+    background-color: #4da3ff;
+}
+
+/* 하단 */
+footer {
+    text-align: center;
+    padding: 15px;
+    background-color: #0f2a50;
     font-size: 13px;
-    font-weight: bold;
-    border: 1px solid #1f3b66;
-    transition: 0.3s;
-}
-
-.pagination a:hover {
-    background: #1c3b6d;
-    color: #4aa3ff;
-}
-
-.pagination a.active {
-    background: #4aa3ff;
-    color: #0b1220;
 }

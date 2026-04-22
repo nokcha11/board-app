@@ -110,12 +110,12 @@ main {
 
             <h2>회원가입</h2>
 
-            <form>
-                <input type="text" placeholder="아이디">
-                <input type="password" placeholder="패스워드">
-                <input type="password" placeholder="패스워드 확인">
-                <input type="text" placeholder="이름">
-                <input type="text" placeholder="연락처">
+            <form method="post" action="join_ok.php">
+                <input type="text" placeholder="아이디 입력" name="id">
+                <input type="password" placeholder="패스워드" name="pw" id="pw" required>
+                <input type="password" placeholder="패스워드 확인" name="pw2" id="pw2" required>
+                <input type="text" placeholder="이름" name="name">
+                <input type="text" placeholder="test@naver.com" name="email">
 
                 <button type="submit">회원가입</button>
             </form>
@@ -128,6 +128,19 @@ main {
 <footer>
     © 2026 MY WEBSITE | All Rights Reserved | Contact: admin@site.com
 </footer>
+
+ <script>
+      function checkForm() {
+        const pw = document.getElementById("pw").value;
+        const pw2 = document.getElementById("pw2").value;
+
+        if (pw !== pw2) {
+          alert("비밀번호가 일치하지 않습니다.");
+          return false;
+        }
+        return true;
+      }
+    </script>
 
 </body>
 </html>

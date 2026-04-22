@@ -1,18 +1,10 @@
 <?php
 
-$dan = 2;
-
-while($dan <= 9) 
-{
-
-    while($su <= 9) 
+for($dan=2; $dan<=9; $dan++)
     {
-        echo $dan . " X " . $su . " = " . $dan*$su . "<br>";
-        $su++; 
+        for($su=1;$su<=9; $su++)
+            {
+                echo $dan. " X " .$su." = " .$dan*$su. "<br>";
+            }
     }
-
-    $su = 1; 
-    $dan++; 
-}
-
 ?>

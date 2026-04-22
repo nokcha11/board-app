@@ -1,40 +1,30 @@
 <?php
-
-// 1. DB 접속 정보
 $host = "localhost";
-$user = "lie8220";      // dothome 아이디
-$password = "koko8220#";         // 보통 dothome은 비밀번호 있음 (본인 비번 넣기)
 $dbname = "lie8220";
+$user = "lie8220";      // ← 본인 DB 계정으로 수정
+$password = "koko8220#"; // ← 본인 비밀번호로 수정
 
-// 2. DB 연결
-$conn = mysqli_connect($host, $user, $password, $dbname);
+try {
+    $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8";
+    $pdo = new PDO($dsn, $user, $password);
 
-// 연결 확인
-if(!$conn){
-    die("DB 연결 실패: " . mysqli_connect_error());
-}
+    // 에러 출력 설정
+    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 
-// 3. 쿼리 실행
-$sql = "SELECT * FROM tb_member";
-$result = mysqli_query($conn, $sql);
+    // 쿼리 실행
+    $sql = "SELECT * FROM tb_member";
+    $stmt = $pdo->query($sql);
 
-// 4. 데이터 출력
-if(mysqli_num_rows($result) > 0){
-
-    while($row = mysqli_fetch_assoc($result)){
-        echo "번호: " . $row['idx'] . "<br>";
-        echo "아이디: " . $row['id'] . "<br>";
-        echo "비밀번호: " . $row['pw'] . "<br>";
-        echo "이름: " . $row['name'] . "<br>";
-        echo "이메일: " . $row['email'] . "<br>";
-        echo "-----------------------------<br>";
+    // 결과 출력
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        echo "idx: " . $row['idx'] . " / ";
+        echo "id: " . $row['id'] . " / ";
+        echo "pw: " . $row['pw'] . " / ";
+        echo "name: " . $row['name'] . " / ";
+        echo "email: " . $row['email'] . "<br>";
     }
 
-}else{
-    echo "데이터가 없습니다.";
+} catch (PDOException $e) {
+    echo "DB 연결 실패: " . $e->getMessage();
 }
-
-// 5. 연결 종료
-mysqli_close($conn);
-
 ?>

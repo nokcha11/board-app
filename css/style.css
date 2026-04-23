@@ -170,7 +170,7 @@ main {
     box-shadow: 0 0 10px rgba(0,0,0,0.5);
 }
 
-.board h2 {
+.board h2 { 
     color: #4da3ff;
 }
 
@@ -195,6 +195,7 @@ td {
     border-bottom: 1px solid #2a4a7b;
     font-size: 13px;
 }
+
 
 /* 페이지네이션 */
 .pagination {

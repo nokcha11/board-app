@@ -32,8 +32,8 @@ if ($pw !== $pw2) {
 
 
 // DB 저장
-$sql = "INSERT INTO tb_member (id, pw, name, email) 
-        VALUES (:id, :pw, :name, :email)";
+$sql = "INSERT INTO tb_member (id, pw, name, email, join_date) 
+        VALUES (:id, :pw, :name, :email, NOW())";
 
 $stmt = $pdo->prepare($sql);
 $stmt->execute([

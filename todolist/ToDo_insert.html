@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>ToDoList 입력</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="container">
+    <h2>ToDoList</h2>
+
+    <form action="ToDo_insert_ok.php" method="post" id="todoForm">
+      <div class="input-group">
+        <label for="todoDate">날짜</label>
+        <input type="date" id="todoDate" name="todoDate" required>
+      </div>
+
+      <div class="input-group">
+        <label for="todoWork">할 일</label>
+
+        <div class="todo-row">
+          <input type="checkbox" name="status" value="1">
+          <input type="text" id="todoWork" name="todoWork" required>
+        </div>
+      </div>
+
+      <div class="input-group">
+        <label for="todoGoal">목표</label>
+        <input type="text" id="todoGoal" name="todoGoal" required>
+      </div>
+
+      <div class="button-area">
+        <button type="submit">추가</button>
+        <button type="reset" class="cancel-btn">취소</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById("todoForm");
+
+    form.addEventListener("submit", function () {
+      setTimeout(function () {
+        form.reset();
+      }, 100);
+    });
+  </script>
+
+</body>
+</html>

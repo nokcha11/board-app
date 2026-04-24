@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>과자 정보 입력</title>
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+  <div class="container">
+    <h2>과자 정보 입력</h2>
+
+    <form action="snack_insert_ok.php" method="post" id="snackForm">
+      <div class="input-group">
+        <label for="snackName">과자명</label>
+        <input type="text" id="snackName" name="snackName" required>
+      </div>
+
+      <div class="input-group">
+        <label for="snackQty">과자수량</label>
+        <input type="number" id="snackQty" name="snackQty" required>
+      </div>
+
+      <div class="input-group">
+        <label for="snackPrice">과자가격</label>
+        <input type="number" id="snackPrice" name="snackPrice" required>
+      </div>
+
+      <div class="input-group">
+        <label for="snackCompany">과자제조사</label>
+        <input type="text" id="snackCompany" name="snackCompany" required>
+      </div>
+
+      <div class="button-area">
+        <button type="submit">추가</button>
+        <button type="reset" class="cancel-btn">취소</button>
+      </div>
+    </form>
+  </div>
+
+  <script>
+    const form = document.getElementById("snackForm");
+
+    form.addEventListener("submit", function () {
+      setTimeout(function () {
+        form.reset();
+      }, 100);
+    });
+  </script>
+
+</body>
+</html>

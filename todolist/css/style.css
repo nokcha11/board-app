@@ -1,0 +1,102 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  height: 100vh;
+  background-color: #ffc9c9; /* 파스텔 핑크 (조금 더 채도 있음) */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+}
+
+.container {
+  width: 400px;
+  padding: 30px;
+  background-color: #ffffff;
+  border: 2px solid #ff7a7a; /* 파스텔 레드 */
+  border-radius: 12px;
+  text-align: center;
+  box-shadow: 0 6px 15px rgba(255, 122, 122, 0.2);
+}
+
+h2 {
+  margin-bottom: 25px;
+  color: #ff5c5c;
+}
+
+.input-group {
+  margin-bottom: 15px;
+  text-align: left;
+}
+
+label {
+  display: block;
+  margin-bottom: 6px;
+  font-weight: bold;
+  color: #d94a4a;
+}
+
+input {
+  width: 100%;
+  padding: 10px;
+  border: 1.8px solid #ffb3b3;
+  border-radius: 6px;
+  font-size: 15px;
+  outline: none;
+}
+
+input:focus {
+  border-color: #ff5c5c;
+  box-shadow: 0 0 6px rgba(255, 92, 92, 0.35);
+}
+
+.button-area {
+  margin-top: 25px;
+  text-align: center;
+}
+
+button {
+  width: 90px;
+  padding: 10px;
+  margin: 0 8px;
+  border: none;
+  border-radius: 6px;
+  background-color: #ff7a7a;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+button:hover {
+  background-color: #ff5c5c;
+}
+
+.cancel-btn {
+  background-color: #ffffff;
+  color: #ff6b6b;
+  border: 1.8px solid #ff7a7a;
+}
+
+.cancel-btn:hover {
+  background-color: #ffe0e0;
+}
+
+/* 체크박스 */
+.todo-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.todo-row input[type="text"] {
+  flex: 1;
+}
+
+.todo-row input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+}

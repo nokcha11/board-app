@@ -69,7 +69,7 @@ $stmt->execute();
     <nav>
         <a href="index.html">메인</a>
         <a href="login.html">로그인</a>
-        <a href="join.html">회원가입</a>
+        <a href="myinfo.html">내정보</a>
         <a href="board.html">게시판</a>
         <a href="admin.php">회원관리</a>
     </nav>

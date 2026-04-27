@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>내 정보 수정</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+/* ================= MAIN ================= */
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 0;
+    background: url("images/pattern.png");
+    background-size: cover;
+    min-height: calc(100vh - 140px);
+}
+
+/* ================= 컨테이너 ================= */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    display: flex;
+    justify-content: center;
+}
+
+/* ================= 정보 수정 박스 ================= */
+.info-box {
+    width: 100%;
+    max-width: 360px;
+    background: rgba(15, 27, 51, 0.9);
+    padding: 45px 28px;
+    border-radius: 12px;
+    border: 1px solid #1f3b66;
+}
+
+/* 제목 */
+.info-box h2 {
+    text-align: center;
+    color: #4aa3ff;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+/* 라벨 (항목 설명) */
+.info-box label {
+    display: block;
+    color: #8fbaff;
+    font-size: 12px;
+    margin-bottom: 5px;
+    margin-left: 2px;
+}
+
+/* ================= 입력창 ================= */
+.info-box input {
+    width: 100%;
+    padding: 11px;
+    margin-bottom: 15px; /* 간격 약간 증가 */
+    border: 1px solid #1f3b66;
+    border-radius: 6px;
+    background: #0b1220;
+    color: #fff;
+    outline: none;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+.info-box input:focus {
+    border-color: #4aa3ff;
+}
+
+/* 아이디는 수정 불가능하게 처리할 경우 */
+.info-box input[readonly] {
+    background: #161f2e;
+    color: #777;
+    cursor: not-allowed;
+}
+
+/* ================= 버튼 ================= */
+.info-box button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    background: #4aa3ff;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.info-box button:hover {
+    background: #2f8fff;
+}
+
+/* 취소 버튼 스타일 추가 */
+.info-box .btn-cancel {
+    display: block;
+    text-align: center;
+    text-decoration: none;
+    color: #777;
+    font-size: 13px;
+    margin-top: 15px;
+}
+
+.info-box .btn-cancel:hover {
+    color: #ccc;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<header>
+    <h1>MY WEBSITE</h1>
+
+    <nav>
+        <a href="index.html">메인</a>
+        <a href="login.html">로그인</a>
+        <a href="myinfo.html">내정보</a>
+        <a href="board.html">게시판</a>
+        <a href="admin.html">회원관리</a>
+    </nav>
+</header>
+
+<main>
+
+    <div class="container">
+        <div class="info-box">
+
+            <h2>내 정보 수정</h2>
+
+            <form method="post" action="update_ok.php" onsubmit="return checkForm()">
+                <label>아이디</label>
+                <input type="text" value="user_id_01" name="id" readonly>
+
+                <label>새 패스워드 (변경 시 입력)</label>
+                <input type="password" placeholder="새 패스워드" name="pw" id="pw">
+                
+                <label>패스워드 확인</label>
+                <input type="password" placeholder="패스워드 확인" name="pw2" id="pw2">
+
+                <label>이름</label>
+                <input type="text" value="홍길동" name="name">
+
+                <label>이메일</label>
+                <input type="text" value="test@naver.com" name="email">
+
+                <button type="submit">수정완료</button>
+                <a href="index.html" class="btn-cancel">취소하고 돌아가기</a>
+            </form>
+
+        </div>
+    </div>
+
+</main>
+
+<footer>
+    © 2026 MY WEBSITE | All Rights Reserved | Contact: admin@site.com
+</footer>
+
+<script>
+    function checkForm() {
+        const pw = document.getElementById("pw").value;
+        const pw2 = document.getElementById("pw2").value;
+
+        // 비밀번호를 입력했을 경우에만 일치 여부 확인
+        if (pw !== "" || pw2 !== "") {
+            if (pw !== pw2) {
+                alert("비밀번호가 일치하지 않습니다.");
+                return false;
+            }
+        }
+        return true;
+    }
+</script>
+
+</body>
+</html>

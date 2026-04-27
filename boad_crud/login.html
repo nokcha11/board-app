@@ -67,18 +67,34 @@ main {
     width: 100%;
     padding: 12px;
     margin-top: 10px;
-    background: #4aa3ff;
-    border: none;
     border-radius: 6px;
-    color: #fff;
     font-weight: bold;
     font-size: 15px;
     cursor: pointer;
     transition: 0.3s;
 }
 
-.login-box button:hover {
+/* 로그인 버튼 */
+.login-box button[type="submit"] {
+    background: #4aa3ff;
+    border: none;
+    color: #fff;
+}
+
+.login-box button[type="submit"]:hover {
     background: #2f8fff;
+}
+
+/* 회원가입 버튼 */
+.login-box .join-btn {
+    background: transparent;
+    border: 1px solid #4aa3ff;
+    color: #4aa3ff;
+}
+
+.login-box .join-btn:hover {
+    background: #4aa3ff;
+    color: #fff;
 }
 
 </style>
@@ -94,7 +110,7 @@ main {
     <nav>
         <a href="index.html">메인</a>
         <a href="login.html">로그인</a>
-        <a href="join.html">회원가입</a>
+        <a href="myinfo.html">내정보</a>
         <a href="board.html">게시판</a>
         <a href="admin.html">회원관리</a>
     </nav>
@@ -113,6 +129,8 @@ main {
                 <input type="password" placeholder="패스워드">
 
                 <button type="submit">로그인</button>
+                <!-- 회원가입 버튼 추가 -->
+                <button type="button" onclick="location.href='join.html'" class="join-btn">회원가입</button>
             </form>
 
         </div>

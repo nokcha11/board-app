@@ -85,18 +85,32 @@ button:hover {
   background-color: #ffe0e0;
 }
 
-/* 체크박스 */
-.todo-row {
+.todo-item {
   display: flex;
   align-items: center;
-  gap: 10px;
+  gap: 4px;
+  font-size: 13px;
+  color: #0044cc;
+  margin-top: 4px;
 }
 
-.todo-row input[type="text"] {
-  flex: 1;
+.todo-item input[type="checkbox"] {
+  width: 13px;
+  height: 13px;
+  margin: 0;
+  padding: 0;
+  flex-shrink: 0;
 }
 
-.todo-row input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
+.todo-item span {
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
 }
+
+.todo-item.done span {
+  color: #999;
+  text-decoration: line-through;
+}
+
+

@@ -1,8 +1,6 @@
 <?php
-$host = "localhost";
-$user = "lie8220";
-$password = "koko8220#";
-$dbname = "lie8220";
+
+require_once "dbcon.php";
 
 try {
     $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8";

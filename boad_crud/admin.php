@@ -1,10 +1,7 @@
 <?php
 
 // 1. DB 접속 정보
-$host = "localhost";
-$user = "lie8220";      // dothome 아이디
-$password = "koko8220#"; // 보통 dothome은 비밀번호 있음 (본인 비번 넣기)
-$dbname = "lie8220";
+require_once "dbcon.php";
 
 try {
     $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8";
@@ -64,16 +61,8 @@ $stmt->execute();
 </head>
 <body>
 
-<header>
-    <h1>MY WEBSITE</h1>
-    <nav>
-        <a href="index.html">메인</a>
-        <a href="login.html">로그인</a>
-        <a href="myinfo.html">내정보</a>
-        <a href="board.html">게시판</a>
-        <a href="admin.php">회원관리</a>
-    </nav>
-</header>
+<!-- 상단 -->
+<?php include "header.php"; ?>
 
 <main>
     <div class="board">

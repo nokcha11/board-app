@@ -115,9 +115,18 @@ while ($row = $result->fetch_assoc()) {
           $checked = $todo['status'] == 1 ? "checked" : "";
 
           echo "<div class='todo-item $doneClass'>";
-          echo "CHECK_TEST ";
-          echo "<input type='checkbox' $checked disabled style='width:14px;height:14px;display:inline-block;'>";
+          // 1줄 (체크 + 제목)
+          echo "<div class='todo-title'>";
+          echo "<input type='checkbox' $checked disabled>";
           echo "<span>" . htmlspecialchars($todo['title']) . "</span>";
+          echo "</div>";
+
+          // 2줄 (버튼)
+          echo "<div class='todo-actions'>";
+          echo "<a href='ToDo_update.php?idx=" . $todo['idx'] . "'>수정</a> ";
+          echo "<a href='ToDo_delete.php?idx=" . $todo['idx'] . "' onclick=\"return confirm('삭제하시겠습니까?');\">삭제</a>";
+          echo "</div>";
+
           echo "</div>";
           }
         }

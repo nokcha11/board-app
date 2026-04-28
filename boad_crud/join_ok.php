@@ -1,8 +1,6 @@
 <?php
-$host = "localhost";
-$dbname = "lie8220";
-$user = "lie8220";
-$password = "koko8220#";
+
+require_once "dbcon.php";
 
 try {
     $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8";
@@ -46,6 +44,6 @@ $stmt->execute([
 // 완료 후 이동
 echo "<script>
         alert('회원가입 완료!');
-        location.href='login.html';
+        location.href='login.php';
       </script>";
 ?>

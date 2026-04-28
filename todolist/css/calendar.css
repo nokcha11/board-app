@@ -99,15 +99,66 @@ body {
 }
 
 .todo-item {
-  font-size: 13px;
-  color: #0044cc;
+  font-size: 12px;
   margin-top: 4px;
-  white-space: nowrap;
+}
+
+.todo-title {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.todo-title input[type="checkbox"] {
+  width: 13px;
+  height: 13px;
+  margin: 0;
+  padding: 0;
+  flex-shrink: 0;
+}
+
+.todo-title span {
+  color: #0044cc;
   overflow: hidden;
+  white-space: nowrap;
   text-overflow: ellipsis;
 }
 
-.todo-item.done {
+.todo-actions {
+  margin-top: 4px;
+  display: flex;
+  justify-content: center;   /* 👉 가운데 정렬 핵심 */
+  gap: 6px;
+}
+
+.todo-actions a {
+  font-size: 11px;           /* 글씨 조금 키움 */
+  padding: 5px 8px;          /* 버튼 크기 키움 */
+  border-radius: 6px;
+  text-decoration: none;
+  color: #fff;
+  font-weight: bold;
+  line-height: 1;
+  transition: 0.2s;
+}
+
+.todo-actions a:first-child {
+  background-color: #ff9f9f;
+}
+
+.todo-actions a:first-child:hover {
+  background-color: #ff7a7a;
+}
+
+.todo-actions a:last-child {
+  background-color: #ff5c5c;
+}
+
+.todo-actions a:last-child:hover {
+  background-color: #ff3333;
+}
+
+.todo-item.done .todo-title span {
   color: #999;
   text-decoration: line-through;
 }

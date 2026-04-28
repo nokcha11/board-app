@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>회원가입</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+
+/* ================= MAIN ================= */
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 0;
+    background: url("images/pattern.png");
+    background-size: cover;
+    min-height: calc(100vh - 140px);
+}
+
+/* ================= 컨테이너 ================= */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    display: flex;
+    justify-content: center;
+}
+
+/* ================= 회원가입 박스 (길이 균형 핵심) ================= */
+.join-box {
+    width: 100%;
+    max-width: 360px;   /* ✔ 기존 420 → 줄임 */
+    
+    background: rgba(15, 27, 51, 0.9);
+
+    padding: 45px 28px; /* ✔ 높이 증가 핵심 (세로 길게) */
+
+    border-radius: 12px;
+    border: 1px solid #1f3b66;
+}
+
+/* 제목 */
+.join-box h2 {
+    text-align: center;
+    color: #4aa3ff;
+    margin-bottom: 20px;
+    font-size: 20px;
+}
+
+/* ================= 입력창 (간격 균형 핵심) ================= */
+.join-box input {
+    width: 100%;
+    padding: 11px;          /* ← 적당히 증가 */
+    margin-bottom: 12px;    /* ← 간격 확보 */
+    border: 1px solid #1f3b66;
+    border-radius: 6px;
+    background: #0b1220;
+    color: #fff;
+    outline: none;
+    box-sizing: border-box;
+    font-size: 14px;
+}
+
+.join-box input:focus {
+    border-color: #4aa3ff;
+}
+
+/* ================= 버튼 (UI 균형 핵심) ================= */
+.join-box button {
+    width: 100%;
+    padding: 12px;         /* ← 입력창과 균형 맞춤 */
+    margin-top: 8px;
+    background: #4aa3ff;
+    border: none;
+    border-radius: 6px;
+    color: #fff;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.join-box button:hover {
+    background: #2f8fff;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- 상단 -->
+<?php include "header.php"; ?>
+
+<main>
+
+    <div class="container">
+        <div class="join-box">
+
+            <h2>회원가입</h2>
+
+            <form method="post" action="join_ok.php">
+                <input type="text" placeholder="아이디 입력" name="id">
+                <input type="password" placeholder="패스워드" name="pw" id="pw" required>
+                <input type="password" placeholder="패스워드 확인" name="pw2" id="pw2" required>
+                <input type="text" placeholder="이름" name="name">
+                <input type="text" placeholder="test@naver.com" name="email">
+
+                <button type="submit">회원가입</button>
+            </form>
+
+        </div>
+    </div>
+
+</main>
+
+<footer>
+    © 2026 MY WEBSITE | All Rights Reserved | Contact: admin@site.com
+</footer>
+
+ <script>
+      function checkForm() {
+        const pw = document.getElementById("pw").value;
+        const pw2 = document.getElementById("pw2").value;
+
+        if (pw !== pw2) {
+          alert("비밀번호가 일치하지 않습니다.");
+          return false;
+        }
+        return true;
+      }
+    </script>
+
+</body>
+</html>

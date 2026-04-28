@@ -16,6 +16,17 @@ header {
     border-bottom: 2px solid #1f3b66;
 }
 
+header {
+    position: relative;
+}
+
+.welcome-header {
+    position: absolute;
+    left: 200px;
+    color: #4aa3ff;
+    font-weight: bold;
+}
+
 header h1 {
     margin: 0;
     font-size: 20px;
@@ -34,6 +45,8 @@ nav a {
 nav a:hover {
     color: #4aa3ff;
 }
+
+
 
 /* ================= 중단 ================= */
 main {

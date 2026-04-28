@@ -35,7 +35,7 @@
   if ($stmt->execute()) {
     echo "<script>
             alert('ToDo가 등록되었습니다.');
-            location.href='ToDo_insert_ok.php';
+            location.href='ToDo_list.php';
           </script>";
   } else {
     echo "등록 실패: " . $stmt->error;

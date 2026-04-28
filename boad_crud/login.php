@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>로그인</title>
+
+<link rel="stylesheet" href="css/style.css">
+
+<style>
+
+/* ================= MAIN ================= */
+main {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 30px 0;
+    background: url("images/pattern.png");
+    background-size: cover;
+    min-height: calc(100vh - 140px);
+}
+
+/* ================= 컨테이너 ================= */
+.container {
+    width: 90%;
+    max-width: 1200px;
+    display: flex;
+    justify-content: center;
+}
+
+/* ================= 로그인 박스 ================= */
+.login-box {
+    width: 100%;
+    max-width: 360px;
+    background: rgba(15, 27, 51, 0.9);
+    padding: 45px 28px;
+    border-radius: 12px;
+    border: 1px solid #1f3b66;
+}
+
+/* 제목 */
+.login-box h2 {
+    text-align: center;
+    color: #4aa3ff;
+    margin-bottom: 25px;
+    font-size: 20px;
+}
+
+/* ================= 입력창 ================= */
+.login-box input {
+    width: 100%;
+    padding: 11px;
+    margin-bottom: 15px;
+    border: 1px solid #1f3b66;
+    border-radius: 6px;
+    background: #0b1220;
+    color: #fff;
+    outline: none;
+    box-sizing: border-box;
+}
+
+.login-box input:focus {
+    border-color: #4aa3ff;
+}
+
+/* ================= 버튼 ================= */
+.login-box button {
+    width: 100%;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 6px;
+    font-weight: bold;
+    font-size: 15px;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+/* 로그인 버튼 */
+.login-box button[type="submit"] {
+    background: #4aa3ff;
+    border: none;
+    color: #fff;
+}
+
+.login-box button[type="submit"]:hover {
+    background: #2f8fff;
+}
+
+/* 회원가입 버튼 */
+.login-box .join-btn {
+    background: transparent;
+    border: 1px solid #4aa3ff;
+    color: #4aa3ff;
+}
+
+.login-box .join-btn:hover {
+    background: #4aa3ff;
+    color: #fff;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<!-- 상단 -->
+<?php include "header.php"; ?>
+
+<!-- ================= 중앙 ================= -->
+<main>
+
+    <div class="container">
+        <div class="login-box">
+
+            <h2>로그인</h2>
+
+            <form method="post" action="login_ok.php">
+                <input type="text" name="id" placeholder="아이디">
+                <input type="password" name="pw" placeholder="패스워드">
+
+                <button type="submit">로그인</button>
+                <!-- 회원가입 버튼 추가 -->
+                <button type="button" onclick="location.href='join.php'" class="join-btn">회원가입</button>
+            </form>
+
+        </div>
+    </div>
+
+</main>
+
+<!-- ================= 하단 ================= -->
+<footer>
+    © 2026 MY WEBSITE | All Rights Reserved | Contact: admin@site.com
+</footer>
+
+</body>
+</html>

@@ -1,8 +1,6 @@
 <?php
-$host = "localhost";
-$dbname = "lie8220";
-$user = "lie8220";
-$password = "koko8220#";
+session_start();
+require_once "dbcon.php";
 
 $conn = new mysqli($host, $user, $password, $dbname);
 
@@ -29,6 +27,7 @@ $lastDate = date('t', strtotime($firstDay));
 
 $prevMonth = $month - 1;
 $prevYear = $year;
+
 if ($prevMonth < 1) {
   $prevMonth = 12;
   $prevYear--;
@@ -36,11 +35,13 @@ if ($prevMonth < 1) {
 
 $nextMonth = $month + 1;
 $nextYear = $year;
+
 if ($nextMonth > 12) {
   $nextMonth = 1;
   $nextYear++;
 }
 
+/* 월별 일정 */
 $sql = "SELECT * FROM tb_todolist 
         WHERE YEAR(due_date) = ? AND MONTH(due_date) = ?
         ORDER BY due_date ASC";
@@ -56,6 +57,31 @@ while ($row = $result->fetch_assoc()) {
   $day = intval(date('j', strtotime($row['due_date'])));
   $todos[$day][] = $row;
 }
+
+/* 오늘 일정 */
+$today = date("Y-m-d");
+
+$todaySql = "SELECT * FROM tb_todolist 
+             WHERE due_date = ?
+             ORDER BY status ASC, idx DESC";
+
+$todayStmt = $conn->prepare($todaySql);
+$todayStmt->bind_param("s", $today);
+$todayStmt->execute();
+$todayResult = $todayStmt->get_result();
+
+/* 주간 일정 */
+$weekStart = date("Y-m-d", strtotime("monday this week"));
+$weekEnd = date("Y-m-d", strtotime("sunday this week"));
+
+$weekSql = "SELECT * FROM tb_todolist 
+            WHERE due_date BETWEEN ? AND ?
+            ORDER BY due_date ASC, status ASC";
+
+$weekStmt = $conn->prepare($weekSql);
+$weekStmt->bind_param("ss", $weekStart, $weekEnd);
+$weekStmt->execute();
+$weekResult = $weekStmt->get_result();
 ?>
 
 <!DOCTYPE html>
@@ -65,94 +91,145 @@ while ($row = $result->fetch_assoc()) {
   <title>ToDoList 달력</title>
   <link rel="stylesheet" href="css/calendar.css">
 </head>
+
 <body>
 
-<div class="calendar-wrap">
+<?php include "header.php"; ?>
 
-  <div class="calendar-header">
-    <a href="?year=<?= $prevYear ?>&month=<?= $prevMonth ?>">◀</a>
-    <h2><?= $year ?>.<?= sprintf("%02d", $month) ?></h2>
-    <a href="?year=<?= $nextYear ?>&month=<?= $nextMonth ?>">▶</a>
-  </div>
+<main class="calendar-main">
 
-  <div class="top-btn">
-    <a href="ToDo_insert.html">+ ToDo 추가</a>
-  </div>
+  <!-- 왼쪽: 오늘의 일정 -->
+  <aside class="side-box">
+    <h3>오늘의 일정</h3>
 
-  <table class="calendar">
-    <thead>
-      <tr>
-        <th class="sun">일</th>
-        <th>월</th>
-        <th>화</th>
-        <th>수</th>
-        <th>목</th>
-        <th>금</th>
-        <th class="sat">토</th>
-      </tr>
-    </thead>
+    <?php if ($todayResult->num_rows > 0) { ?>
+      <?php while ($row = $todayResult->fetch_assoc()) {
+        $checked = $row['status'] == 1 ? "checked" : "";
+        $doneClass = $row['status'] == 1 ? "done" : "";
+      ?>
+        <div class="side-todo <?= $doneClass ?>">
+          <input type="checkbox" <?= $checked ?> disabled>
+          <span><?= htmlspecialchars($row['title']) ?></span>
+        </div>
+      <?php } ?>
+    <?php } else { ?>
+      <p class="empty">오늘 일정이 없습니다.</p>
+    <?php } ?>
+  </aside>
 
-    <tbody>
-      <tr>
-      <?php
-      for ($i = 0; $i < $startWeek; $i++) {
-        echo "<td></td>";
-      }
 
-      for ($day = 1; $day <= $lastDate; $day++) {
-        $week = date('w', strtotime("$year-$month-$day"));
-        $class = "";
+  <!-- 가운데: 월별 달력 -->
+  <div class="calendar-wrap">
 
-        if ($week == 0) $class = "sun";
-        if ($week == 6) $class = "sat";
+    <div class="calendar-header">
+      <a href="?year=<?= $prevYear ?>&month=<?= $prevMonth ?>">◀</a>
+      <h2><?= $year ?>.<?= sprintf("%02d", $month) ?></h2>
+      <a href="?year=<?= $nextYear ?>&month=<?= $nextMonth ?>">▶</a>
+    </div>
 
-        echo "<td>";
-        echo "<div class='date $class'>$day</div>";
+    <div class="top-btn">
+      <a href="ToDo_insert.html">+ ToDo 추가</a>
+    </div>
 
-        if (isset($todos[$day])) {
-          foreach ($todos[$day] as $todo) {
-          $doneClass = $todo['status'] == 1 ? "done" : "";
-          $checked = $todo['status'] == 1 ? "checked" : "";
+    <table class="calendar">
+      <thead>
+        <tr>
+          <th class="sun">일</th>
+          <th>월</th>
+          <th>화</th>
+          <th>수</th>
+          <th>목</th>
+          <th>금</th>
+          <th class="sat">토</th>
+        </tr>
+      </thead>
 
-          echo "<div class='todo-item $doneClass'>";
-          // 1줄 (체크 + 제목)
-          echo "<div class='todo-title'>";
-          echo "<input type='checkbox' $checked disabled>";
-          echo "<span>" . htmlspecialchars($todo['title']) . "</span>";
-          echo "</div>";
+      <tbody>
+        <tr>
+        <?php
+        for ($i = 0; $i < $startWeek; $i++) {
+          echo "<td></td>";
+        }
 
-          // 2줄 (버튼)
-          echo "<div class='todo-actions'>";
-          echo "<a href='ToDo_update.php?idx=" . $todo['idx'] . "'>수정</a> ";
-          echo "<a href='ToDo_delete.php?idx=" . $todo['idx'] . "' onclick=\"return confirm('삭제하시겠습니까?');\">삭제</a>";
-          echo "</div>";
+        for ($day = 1; $day <= $lastDate; $day++) {
+          $week = date('w', strtotime("$year-$month-$day"));
+          $class = "";
 
-          echo "</div>";
+          if ($week == 0) $class = "sun";
+          if ($week == 6) $class = "sat";
+
+          echo "<td>";
+          echo "<div class='date $class'>$day</div>";
+
+          if (isset($todos[$day])) {
+            foreach ($todos[$day] as $todo) {
+              $doneClass = $todo['status'] == 1 ? "done" : "";
+              $checked = $todo['status'] == 1 ? "checked" : "";
+
+              echo "<div class='todo-item $doneClass'>";
+              echo "<div class='todo-title'>";
+              echo "<input type='checkbox' $checked disabled>";
+              echo "<span>" . htmlspecialchars($todo['title']) . "</span>";
+              echo "</div>";
+              echo "</div>";
+            }
+
+            $dateParam = sprintf("%04d-%02d-%02d", $year, $month, $day);
+
+            echo "<div class='day-actions'>";
+            echo "<a href='ToDo_day.php?date=$dateParam'>상세보기</a>";
+            echo "</div>";
+          }
+
+          echo "</td>";
+
+          if ($week == 6 && $day != $lastDate) {
+            echo "</tr><tr>";
           }
         }
 
-        echo "</td>";
+        $lastWeek = date('w', strtotime("$year-$month-$lastDate"));
 
-        if ($week == 6 && $day != $lastDate) {
-          echo "</tr><tr>";
+        for ($i = $lastWeek; $i < 6; $i++) {
+          echo "<td></td>";
         }
-      }
+        ?>
+        </tr>
+      </tbody>
+    </table>
 
-      $lastWeek = date('w', strtotime("$year-$month-$lastDate"));
-      for ($i = $lastWeek; $i < 6; $i++) {
-        echo "<td></td>";
-      }
+  </div>
+
+
+  <!-- 오른쪽: 주간 일정표 -->
+  <aside class="side-box">
+    <h3>주간 일정표</h3>
+
+    <?php if ($weekResult->num_rows > 0) { ?>
+      <?php while ($row = $weekResult->fetch_assoc()) {
+        $checked = $row['status'] == 1 ? "checked" : "";
+        $doneClass = $row['status'] == 1 ? "done" : "";
+        $dateText = date("m/d", strtotime($row['due_date']));
       ?>
-      </tr>
-    </tbody>
-  </table>
+        <div class="side-todo <?= $doneClass ?>">
+          <span class="side-date"><?= $dateText ?></span>
+          <input type="checkbox" <?= $checked ?> disabled>
+          <span><?= htmlspecialchars($row['title']) ?></span>
+        </div>
+      <?php } ?>
+    <?php } else { ?>
+      <p class="empty">이번 주 일정이 없습니다.</p>
+    <?php } ?>
+  </aside>
 
-</div>
+</main>
 
 </body>
 </html>
 
 <?php
 $stmt->close();
+$todayStmt->close();
+$weekStmt->close();
 $conn->close();
 ?>

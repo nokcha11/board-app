@@ -1,0 +1,51 @@
+.petal {
+  position: fixed;
+  top: -20px;
+
+  width: 18px;
+  height: 26px;
+
+  /* 🌸 벚꽃 색 */
+  background: linear-gradient(145deg, #ffd1dc, #ff8fa3);
+
+  /* 👇 핵심: 비대칭 타원 */
+  border-radius: 60% 40% 60% 40%;
+
+  /* 👇 살짝 기울기 */
+  transform: rotate(20deg);
+
+  pointer-events: none;
+  z-index: 9999;
+
+  opacity: 0.85;
+
+  animation: fall linear forwards;
+}
+
+.petal::after {
+  content: "";
+  position: absolute;
+  left: 50%;
+  top: 10%;
+  width: 1px;
+  height: 70%;
+
+  background: rgba(255,255,255,0.6);
+
+  transform: translateX(-50%);
+}
+
+@keyframes fall {
+  0% {
+    transform: translate(0, 0) rotate(0deg);
+  }
+  30% {
+    transform: translate(20px, 30vh) rotate(120deg);
+  }
+  60% {
+    transform: translate(-15px, 70vh) rotate(240deg);
+  }
+  100% {
+    transform: translate(10px, 110vh) rotate(360deg);
+  }
+}

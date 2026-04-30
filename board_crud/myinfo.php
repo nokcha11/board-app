@@ -149,7 +149,7 @@ main {
 
             <h2>내 정보 수정</h2>
 
-            <form method="post" action="update_ok.php" onsubmit="return checkForm()">
+            <form method="post" action="myinfo_ok.php" onsubmit="return checkForm()">
                 <label>아이디</label>
                 <input type="text" value="<?php echo htmlspecialchars($row['id']); ?>" name="id" readonly>
 

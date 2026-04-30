@@ -21,7 +21,9 @@ session_start();
             <a href="logout.php">로그아웃</a>
         <?php } ?>
 
-        <a href="myinfo.php">내정보</a>
+        <?php if (isset($_SESSION['loginid']) && $_SESSION['loginid'] != 'admin') { ?>
+            <a href="myinfo.php">내정보</a>
+        <?php } ?>
         <a href="board.php">게시판</a>
 
         <?php if (isset($_SESSION['loginid']) && $_SESSION['loginid'] == 'admin') { ?>

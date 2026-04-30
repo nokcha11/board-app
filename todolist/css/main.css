@@ -1,0 +1,173 @@
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #ffd6d6, #ffc0c0);
+  font-family: Arial, sans-serif;
+}
+
+
+/* ===== main ===== */
+main {
+  display: flex;
+  justify-content: center;
+  padding: 55px 20px;
+}
+
+.main-wrap {
+  width: 900px;
+  background: #ffe5e5;
+  border: 3px solid #ff4d4d;
+  border-radius: 18px;
+  padding: 45px;
+  box-shadow: 0 12px 30px rgba(255, 77, 77, 0.25);
+}
+
+.main-title {
+  text-align: center;
+  color: #d60000;
+  margin-bottom: 32px;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+/* ===== 카드 영역 ===== */
+.plan-area {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  padding: 0;
+  background: transparent;
+  border: none;
+  border-radius: 0;
+}
+
+/* 카드 */
+.card {
+  background: #ffffff;
+  border: 2px solid #ff7a7a;
+  border-radius: 16px;
+  padding: 28px 30px;
+  box-shadow: 0 6px 16px rgba(255, 92, 92, 0.18);
+}
+
+.card:hover {
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(255, 77, 77, 0.32);
+}
+
+.card h3 {
+  margin: 0 0 18px 0;
+  color: #e60000;
+  border-bottom: 2px solid #ffb3b3;
+  padding-bottom: 12px;
+  font-size: 20px;
+}
+
+/* ===== todo ===== */
+.todo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 12px 0;
+  padding: 9px 10px;
+  border-radius: 8px;
+  background: #fff5f5;
+  color: #222;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+.todo:hover {
+  background: #ffecec;
+  transform: translateX(4px);
+}
+
+
+.todo.done {
+  background: #eeeeee;
+  color: #888;
+}
+
+.todo.done span:last-child {
+  color: #777;
+  text-decoration: line-through;
+}
+
+/* 날짜 */
+.todo-date {
+  color: #ff3333;
+  font-weight: bold;
+  min-width: 40px;
+}
+
+/* 버튼 */
+.go-btn {
+  display: block;
+  width: 180px;
+  margin: 32px auto 0;
+  text-align: center;
+  background: #ff4d4d;
+  color: white;
+  padding: 13px;
+  border-radius: 10px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.empty {
+  color: #555;
+  font-weight: bold;
+  background: #fff5f5;
+  padding: 14px 16px;
+  border-radius: 10px;
+}
+
+.go-btn:hover {
+  background: #e60000;
+}
+
+.sparkle-btn {
+  position: relative;
+}
+
+/* hover 시 반짝이 */
+.sparkle-btn:hover::after {
+  content: "✨";
+  position: absolute;
+  top: -15px;
+  right: -10px;
+  font-size: 18px;
+  animation: sparkleOne 0.6s ease;
+}
+
+/* 애니메이션 */
+@keyframes sparkleOne {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) translateY(5px);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2) translateY(-5px);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1) translateY(-10px);
+  }
+}
+
+/* ===== 모바일 ===== */
+@media (max-width: 768px) {
+  .plan-area {
+    grid-template-columns: 1fr;
+  }
+
+  header {
+    flex-direction: column;
+    gap: 10px;
+  }
+}

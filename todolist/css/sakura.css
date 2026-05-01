@@ -1,51 +1,84 @@
+/* ================= 벚꽃잎 기본 스타일 ================= */
 .petal {
   position: fixed;
-  top: -20px;
+  top: -40px;
 
-  width: 18px;
-  height: 26px;
+  /* JS에서 랜덤 크기 지정 */
+  width: var(--size);
+  height: calc(var(--size) * 1.45);
 
-  /* 🌸 벚꽃 색 */
-  background: linear-gradient(145deg, #ffd1dc, #ff8fa3);
+  /* 벚꽃잎 색감 */
+  background: linear-gradient(
+    145deg,
+    rgba(255, 240, 245, 0.95) 0%,
+    rgba(255, 170, 190, 0.9) 55%,
+    rgba(255, 115, 145, 0.85) 100%
+  );
 
-  /* 👇 핵심: 비대칭 타원 */
-  border-radius: 60% 40% 60% 40%;
-
-  /* 👇 살짝 기울기 */
-  transform: rotate(20deg);
+  /* 위쪽이 살짝 갈라진 꽃잎 모양 */
+  clip-path: polygon(
+    50% 0%,
+    60% 12%,
+    74% 3%,
+    90% 20%,
+    100% 45%,
+    96% 70%,
+    82% 90%,
+    58% 100%,
+    42% 100%,
+    18% 90%,
+    4% 70%,
+    0% 45%,
+    10% 20%,
+    26% 3%,
+    40% 12%
+  );
 
   pointer-events: none;
-  z-index: 9999;
+  z-index: 5;
+  opacity: var(--opacity);
 
-  opacity: 0.85;
+  /* 부드러운 일본 감성 느낌 */
+  filter: blur(0.2px);
+  box-shadow: 0 0 6px rgba(255, 150, 170, 0.25);
 
-  animation: fall linear forwards;
+  animation: sakuraFall var(--duration) linear forwards;
 }
 
-.petal::after {
-  content: "";
-  position: absolute;
-  left: 50%;
-  top: 10%;
-  width: 1px;
-  height: 70%;
+/* ❌ 가운데 흰 선 제거
+   기존 .petal::after 는 삭제해야 함
+*/
 
-  background: rgba(255,255,255,0.6);
-
-  transform: translateX(-50%);
-}
-
-@keyframes fall {
+/* ================= 벚꽃 낙하 + 바람 효과 ================= */
+@keyframes sakuraFall {
   0% {
-    transform: translate(0, 0) rotate(0deg);
+    transform:
+      translate(0, 0)
+      rotate(var(--start-rotate));
   }
-  30% {
-    transform: translate(20px, 30vh) rotate(120deg);
+
+  25% {
+    transform:
+      translate(calc(var(--wind) * 0.4), 28vh)
+      rotate(calc(var(--start-rotate) + 120deg));
   }
-  60% {
-    transform: translate(-15px, 70vh) rotate(240deg);
+
+  50% {
+    transform:
+      translate(calc(var(--wind) * -0.2), 55vh)
+      rotate(calc(var(--start-rotate) + 220deg));
   }
+
+  75% {
+    transform:
+      translate(calc(var(--wind) * 0.7), 82vh)
+      rotate(calc(var(--start-rotate) + 310deg));
+  }
+
   100% {
-    transform: translate(10px, 110vh) rotate(360deg);
+    transform:
+      translate(var(--wind), 115vh)
+      rotate(calc(var(--start-rotate) + 430deg));
+    opacity: 0;
   }
 }

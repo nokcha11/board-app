@@ -20,7 +20,7 @@ if (month >= 3 && month <= 5) {
 
 document.body.setAttribute("data-season", season);
 
-/* 계절별 색상 변경 */
+/* 계절별 색상 변경 
 if (season === "spring") {
   document.body.style.background = "linear-gradient(135deg,#ffe4ec,#ffcdd2)";
 }
@@ -32,7 +32,7 @@ if (season === "autumn") {
 }
 if (season === "winter") {
   document.body.style.background = "linear-gradient(135deg,#eef3ff,#cfd8ff)";
-}
+}*/
 
 /* ================= 계절별 파티클 생성 ================= */
 function createSeasonParticle() {

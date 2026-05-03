@@ -166,7 +166,7 @@ $weekResult = $weekStmt->get_result();
 
           $dateParam = sprintf("%04d-%02d-%02d", $year, $month, $day);
 
-          echo "<td class='calendar-cell' onclick=\"location.href='ToDo_day.php?date=$dateParam'\">";
+          echo "<td class='calendar-cell' onclick=\"openTodoModal('$dateParam')\">";
           echo "<div class='date $class'>$day</div>";
 
           if (isset($todos[$day])) {
@@ -225,6 +225,48 @@ $weekResult = $weekStmt->get_result();
   </aside>
 
 </main>
+
+
+<!-- 모달 / 모바일 바텀시트 -->
+<div class="modal-wrap" id="todoModal" onclick="closeTodoModal()">
+  <div class="modal-box" onclick="event.stopPropagation()">
+    <div class="modal-header">
+      <h3 id="modalDateTitle">일정</h3>
+      <button type="button" class="modal-close" onclick="closeTodoModal()">×</button>
+    </div>
+
+    <div id="modalContent" class="modal-content">
+      불러오는 중...
+    </div>
+  </div>
+</div>
+
+<script>
+function openTodoModal(date) {
+  const modal = document.getElementById("todoModal");
+  const title = document.getElementById("modalDateTitle");
+  const content = document.getElementById("modalContent");
+
+  title.innerText = date + " 일정";
+  content.innerHTML = "불러오는 중...";
+  modal.style.display = "block";
+
+  fetch("todo_modal_data.php?date=" + encodeURIComponent(date))
+    .then(function(response) {
+      return response.text();
+    })
+    .then(function(data) {
+      content.innerHTML = data;
+    })
+    .catch(function() {
+      content.innerHTML = "<p class='empty'>일정을 불러오지 못했습니다.</p>";
+    });
+}
+
+function closeTodoModal() {
+  document.getElementById("todoModal").style.display = "none";
+}
+</script>
 
 </body>
 </html>

@@ -352,3 +352,166 @@ body {
     order: 3;
   }
 }
+
+/* 날짜 칸 클릭 가능 */
+.calendar-cell {
+  cursor: pointer;
+  transition: 0.2s;
+  position: relative;
+}
+
+.calendar-cell:hover {
+  background-color: #ffeaea;
+}
+
+.calendar-cell:hover::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  border: 2px solid #ff4d4d;
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.calendar-cell:hover .todo-title span {
+  font-weight: bold;
+  color: #ff3333;
+}
+
+/* 모달 배경 */
+.modal-wrap {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.35);
+  z-index: 9999;
+}
+
+/* 데스크탑 모달 */
+.modal-box {
+  width: 520px;
+  max-height: 80vh;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 18px;
+  padding: 24px;
+  margin: 100px auto;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.25);
+  animation: modalFade 0.2s ease;
+}
+
+@keyframes modalFade {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 18px;
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: #ff4d4d;
+}
+
+.modal-close {
+  border: none;
+  background: #ff7a7a;
+  color: white;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  font-size: 22px;
+  cursor: pointer;
+  line-height: 1;
+}
+
+.modal-close:hover {
+  background: #ff4d4d;
+}
+
+.modal-todo {
+  background: #fff5f5;
+  border: 1px solid #ffd1d1;
+  border-radius: 10px;
+  padding: 12px;
+  margin-bottom: 10px;
+}
+
+.modal-todo-title {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-weight: bold;
+  color: #222;
+}
+
+.modal-todo.done .modal-todo-title span {
+  color: #999;
+  text-decoration: line-through;
+}
+
+.modal-todo-btns {
+  display: flex;
+  justify-content: flex-end;
+  gap: 8px;
+  margin-top: 10px;
+}
+
+.modal-todo-btns a,
+.modal-add-btn a {
+  display: inline-block;
+  text-decoration: none;
+  background: #ff7a7a;
+  color: white;
+  padding: 6px 10px;
+  border-radius: 7px;
+  font-size: 12px;
+  font-weight: bold;
+}
+
+.modal-todo-btns a:hover,
+.modal-add-btn a:hover {
+  background: #ff4d4d;
+}
+
+.modal-add-btn {
+  margin-top: 16px;
+  text-align: center;
+}
+
+/* 모바일: 바텀시트 */
+@media (max-width: 768px) {
+  .modal-box {
+    width: 100%;
+    max-height: 75vh;
+    margin: 0;
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    border-radius: 22px 22px 0 0;
+    animation: bottomSheetUp 0.25s ease;
+  }
+
+  @keyframes bottomSheetUp {
+    from {
+      transform: translateY(100%);
+    }
+    to {
+      transform: translateY(0);
+    }
+  }
+}

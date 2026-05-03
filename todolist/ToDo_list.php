@@ -164,7 +164,9 @@ $weekResult = $weekStmt->get_result();
           if ($week == 0) $class = "sun";
           if ($week == 6) $class = "sat";
 
-          echo "<td>";
+          $dateParam = sprintf("%04d-%02d-%02d", $year, $month, $day);
+
+          echo "<td class='calendar-cell' onclick=\"location.href='ToDo_day.php?date=$dateParam'\">";
           echo "<div class='date $class'>$day</div>";
 
           if (isset($todos[$day])) {
@@ -174,17 +176,11 @@ $weekResult = $weekStmt->get_result();
 
               echo "<div class='todo-item $doneClass'>";
               echo "<div class='todo-title'>";
-              echo "<input type='checkbox' $checked disabled>";
+              echo "<input type='checkbox' $checked onclick='event.stopPropagation()' disabled>";
               echo "<span>" . htmlspecialchars($todo['title']) . "</span>";
               echo "</div>";
               echo "</div>";
             }
-
-            $dateParam = sprintf("%04d-%02d-%02d", $year, $month, $day);
-
-            echo "<div class='day-actions'>";
-            echo "<a href='ToDo_day.php?date=$dateParam'>상세보기</a>";
-            echo "</div>";
           }
 
           echo "</td>";

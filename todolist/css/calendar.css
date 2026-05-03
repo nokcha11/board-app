@@ -179,12 +179,44 @@ body {
   color: #999;
   text-decoration: line-through;
 }
-
-/* 칸안의 수정 삭제 버튼 */
-.day-actions {
-  margin-top: 6px;
-  text-align: center;
+/* 클릭시 상세보기 */
+.todo-item {
+  cursor: pointer;
 }
+.todo-item input {
+  cursor: default;
+}
+
+/* 날짜 칸 hover */
+.calendar-cell {
+  cursor: pointer;
+  transition: 0.2s;
+  position: relative;
+}
+
+/* 전체 칸 배경 변화 */
+.calendar-cell:hover {
+  background-color: #ffeaea;
+}
+
+/* 내부 강조 박스 효과 (빨간 테두리 느낌) */
+.calendar-cell:hover::after {
+  content: "";
+  position: absolute;
+  top: 4px;
+  left: 4px;
+  right: 4px;
+  bottom: 4px;
+  border: 2px solid #ff4d4d;
+  border-radius: 8px;
+  pointer-events: none;
+}
+
+.calendar-cell:hover .todo-title span {
+  font-weight: bold;
+  color: #ff3333;
+}
+
 
 .day-actions a {
   display: inline-block;

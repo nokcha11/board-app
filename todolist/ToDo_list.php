@@ -90,7 +90,13 @@ $weekResult = $weekStmt->get_result();
   <meta charset="UTF-8">
   <title>ToDoList 달력</title>
   <link rel="stylesheet" href="css/calendar.css">
+  <link rel="stylesheet" href="css/seasonEffect.css">
+  <script src="js/seasonEffect.js" defer></script>
 </head>
+
+<script>
+  const calendarMonth = <?= $month ?>;
+</script>
 
 <body>
 

@@ -1,0 +1,137 @@
+/* ================= 공통 계절 효과 ================= */
+.season-particle {
+  position: fixed;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ================= 봄: 벚꽃잎 ================= */
+.petal {
+  top: -40px;
+  width: var(--size);
+  height: calc(var(--size) * 1.45);
+
+  background: linear-gradient(
+    145deg,
+    rgba(255, 240, 245, 0.95) 0%,
+    rgba(255, 170, 190, 0.9) 55%,
+    rgba(255, 115, 145, 0.85) 100%
+  );
+
+  clip-path: polygon(
+    50% 0%,
+    60% 12%,
+    74% 3%,
+    90% 20%,
+    100% 45%,
+    96% 70%,
+    82% 90%,
+    58% 100%,
+    42% 100%,
+    18% 90%,
+    4% 70%,
+    0% 45%,
+    10% 20%,
+    26% 3%,
+    40% 12%
+  );
+
+  opacity: var(--opacity);
+  filter: blur(0.2px);
+  box-shadow: 0 0 6px rgba(255, 150, 170, 0.25);
+  animation: springFall var(--duration) linear forwards;
+}
+
+/* ================= 여름: 비 ================= */
+.rain {
+  top: -30px;
+  width: 2px;
+  height: 18px;
+  background: rgba(120, 200, 255, 0.75);
+  border-radius: 10px;
+  animation: rainFall var(--duration) linear forwards;
+}
+
+/* ================= 가을: 낙엽 ================= */
+.leaf {
+  top: -40px;
+  width: var(--size);
+  height: calc(var(--size) * 1.4);
+  background: linear-gradient(145deg, #ffb347, #ff6b00);
+  border-radius: 70% 20% 70% 20%;
+  opacity: var(--opacity);
+  animation: springFall var(--duration) linear forwards;
+}
+
+/* ================= 겨울: 눈 ================= */
+.snow {
+  top: -20px;
+  width: var(--size);
+  height: var(--size);
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 50%;
+  opacity: var(--opacity);
+  box-shadow: 0 0 8px rgba(255, 255, 255, 0.9);
+  animation: snowFall var(--duration) linear forwards;
+}
+
+/* 봄/가을 떨어지는 움직임 */
+@keyframes springFall {
+  0% {
+    transform: translate(0, 0) rotate(var(--start-rotate));
+  }
+
+  25% {
+    transform: translate(calc(var(--wind) * 0.4), 28vh) rotate(calc(var(--start-rotate) + 120deg));
+  }
+
+  50% {
+    transform: translate(calc(var(--wind) * -0.2), 55vh) rotate(calc(var(--start-rotate) + 220deg));
+  }
+
+  75% {
+    transform: translate(calc(var(--wind) * 0.7), 82vh) rotate(calc(var(--start-rotate) + 310deg));
+  }
+
+  100% {
+    transform: translate(var(--wind), 115vh) rotate(calc(var(--start-rotate) + 430deg));
+    opacity: 0;
+  }
+}
+
+/* 여름 비 */
+@keyframes rainFall {
+  100% {
+    transform: translateY(115vh);
+    opacity: 0;
+  }
+}
+
+/* 겨울 눈 */
+@keyframes snowFall {
+  0% {
+    transform: translate(0, 0);
+  }
+
+  100% {
+    transform: translate(var(--wind), 115vh);
+    opacity: 0;
+  }
+}
+
+/* ================= 마우스 꽃잎 효과 ================= */
+.mouse-petal {
+  animation: mousePetal 1.6s ease-out forwards !important;
+}
+
+@keyframes mousePetal {
+  0% {
+    transform: translate(0, 0) rotate(var(--start-rotate));
+    opacity: 0.75;
+  }
+
+  100% {
+    transform: translate(var(--wind), 75px) rotate(calc(var(--start-rotate) + 180deg));
+    opacity: 0;
+  }
+}

@@ -39,8 +39,8 @@ $weekResult = $stmtWeek->get_result();
 <title>MY TODO MAIN</title>
 
 <link rel="stylesheet" href="css/main.css">
-<link rel="stylesheet" href="css/sakura.css">
-<script src="js/sakura.js" defer></script>
+<link rel="stylesheet" href="css/seasonEffect.css">
+<script src="js/seasonEffect.js" defer></script>
 </head>
 
 <body>

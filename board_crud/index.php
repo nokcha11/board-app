@@ -1,4 +1,17 @@
-<?php session_start(); ?>
+<?php
+session_start();
+require_once "dbcon.php";
+
+/* 최신 게시글 3개 가져오기 */
+$sql = "SELECT idx, title, writer, reg_date, hit
+        FROM tb_board
+        ORDER BY idx DESC
+        LIMIT 3";
+
+$stmt = $pdo->prepare($sql);
+$stmt->execute();
+?>
+
 <!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -30,29 +43,31 @@
                     <th>조회수</th>
                 </tr>
 
-                <tr>
-                    <td>1</td>
-                    <td>첫 번째 게시글</td>
-                    <td>홍길동</td>
-                    <td>2026-01-01</td>
-                    <td>10</td>
-                </tr>
+                <?php
+                $rows = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
-                <tr>
-                    <td>2</td>
-                    <td>두 번째 게시글</td>
-                    <td>김철수</td>
-                    <td>2026-01-02</td>
-                    <td>5</td>
-                </tr>
-
-                <tr>
-                    <td>3</td>
-                    <td>세 번째 게시글</td>
-                    <td>이영희</td>
-                    <td>2026-01-03</td>
-                    <td>8</td>
-                </tr>
+                if (count($rows) > 0) {
+                    foreach ($rows as $row) {
+                ?>
+                    <tr>
+                        <td><?php echo $row['idx']; ?></td>
+                        <td>
+                            <a href="board_view.php?idx=<?php echo $row['idx']; ?>" style="color:#cfe6ff; text-decoration:none;">
+                                <?php echo htmlspecialchars($row['title']); ?>
+                            </a>
+                        </td>
+                        <td><?php echo htmlspecialchars($row['writer']); ?></td>
+                        <td><?php echo $row['reg_date']; ?></td>
+                        <td><?php echo $row['hit']; ?></td>
+                    </tr>
+                <?php
+                    }
+                } else {
+                ?>
+                    <tr>
+                        <td colspan="5">등록된 게시글이 없습니다.</td>
+                    </tr>
+                <?php } ?>
             </table>
         </div>
 

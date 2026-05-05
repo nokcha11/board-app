@@ -43,7 +43,7 @@ if ($nextMonth > 12) {
 
 $weekNames = ["일", "월", "화", "수", "목", "금", "토"];
 
-/* 월별 일정 - 시간순 정렬 추가 */
+/* 월별 일정 */
 $sql = "SELECT * FROM tb_todolist 
         WHERE YEAR(due_date) = ? AND MONTH(due_date) = ?
         ORDER BY due_date ASC, todo_time ASC, status ASC, idx DESC";
@@ -60,7 +60,7 @@ while ($row = $result->fetch_assoc()) {
   $todos[$day][] = $row;
 }
 
-/* 오늘 일정 - 시간순 정렬 추가 */
+/* 오늘 일정 */
 $today = date("Y-m-d");
 
 $todaySql = "SELECT * FROM tb_todolist 
@@ -72,13 +72,13 @@ $todayStmt->bind_param("s", $today);
 $todayStmt->execute();
 $todayResult = $todayStmt->get_result();
 
-/* 주간 일정 - 시간순 정렬 추가 */
+/* 주간 일정 */
 $weekStart = date("Y-m-d", strtotime("monday this week"));
 $weekEnd = date("Y-m-d", strtotime("sunday this week"));
 
 $weekSql = "SELECT * FROM tb_todolist 
             WHERE due_date BETWEEN ? AND ?
-            ORDER BY due_date ASC, todo_time ASC, status ASC";
+            ORDER BY due_date ASC, todo_time ASC, status ASC, idx DESC";
 
 $weekStmt = $conn->prepare($weekSql);
 $weekStmt->bind_param("ss", $weekStart, $weekEnd);
@@ -116,12 +116,13 @@ $weekResult = $weekStmt->get_result();
         $doneClass = $row['status'] == 1 ? "done" : "";
         $timeText = !empty($row['todo_time']) ? date("H:i", strtotime($row['todo_time'])) : "";
       ?>
-        <div class="side-todo <?= $doneClass ?>">
+        <div class="side-todo today-side-todo <?= $doneClass ?>">
           <?php if ($timeText !== "") { ?>
             <span class="side-time"><?= $timeText ?></span>
           <?php } ?>
+
           <input type="checkbox" <?= $checked ?> disabled>
-          <span><?= htmlspecialchars($row['title']) ?></span>
+          <span class="side-title"><?= htmlspecialchars($row['title']) ?></span>
         </div>
       <?php } ?>
     <?php } else { ?>
@@ -228,15 +229,17 @@ $weekResult = $weekStmt->get_result();
         $dayText = $weekNames[date("w", strtotime($row['due_date']))];
         $timeText = !empty($row['todo_time']) ? date("H:i", strtotime($row['todo_time'])) : "";
       ?>
-        <div class="side-todo today-side-todo <?= $doneClass ?>">
+        <div class="side-todo week-side-todo <?= $doneClass ?>">
           <span class="side-date"><?= $dateText ?>(<?= $dayText ?>)</span>
 
           <?php if ($timeText !== "") { ?>
             <span class="side-time"><?= $timeText ?></span>
+          <?php } else { ?>
+            <span class="side-time"></span>
           <?php } ?>
 
           <input type="checkbox" <?= $checked ?> disabled>
-          <span><?= htmlspecialchars($row['title']) ?></span>
+          <span class="side-title"><?= htmlspecialchars($row['title']) ?></span>
         </div>
       <?php } ?>
     <?php } else { ?>

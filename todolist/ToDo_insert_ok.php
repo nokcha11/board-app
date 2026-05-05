@@ -10,6 +10,7 @@ if ($conn->connect_error) {
 
 $todoDate = $_POST['todoDate'] ?? '';
 $titles = $_POST['titles'] ?? [];
+$times = $_POST['times'] ?? []; // 시간 배열 받기
 $todoGoal = $_POST['todoGoal'] ?? '';
 
 if ($todoDate === '' || empty($titles)) {
@@ -20,23 +21,33 @@ if ($todoDate === '' || empty($titles)) {
   exit;
 }
 
-$sql = "INSERT INTO tb_todolist (due_date, title, goal, status)
-        VALUES (?, ?, ?, ?)";
+// todo_time 컬럼까지 함께 저장
+$sql = "INSERT INTO tb_todolist (due_date, todo_time, title, goal, status)
+        VALUES (?, ?, ?, ?, ?)";
 
 $stmt = $conn->prepare($sql);
 
 $insertCount = 0;
 
-foreach ($titles as $title) {
+foreach ($titles as $i => $title) {
   $title = trim($title);
 
   if ($title === '') {
     continue;
   }
 
+  // 해당 할 일의 시간값 가져오기
+  $todoTime = $times[$i] ?? null;
+
+  // 빈 시간은 NULL로 저장
+  if ($todoTime === '') {
+    $todoTime = null;
+  }
+
   $status = 0;
 
-  $stmt->bind_param("sssi", $todoDate, $title, $todoGoal, $status);
+  // 날짜, 시간, 제목, 목표, 상태 저장
+  $stmt->bind_param("ssssi", $todoDate, $todoTime, $title, $todoGoal, $status);
 
   if ($stmt->execute()) {
     $insertCount++;

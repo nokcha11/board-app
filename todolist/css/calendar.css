@@ -179,6 +179,25 @@ body {
   color: #999;
   text-decoration: line-through;
 }
+
+/* 달력 안 시간 표시 */
+.todo-time {
+  color: #ff4d4d;
+  font-size: 11px;
+  font-weight: bold;
+  margin-right: 3px;
+  flex-shrink: 0;
+}
+
+/* 사이드 일정 시간 표시 */
+.side-time {
+  color: #ff6666;
+  font-size: 12px;
+  font-weight: bold;
+  min-width: 38px;
+  flex-shrink: 0;
+}
+
 /* 클릭시 상세보기 */
 .todo-item {
   cursor: pointer;
@@ -257,32 +276,38 @@ body {
   margin-bottom: 25px;
 }
 
+/* 주간/오늘 일정 한 줄 정렬 */
 .side-todo {
-  display: flex;
+  display: grid;
+  grid-template-columns: 62px 42px 18px 1fr;
   align-items: center;
   gap: 6px;
+
   background: #fff5f5;
   padding: 8px;
   border-radius: 8px;
   margin-bottom: 10px;
+
   font-size: 13px;
   color: #222;
   font-weight: bold;
 }
 
+/* 체크박스 */
 .side-todo input[type="checkbox"] {
   width: 14px;
   height: 14px;
   margin: 0;
-  flex-shrink: 0;
 }
 
+/* 제목 */
 .side-todo span:last-child {
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
 }
 
+/* 완료된 일정 */
 .side-todo.done {
   background: #eeeeee;
   color: #888;
@@ -292,10 +317,19 @@ body {
   text-decoration: line-through;
 }
 
+/* 날짜 + 요일 */
 .side-date {
   color: #ff3333;
   font-size: 12px;
-  min-width: 38px;
+  width: 62px;
+  white-space: nowrap;
+}
+.side-time {
+  color: #ff6666;
+  font-size: 12px;
+  font-weight: bold;
+  width: 42px;
+  white-space: nowrap;
 }
 
 .empty {

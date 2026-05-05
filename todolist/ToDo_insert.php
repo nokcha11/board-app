@@ -1,4 +1,5 @@
 <?php
+// 모달/달력에서 date 값을 넘기면 날짜 자동 입력
 $date = isset($_GET['date']) ? $_GET['date'] : "";
 ?>
 
@@ -25,10 +26,16 @@ $date = isset($_GET['date']) ? $_GET['date'] : "";
       <div class="input-group">
         <label>할 일</label>
 
+        <!-- 시간 + 할 일을 여러 개 추가하는 영역 -->
         <div id="todoList">
           <div class="todo-row">
-            <input type="checkbox" name="status[]" value="1">
+            <!-- 일정 시간 입력 -->
+            <input type="time" name="times[]" class="todo-time">
+
+            <!-- 여러 할 일 배열 입력 -->
             <input type="text" name="titles[]" placeholder="할 일을 입력하세요" required>
+
+            <!-- 할 일 입력칸 추가 버튼 -->
             <button type="button" class="plus-btn" onclick="addTodoInput()">+</button>
           </div>
         </div>
@@ -54,8 +61,9 @@ $date = isset($_GET['date']) ? $_GET['date'] : "";
       const row = document.createElement("div");
       row.className = "todo-row";
 
+      // 새 할 일 행 추가
       row.innerHTML = `
-        <input type="checkbox" name="status[]" value="1">
+        <input type="time" name="times[]" class="todo-time">
         <input type="text" name="titles[]" placeholder="할 일을 입력하세요" required>
         <button type="button" class="minus-btn" onclick="this.parentElement.remove()">-</button>
       `;

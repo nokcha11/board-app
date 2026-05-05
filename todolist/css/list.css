@@ -64,6 +64,12 @@ h2 {
   resize: none;
 }
 
+/* 시간 입력칸 */
+.todo-time {
+  width: 115px !important;
+  flex-shrink: 0;
+}
+
 /* 할 일 카드형 행 */
 .todo-row {
   display: flex;
@@ -85,6 +91,11 @@ h2 {
 .todo-row input[type="text"] {
   flex: 1;
   margin: 0;
+}
+
+/* 오늘의 일정은 날짜 칸 없이 정렬 */
+.today-side-todo {
+  grid-template-columns: 18px 1fr;
 }
 
 /* + / - 원형 버튼 */

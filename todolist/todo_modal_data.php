@@ -43,7 +43,7 @@ $result = $stmt->get_result();
   <?php } ?>
 
   <div class="modal-add-btn">
-    <a href="ToDo_insert.html?date=<?= urlencode($date) ?>">+ 이 날짜에 일정 추가</a>
+    <a href="ToDo_insert.php?date=<?= urlencode($date) ?>">+ 이 날짜에 일정 추가</a>
   </div>
 
 </div>

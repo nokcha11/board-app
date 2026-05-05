@@ -41,10 +41,12 @@ if ($nextMonth > 12) {
   $nextYear++;
 }
 
-/* 월별 일정 */
+$weekNames = ["일", "월", "화", "수", "목", "금", "토"];
+
+/* 월별 일정 - 시간순 정렬 추가 */
 $sql = "SELECT * FROM tb_todolist 
         WHERE YEAR(due_date) = ? AND MONTH(due_date) = ?
-        ORDER BY due_date ASC";
+        ORDER BY due_date ASC, todo_time ASC, status ASC, idx DESC";
 
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("ii", $year, $month);
@@ -58,25 +60,25 @@ while ($row = $result->fetch_assoc()) {
   $todos[$day][] = $row;
 }
 
-/* 오늘 일정 */
+/* 오늘 일정 - 시간순 정렬 추가 */
 $today = date("Y-m-d");
 
 $todaySql = "SELECT * FROM tb_todolist 
              WHERE due_date = ?
-             ORDER BY status ASC, idx DESC";
+             ORDER BY todo_time ASC, status ASC, idx DESC";
 
 $todayStmt = $conn->prepare($todaySql);
 $todayStmt->bind_param("s", $today);
 $todayStmt->execute();
 $todayResult = $todayStmt->get_result();
 
-/* 주간 일정 */
+/* 주간 일정 - 시간순 정렬 추가 */
 $weekStart = date("Y-m-d", strtotime("monday this week"));
 $weekEnd = date("Y-m-d", strtotime("sunday this week"));
 
 $weekSql = "SELECT * FROM tb_todolist 
             WHERE due_date BETWEEN ? AND ?
-            ORDER BY due_date ASC, status ASC";
+            ORDER BY due_date ASC, todo_time ASC, status ASC";
 
 $weekStmt = $conn->prepare($weekSql);
 $weekStmt->bind_param("ss", $weekStart, $weekEnd);
@@ -112,8 +114,12 @@ $weekResult = $weekStmt->get_result();
       <?php while ($row = $todayResult->fetch_assoc()) {
         $checked = $row['status'] == 1 ? "checked" : "";
         $doneClass = $row['status'] == 1 ? "done" : "";
+        $timeText = !empty($row['todo_time']) ? date("H:i", strtotime($row['todo_time'])) : "";
       ?>
         <div class="side-todo <?= $doneClass ?>">
+          <?php if ($timeText !== "") { ?>
+            <span class="side-time"><?= $timeText ?></span>
+          <?php } ?>
           <input type="checkbox" <?= $checked ?> disabled>
           <span><?= htmlspecialchars($row['title']) ?></span>
         </div>
@@ -173,10 +179,16 @@ $weekResult = $weekStmt->get_result();
             foreach ($todos[$day] as $todo) {
               $doneClass = $todo['status'] == 1 ? "done" : "";
               $checked = $todo['status'] == 1 ? "checked" : "";
+              $timeText = !empty($todo['todo_time']) ? date("H:i", strtotime($todo['todo_time'])) : "";
 
               echo "<div class='todo-item $doneClass'>";
               echo "<div class='todo-title'>";
               echo "<input type='checkbox' $checked onclick='event.stopPropagation()' disabled>";
+
+              if ($timeText !== "") {
+                echo "<span class='todo-time'>$timeText</span>";
+              }
+
               echo "<span>" . htmlspecialchars($todo['title']) . "</span>";
               echo "</div>";
               echo "</div>";
@@ -211,12 +223,18 @@ $weekResult = $weekStmt->get_result();
       <?php while ($row = $weekResult->fetch_assoc()) {
         $checked = $row['status'] == 1 ? "checked" : "";
         $doneClass = $row['status'] == 1 ? "done" : "";
-        $weekNames = ["일", "월", "화", "수", "목", "금", "토"];
+
         $dateText = date("m/d", strtotime($row['due_date']));
         $dayText = $weekNames[date("w", strtotime($row['due_date']))];
+        $timeText = !empty($row['todo_time']) ? date("H:i", strtotime($row['todo_time'])) : "";
       ?>
-        <div class="side-todo <?= $doneClass ?>">
-          <span class="side-date"><?= $dateText ?></span>
+        <div class="side-todo today-side-todo <?= $doneClass ?>">
+          <span class="side-date"><?= $dateText ?>(<?= $dayText ?>)</span>
+
+          <?php if ($timeText !== "") { ?>
+            <span class="side-time"><?= $timeText ?></span>
+          <?php } ?>
+
           <input type="checkbox" <?= $checked ?> disabled>
           <span><?= htmlspecialchars($row['title']) ?></span>
         </div>

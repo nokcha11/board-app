@@ -134,7 +134,7 @@ $weekResult = $weekStmt->get_result();
     </div>
 
     <div class="top-btn">
-      <a href="ToDo_insert.html">+ ToDo 추가</a>
+      <a href="ToDo_insert.php">+ ToDo 추가</a>
     </div>
 
     <table class="calendar">
@@ -211,7 +211,9 @@ $weekResult = $weekStmt->get_result();
       <?php while ($row = $weekResult->fetch_assoc()) {
         $checked = $row['status'] == 1 ? "checked" : "";
         $doneClass = $row['status'] == 1 ? "done" : "";
+        $weekNames = ["일", "월", "화", "수", "목", "금", "토"];
         $dateText = date("m/d", strtotime($row['due_date']));
+        $dayText = $weekNames[date("w", strtotime($row['due_date']))];
       ?>
         <div class="side-todo <?= $doneClass ?>">
           <span class="side-date"><?= $dateText ?></span>

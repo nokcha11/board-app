@@ -1,7 +1,3 @@
-/* ================= 계절 자동 선택 =================
-   ToDo_list.php에서는 calendarMonth 값을 사용
-   index.php에서는 실제 현재 월을 사용
-*/
 const month = typeof calendarMonth !== "undefined"
   ? calendarMonth
   : (new Date().getMonth() + 1);
@@ -9,129 +5,193 @@ const month = typeof calendarMonth !== "undefined"
 let season = "";
 
 if (month >= 3 && month <= 5) {
-  season = "spring"; // 봄: 벚꽃
+  season = "spring";
 } else if (month >= 6 && month <= 8) {
-  season = "summer"; // 여름: 비
+  season = "summer";
 } else if (month >= 9 && month <= 11) {
-  season = "autumn"; // 가을: 낙엽
+  season = "autumn";
 } else {
-  season = "winter"; // 겨울: 눈
+  season = "winter";
 }
 
 document.body.setAttribute("data-season", season);
 
-/* 계절별 색상 변경 
-if (season === "spring") {
-  document.body.style.background = "linear-gradient(135deg,#ffe4ec,#ffcdd2)";
-}
-if (season === "summer") {
-  document.body.style.background = "linear-gradient(135deg,#d6f0ff,#aee1ff)";
-}
-if (season === "autumn") {
-  document.body.style.background = "linear-gradient(135deg,#ffe0c2,#ffb74d)";
-}
-if (season === "winter") {
-  document.body.style.background = "linear-gradient(135deg,#eef3ff,#cfd8ff)";
-}*/
+function createSplash(x, y) {
+  for (let i = 0; i < 9; i++) {
+    const dot = document.createElement("div");
+    dot.className = "splash-dot";
 
-/* ================= 계절별 파티클 생성 ================= */
+    const angle = Math.random() * Math.PI * 2;
+    const distance = 18 + Math.random() * 34;
+
+    dot.style.left = x + "px";
+    dot.style.top = y + "px";
+    dot.style.setProperty("--dot-size", (3 + Math.random() * 5) + "px");
+    dot.style.setProperty("--sx", Math.cos(angle) * distance + "px");
+    dot.style.setProperty("--sy", Math.sin(angle) * distance + "px");
+
+    document.body.appendChild(dot);
+
+    setTimeout(() => {
+      dot.remove();
+    }, 450);
+  }
+}
+
+function popBubble(bubble) {
+  if (!bubble || bubble.classList.contains("pop")) return;
+
+  const rect = bubble.getBoundingClientRect();
+  const x = rect.left + rect.width / 2;
+  const y = rect.top + rect.height / 2;
+
+  bubble.classList.add("pop");
+  createSplash(x, y);
+
+  setTimeout(() => {
+    bubble.remove();
+  }, 350);
+}
+
 function createSeasonParticle() {
   const particle = document.createElement("div");
   particle.classList.add("season-particle");
 
   if (season === "spring") {
     particle.classList.add("petal");
+
   } else if (season === "summer") {
     particle.classList.add("rain");
+
   } else if (season === "autumn") {
     particle.classList.add("leaf");
+
+    const random = Math.random();
+
+    if (random < 0.33) {
+      particle.classList.add("leaf-red");
+    } else if (random < 0.66) {
+      particle.classList.add("leaf-yellow");
+    } else {
+      particle.classList.add("leaf-green");
+    }
+
   } else {
     particle.classList.add("snow");
   }
 
   particle.style.left = Math.random() * window.innerWidth + "px";
 
-  const size = 10 + Math.random() * 12;
+  let size = 20;
+
+  if (season === "summer") {
+    if (Math.random() < 0.72) {
+      size = 42 + Math.random() * 48;
+    } else {
+      size = 95 + Math.random() * 95;
+    }
+
+  } else if (season === "winter") {
+    size = 45 + Math.random() * 55;
+
+  } else if (season === "spring") {
+    size = 12 + Math.random() * 14;
+
+  } else {
+    size = 14 + Math.random() * 10;
+  }
+
   particle.style.setProperty("--size", size + "px");
 
-  const duration =
-    season === "summer"
-      ? 0.8 + Math.random() * 0.7
-      : 7 + Math.random() * 6;
+  let duration = 7 + Math.random() * 6;
+
+  if (season === "summer") {
+    duration = 6 + Math.random() * 4;
+  } else if (season === "winter") {
+    duration = 7 + Math.random() * 5;
+  } else if (season === "autumn") {
+    duration = 8 + Math.random() * 6;
+  }
 
   particle.style.setProperty("--duration", duration + "s");
-
-  const opacity = 0.35 + Math.random() * 0.35;
-  particle.style.setProperty("--opacity", opacity);
-
-  const startRotate = Math.random() * 360;
-  particle.style.setProperty("--start-rotate", startRotate + "deg");
-
-  const wind = Math.random() * 240 - 120;
-  particle.style.setProperty("--wind", wind + "px");
+  particle.style.setProperty("--opacity", 0.5 + Math.random() * 0.3);
+  particle.style.setProperty("--start-rotate", Math.random() * 360 + "deg");
+  particle.style.setProperty("--wind", (Math.random() * 240 - 120) + "px");
 
   document.body.appendChild(particle);
 
-  /* 쌓이지 않고 사라지게
-  setTimeout(() => {
-    particle.remove();
-  }, duration * 1000);*/
-
-  // 👉 쌓이게 변경
-setTimeout(() => {
-  if (season === "spring") {
-    particle.style.top = "calc(100vh - 20px)";
-    particle.style.position = "fixed";
-    particle.style.opacity = "0.8";
-    particle.style.transform = "rotate(" + (Math.random()*360) + "deg)";
-  } else {
-    particle.remove();
+  if (season === "summer") {
+    particle.addEventListener("mouseenter", function () {
+      popBubble(particle);
+    });
   }
-}, duration * 1000);
+
+  setTimeout(() => {
+    if (season === "spring") {
+      particle.style.top = "calc(100vh - 20px)";
+      particle.style.position = "fixed";
+      particle.style.opacity = "0.8";
+      particle.style.transform = "rotate(" + (Math.random() * 360) + "deg)";
+    } else {
+      particle.remove();
+    }
+  }, duration * 1000);
 }
 
-
-/* ================= 계절별 생성 속도 ================= */
 let intervalTime = 700;
 
 if (season === "summer") {
-  intervalTime = 180;
+  intervalTime = 750;
 } else if (season === "winter") {
-  intervalTime = 350;
+  intervalTime = 450;
+} else if (season === "autumn") {
+  intervalTime = 620;
 } else {
   intervalTime = 700;
 }
 
 setInterval(createSeasonParticle, intervalTime);
 
-
-/* ================= 마우스 꽃잎 효과 =================
-   계절과 상관없이 마우스 주변에는 벚꽃잎이 흩날림
-*/
 document.addEventListener("mousemove", function(e) {
   if (Math.random() > 0.88) {
-    const petal = document.createElement("div");
+    const particle = document.createElement("div");
 
-    petal.className = "season-particle petal mouse-petal";
+    if (season === "summer") {
+      particle.className = "season-particle rain mouse-bubble";
 
-    const size = 8 + Math.random() * 8;
-    petal.style.setProperty("--size", size + "px");
+      const size = 10 + Math.random() * 12;
+      particle.style.setProperty("--size", size + "px");
+      particle.style.setProperty("--duration", "1.4s");
+      particle.style.setProperty("--opacity", 0.65 + Math.random() * 0.25);
+      particle.style.setProperty("--wind", (Math.random() * 80 - 40) + "px");
 
-    petal.style.setProperty("--duration", "1.6s");
+    } else if (season === "winter") {
+      particle.className = "season-particle snow mouse-snow";
 
-    const opacity = 0.45 + Math.random() * 0.25;
-    petal.style.setProperty("--opacity", opacity);
+      const size = 14 + Math.random() * 16;
+      particle.style.setProperty("--size", size + "px");
+      particle.style.setProperty("--duration", "1.5s");
+      particle.style.setProperty("--opacity", 0.55 + Math.random() * 0.3);
+      particle.style.setProperty("--wind", (Math.random() * 80 - 40) + "px");
 
-    petal.style.setProperty("--start-rotate", Math.random() * 360 + "deg");
-    petal.style.setProperty("--wind", (Math.random() * 90 - 45) + "px");
+    } else {
+      particle.className = "season-particle petal mouse-petal";
 
-    petal.style.left = e.clientX + "px";
-    petal.style.top = e.clientY + "px";
+      const size = 10 + Math.random() * 10;
+      particle.style.setProperty("--size", size + "px");
+      particle.style.setProperty("--duration", "1.6s");
+      particle.style.setProperty("--opacity", 0.45 + Math.random() * 0.25);
+      particle.style.setProperty("--start-rotate", Math.random() * 360 + "deg");
+      particle.style.setProperty("--wind", (Math.random() * 90 - 45) + "px");
+    }
 
-    document.body.appendChild(petal);
+    particle.style.left = e.clientX + "px";
+    particle.style.top = e.clientY + "px";
+
+    document.body.appendChild(particle);
 
     setTimeout(() => {
-      petal.remove();
+      particle.remove();
     }, 1600);
   }
 });

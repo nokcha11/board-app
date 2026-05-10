@@ -5,69 +5,210 @@
 body {
   margin: 0;
   min-height: 100vh;
-  background-color: #ffc9c9;
+  background: #ffc9c9;
   font-family: Arial, sans-serif;
 }
 
+/* 전체 달력 영역 */
 .calendar-main {
   display: flex;
   justify-content: center;
   align-items: flex-start;
-  gap: 30px;
-  padding: 60px 20px;
+  gap: 52px;
+  padding: 110px 40px 60px;
 }
 
-/* 가운데 달력 */
+/* ================= 사이드 박스 글래스모피즘 ================= */
+.side-box {
+  width: 300px;
+  min-height: 560px;
+  padding: 36px 26px;
+
+  background: rgba(255, 255, 255, 0.26) !important;
+
+  backdrop-filter: blur(16px) saturate(140%);
+  -webkit-backdrop-filter: blur(16px) saturate(140%);
+
+  border: 2px solid rgba(255, 255, 255, 0.65);
+  border-radius: 22px;
+
+  box-shadow:
+    0 18px 40px rgba(255, 77, 77, 0.18),
+    inset 0 0 28px rgba(255, 255, 255, 0.18);
+
+  transition:
+    transform 0.28s ease,
+    box-shadow 0.28s ease,
+    background 0.28s ease;
+}
+
+.side-box:hover {
+  transform: translateY(-6px) scale(1.015);
+
+  background: rgba(255, 255, 255, 0.34) !important;
+
+  box-shadow:
+    0 26px 48px rgba(255, 77, 77, 0.24),
+    inset 0 0 35px rgba(255, 255, 255, 0.25);
+}
+
+.side-box h3 {
+  text-align: center;
+  color: #e60000;
+  font-size: 24px;
+  margin: 0 0 36px;
+}
+
+.empty {
+  text-align: center;
+  color: #777;
+  font-weight: bold;
+}
+
+/* 사이드 일정 */
+.side-todo {
+  display: grid;
+  align-items: center;
+  gap: 8px;
+
+  background: rgba(255, 255, 255, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.62);
+  border-radius: 10px;
+
+  padding: 10px 12px;
+  margin-bottom: 12px;
+
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
+}
+
+.side-todo:hover {
+  transform: translateY(-3px) scale(1.02);
+  background: rgba(255, 255, 255, 0.78);
+  box-shadow: 0 8px 18px rgba(255, 77, 77, 0.12);
+}
+
+.today-side-todo {
+  grid-template-columns: 18px 1fr;
+}
+
+.week-side-todo {
+  grid-template-columns: 70px 48px 18px 1fr;
+}
+
+.side-date,
+.side-time {
+  color: #ff3030;
+  font-weight: bold;
+  font-size: 14px;
+}
+
+.side-title {
+  font-weight: bold;
+  color: #222;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.side-todo.done {
+  opacity: 0.45;
+}
+
+.side-todo.done .side-title {
+  text-decoration: line-through;
+}
+
+/* ================= 중앙 달력 ================= */
 .calendar-wrap {
   width: 760px;
-  background-color: white;
-  border: 2px solid #ff7a7a;
-  border-radius: 12px;
-  padding: 20px;
-  box-shadow: 0 6px 15px rgba(255, 122, 122, 0.25);
+
+  background: rgba(255, 250, 250, 0.9);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+
+  border: 2px solid #ff6b6b;
+  border-radius: 14px;
+
+  padding: 26px 24px 28px;
+
+  box-shadow: 0 14px 34px rgba(255, 77, 77, 0.2);
 }
 
 .calendar-header {
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 18px;
-  margin-bottom: 10px;
+  gap: 22px;
+  margin-bottom: 18px;
 }
 
 .calendar-header h2 {
+  color: #ff4d4d;
+  font-size: 32px;
   margin: 0;
-  color: #ff5c5c;
-  font-size: 26px;
 }
 
 .calendar-header a {
-  text-decoration: none;
+  width: 44px;
+  height: 44px;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  background: #ff6b6b;
   color: white;
-  background-color: #ff7a7a;
-  padding: 5px 10px;
-  border-radius: 5px;
+  text-decoration: none;
+
+  border-radius: 8px;
+  font-size: 24px;
   font-weight: bold;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
 .calendar-header a:hover {
-  background-color: #ff5c5c;
+  background: #ff4d4d;
+  transform: scale(1.08);
+  box-shadow: 0 8px 18px rgba(255, 77, 77, 0.22);
 }
 
 .top-btn {
   text-align: right;
-  margin-bottom: 10px;
+  margin-bottom: 8px;
 }
 
 .top-btn a {
-  text-decoration: none;
-  background-color: #ff7a7a;
+  display: inline-block;
+  background: #ff7a7a;
   color: white;
-  padding: 8px 14px;
-  border-radius: 6px;
+  text-decoration: none;
   font-weight: bold;
+  padding: 12px 22px;
+  border-radius: 8px;
+
+  transition:
+    transform 0.2s ease,
+    background 0.2s ease,
+    box-shadow 0.2s ease;
 }
 
+.top-btn a:hover {
+  background: #ff4d4d;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(255, 77, 77, 0.22);
+}
+
+/* 달력 테이블 */
 .calendar {
   width: 100%;
   border-collapse: collapse;
@@ -75,241 +216,97 @@ body {
 }
 
 .calendar th {
-  height: 35px;
-  color: #d94a4a;
-  border: 1px solid #ffd1d1;
-  background-color: #fff1f1;
+  height: 42px;
+  color: #ff3d3d;
+  background: rgba(255, 230, 230, 0.75);
+  border: 1px solid #ffd0d0;
+  font-size: 18px;
 }
 
 .calendar td {
-  height: 95px;
+  height: 115px;
   vertical-align: top;
-  border: 1px solid #ffd1d1;
-  padding: 6px;
-  background-color: #fffafa;
+  border: 1px solid #ffd0d0;
+  background: rgba(255, 255, 255, 0.48);
+  padding: 8px;
+  cursor: pointer;
+}
+
+.calendar td:hover {
+  background: rgba(255, 230, 230, 0.58);
+  outline: 2px solid #ff5c5c;
+  outline-offset: -2px;
 }
 
 .date {
+  font-size: 18px;
   font-weight: bold;
-  font-size: 15px;
-  margin-bottom: 5px;
-  color: #222;
+  color: #111;
 }
 
 .sun {
-  color: #ff3333 !important;
+  color: #ff3030 !important;
 }
 
 .sat {
   color: #3366ff !important;
 }
 
-/* 달력 날짜 칸 클릭/hover */
-.calendar-cell {
-  cursor: pointer;
-  transition: 0.2s;
-  position: relative;
-}
-
-.calendar-cell:hover {
-  background-color: #ffeaea;
-}
-
-.calendar-cell:hover::after {
-  content: "";
-  position: absolute;
-  top: 4px;
-  left: 4px;
-  right: 4px;
-  bottom: 4px;
-  border: 2px solid #ff4d4d;
-  border-radius: 8px;
-  pointer-events: none;
-}
-
-/* 달력 안 일정 */
+/* 달력 안 todo */
 .todo-item {
-  font-size: 12px;
-  margin-top: 4px;
-  cursor: pointer;
+  margin-top: 6px;
+  padding: 4px 6px;
+  border-radius: 6px;
+  background: rgba(255, 230, 230, 0.82);
+  font-size: 13px;
 }
 
 .todo-title {
   display: flex;
   align-items: center;
   gap: 4px;
-  min-width: 0;
-}
-
-.todo-title input[type="checkbox"] {
-  width: 13px;
-  height: 13px;
-  margin: 0;
-  padding: 0;
-  flex-shrink: 0;
-  cursor: default;
-}
-
-.todo-title span {
-  color: #0044cc;
   overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
 }
 
-.calendar-cell:hover .todo-title span {
-  font-weight: bold;
-  color: #ff3333;
+.todo-title span:last-child {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .todo-time {
-  color: #ff4d4d !important;
-  font-size: 11px;
+  color: #ff3030;
+  font-size: 12px;
   font-weight: bold;
-  margin-right: 3px;
-  flex-shrink: 0;
 }
 
-.todo-item.done .todo-title span {
-  color: #999;
+.todo-item.done {
+  opacity: 0.45;
   text-decoration: line-through;
 }
 
-/* 사이드 박스 */
-.side-box {
-  width: 260px;
-  min-height: 420px;
-  margin-top: 70px;
-  background: #ffe1e1;
-  border: 2px solid #ff4d4d;
-  border-radius: 14px;
-  padding: 25px 20px;
-  box-shadow: 0 6px 15px rgba(255, 77, 77, 0.2);
-}
-
-.side-box h3 {
-  text-align: center;
-  color: #e60000;
-  margin-bottom: 25px;
-}
-
-/* 사이드 일정 공통 */
-.side-todo {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  background: #fff5f5;
-  padding: 8px;
-  border-radius: 8px;
-  margin-bottom: 10px;
-  font-size: 13px;
-  color: #222;
-  font-weight: bold;
-}
-
-/* 주간 날짜 + 요일 */
-.side-date {
-  color: #ff3333;
-  font-size: 12px;
-  width: 64px;
-  min-width: 64px;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-/* 시간 */
-.side-time {
-  color: #ff6666;
-  font-size: 12px;
-  font-weight: bold;
-  width: 42px;
-  min-width: 42px;
-  white-space: nowrap;
-  flex-shrink: 0;
-}
-
-/* 체크박스 */
-.side-todo input[type="checkbox"] {
-  width: 14px;
-  height: 14px;
-  margin: 0;
-  flex-shrink: 0;
-}
-
-/* 제목 */
-.side-title {
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-}
-
-/* 오늘 일정은 날짜가 없으므로 시간/체크/제목만 정렬 */
-.today-side-todo {
-  display: flex;
-}
-
-.today-side-todo .side-date {
-  display: none;
-}
-
-/* 완료 일정 */
-.side-todo.done {
-  background: #eeeeee;
-  color: #888;
-}
-
-.side-todo.done .side-title {
-  text-decoration: line-through;
-}
-
-.empty {
-  text-align: center;
-  color: #777;
-  font-weight: bold;
-  font-size: 14px;
-}
-
-/* 모달 배경 */
+/* ================= 모달 ================= */
 .modal-wrap {
   display: none;
   position: fixed;
   inset: 0;
+  z-index: 20000;
   background: rgba(0, 0, 0, 0.35);
-  z-index: 9999;
 }
 
-/* 데스크탑 모달 */
 .modal-box {
-  width: 520px;
-  max-height: 80vh;
-  overflow-y: auto;
-  background: #fff;
+  width: 420px;
+  max-width: 90%;
+  background: white;
   border-radius: 18px;
   padding: 24px;
-  margin: 100px auto;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.25);
-  animation: modalFade 0.2s ease;
-}
-
-@keyframes modalFade {
-  from {
-    opacity: 0;
-    transform: translateY(-12px);
-  }
-
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+  margin: 120px auto;
 }
 
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 18px;
 }
 
 .modal-header h3 {
@@ -319,117 +316,21 @@ body {
 
 .modal-close {
   border: none;
-  background: #ff7a7a;
-  color: white;
-  width: 32px;
-  height: 32px;
-  border-radius: 50%;
-  font-size: 22px;
+  background: none;
+  font-size: 28px;
   cursor: pointer;
-  line-height: 1;
+  color: #ff4d4d;
 }
 
-.modal-close:hover {
-  background: #ff4d4d;
-}
-
-.modal-todo {
-  background: #fff5f5;
-  border: 1px solid #ffd1d1;
-  border-radius: 10px;
-  padding: 12px;
-  margin-bottom: 10px;
-}
-
-.modal-todo-title {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-weight: bold;
-  color: #222;
-}
-
-.modal-todo.done .modal-todo-title span {
-  color: #999;
-  text-decoration: line-through;
-}
-
-.modal-todo-btns {
-  display: flex;
-  justify-content: flex-end;
-  gap: 8px;
-  margin-top: 10px;
-}
-
-.modal-todo-btns a,
-.modal-add-btn a {
-  display: inline-block;
-  text-decoration: none;
-  background: #ff7a7a;
-  color: white;
-  padding: 6px 10px;
-  border-radius: 7px;
-  font-size: 12px;
-  font-weight: bold;
-}
-
-.modal-todo-btns a:hover,
-.modal-add-btn a:hover {
-  background: #ff4d4d;
-}
-
-.modal-add-btn {
-  margin-top: 16px;
-  text-align: center;
-}
-
-/* 모바일 */
-@media (max-width: 768px) {
+/* 반응형 */
+@media (max-width: 1300px) {
   .calendar-main {
     flex-direction: column;
     align-items: center;
-    padding: 30px 14px;
   }
 
+  .side-box,
   .calendar-wrap {
-    width: 100%;
-    order: 1;
-  }
-
-  .side-box {
-    width: 100%;
-    max-width: 760px;
-    min-height: auto;
-    margin-top: 20px;
-  }
-
-  .side-box:first-of-type {
-    order: 2;
-  }
-
-  .side-box:last-of-type {
-    order: 3;
-  }
-
-  .modal-box {
-    width: 100%;
-    max-height: 75vh;
-    margin: 0;
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    border-radius: 22px 22px 0 0;
-    animation: bottomSheetUp 0.25s ease;
-  }
-
-  @keyframes bottomSheetUp {
-    from {
-      transform: translateY(100%);
-    }
-
-    to {
-      transform: translateY(0);
-    }
+    width: 90%;
   }
 }

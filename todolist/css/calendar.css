@@ -23,30 +23,20 @@ body {
   width: 300px;
   min-height: 560px;
   padding: 36px 26px;
-
   background: rgba(255, 255, 255, 0.26) !important;
-
   backdrop-filter: blur(16px) saturate(140%);
   -webkit-backdrop-filter: blur(16px) saturate(140%);
-
   border: 2px solid rgba(255, 255, 255, 0.65);
   border-radius: 22px;
-
   box-shadow:
     0 18px 40px rgba(255, 77, 77, 0.18),
     inset 0 0 28px rgba(255, 255, 255, 0.18);
-
-  transition:
-    transform 0.28s ease,
-    box-shadow 0.28s ease,
-    background 0.28s ease;
+  transition: transform 0.28s ease, box-shadow 0.28s ease, background 0.28s ease;
 }
 
 .side-box:hover {
   transform: translateY(-6px) scale(1.015);
-
   background: rgba(255, 255, 255, 0.34) !important;
-
   box-shadow:
     0 26px 48px rgba(255, 77, 77, 0.24),
     inset 0 0 35px rgba(255, 255, 255, 0.25);
@@ -70,21 +60,14 @@ body {
   display: grid;
   align-items: center;
   gap: 8px;
-
   background: rgba(255, 255, 255, 0.62);
   border: 1px solid rgba(255, 255, 255, 0.62);
   border-radius: 10px;
-
   padding: 10px 12px;
   margin-bottom: 12px;
-
   backdrop-filter: blur(8px);
   -webkit-backdrop-filter: blur(8px);
-
-  transition:
-    transform 0.2s ease,
-    background 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 
 .side-todo:hover {
@@ -127,16 +110,12 @@ body {
 /* ================= 중앙 달력 ================= */
 .calendar-wrap {
   width: 760px;
-
   background: rgba(255, 250, 250, 0.9);
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-
   border: 2px solid #ff6b6b;
   border-radius: 14px;
-
   padding: 26px 24px 28px;
-
   box-shadow: 0 14px 34px rgba(255, 77, 77, 0.2);
 }
 
@@ -157,23 +136,16 @@ body {
 .calendar-header a {
   width: 44px;
   height: 44px;
-
   display: flex;
   align-items: center;
   justify-content: center;
-
   background: #ff6b6b;
   color: white;
   text-decoration: none;
-
   border-radius: 8px;
   font-size: 24px;
   font-weight: bold;
-
-  transition:
-    transform 0.2s ease,
-    background 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 
 .calendar-header a:hover {
@@ -195,11 +167,7 @@ body {
   font-weight: bold;
   padding: 12px 22px;
   border-radius: 8px;
-
-  transition:
-    transform 0.2s ease,
-    background 0.2s ease,
-    box-shadow 0.2s ease;
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
 }
 
 .top-btn a:hover {
@@ -292,34 +260,193 @@ body {
   inset: 0;
   z-index: 20000;
   background: rgba(0, 0, 0, 0.35);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  animation: fadeIn 0.25s ease;
 }
 
 .modal-box {
-  width: 420px;
-  max-width: 90%;
-  background: white;
-  border-radius: 18px;
-  padding: 24px;
-  margin: 120px auto;
+  width: 560px;
+  max-width: 92%;
+  margin: 110px auto;
+  padding: 34px;
+  background: rgba(255, 255, 255, 0.9);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border: 2px solid rgba(255, 255, 255, 0.6);
+  border-radius: 28px;
+  box-shadow:
+    0 25px 50px rgba(0, 0, 0, 0.18),
+    0 0 30px rgba(255, 120, 120, 0.2);
+  animation: modalUp 0.28s ease;
 }
 
+/* 모달 상단 */
 .modal-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  margin-bottom: 28px;
 }
 
 .modal-header h3 {
   margin: 0;
   color: #ff4d4d;
+  font-size: 40px;
+  font-weight: bold;
 }
 
 .modal-close {
   border: none;
   background: none;
-  font-size: 28px;
-  cursor: pointer;
   color: #ff4d4d;
+  font-size: 42px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+.modal-close:hover {
+  transform: rotate(90deg) scale(1.1);
+  color: #ff1f1f;
+}
+
+/* 모달 일정 리스트 */
+.modal-todo-area {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+/* 모달 일정 카드 */
+.modal-todo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 18px;
+  padding: 16px 18px;
+  background: rgba(255, 245, 245, 0.88);
+  border: 1px solid rgba(255, 200, 200, 0.8);
+  border-radius: 14px;
+  transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+}
+
+.modal-todo:hover {
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.95);
+  box-shadow: 0 10px 20px rgba(255, 77, 77, 0.12);
+}
+
+/* 체크 + 제목 */
+.modal-todo-title {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 18px;
+  font-weight: bold;
+  color: #222;
+}
+
+.modal-todo-title input[type="checkbox"] {
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.modal-todo-title span {
+  display: block;
+  min-width: 0;
+  line-height: 1.45;
+  word-break: keep-all;
+  overflow-wrap: break-word;
+}
+
+/* 완료 상태 */
+.modal-todo.done {
+  opacity: 0.45;
+}
+
+.modal-todo.done span {
+  text-decoration: line-through;
+}
+
+/* 수정 삭제 버튼 */
+.modal-todo-btns {
+  flex-shrink: 0;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+}
+
+.modal-todo-btns a {
+  min-width: 58px;
+  padding: 10px 12px;
+  background: #ff7a7a;
+  color: white;
+  border-radius: 10px;
+  text-align: center;
+  text-decoration: none;
+  font-size: 15px;
+  font-weight: bold;
+  transition: transform 0.2s ease, background 0.2s ease, box-shadow 0.2s ease;
+}
+
+.modal-todo-btns a:hover {
+  background: #ff4d4d;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(255, 77, 77, 0.2);
+}
+
+/* 일정 추가 버튼 */
+.modal-add-btn {
+  margin-top: 26px;
+  text-align: center;
+}
+
+.modal-add-btn a {
+  display: inline-block;
+  padding: 14px 24px;
+  background: linear-gradient(135deg, #ff7a7a, #ff4d4d);
+  color: white;
+  border-radius: 14px;
+  font-size: 20px;
+  font-weight: bold;
+  text-decoration: none;
+  box-shadow: 0 8px 18px rgba(255, 77, 77, 0.28);
+  transition: transform 0.22s ease, box-shadow 0.22s ease, background 0.22s ease;
+}
+
+.modal-add-btn a:hover {
+  transform: translateY(-3px) scale(1.03);
+  background: linear-gradient(135deg, #ff4d4d, #ff2f6d);
+  box-shadow:
+    0 0 16px rgba(255, 120, 120, 0.55),
+    0 12px 24px rgba(255, 77, 77, 0.32);
+}
+
+/* 모달 애니메이션 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+@keyframes modalUp {
+  from {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+
+  to {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 /* 반응형 */

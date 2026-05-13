@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>AI 체커 게임</title>
+<style>
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #ffe0e0, #ffc3c3);
+    font-family: Arial, sans-serif;
+  }
+
+  .game-wrap { text-align: center; }
+
+  h1 {
+    color: #ff4d4d;
+    margin-bottom: 12px;
+  }
+
+  .info {
+    margin-bottom: 18px;
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+  }
+
+  .board {
+    display: grid;
+    grid-template-columns: repeat(8, 70px);
+    grid-template-rows: repeat(8, 70px);
+    border: 6px solid #5b2c2c;
+    box-shadow: 0 18px 35px rgba(0, 0, 0, 0.25);
+  }
+
+  .cell {
+    width: 70px;
+    height: 70px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .light { background: #f8e0c4; }
+  .dark { background: #9b5a3c; cursor: pointer; }
+
+  .piece {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    box-shadow: inset 0 4px 8px rgba(255,255,255,0.35), 0 5px 10px rgba(0,0,0,0.3);
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+
+  .piece:hover { transform: scale(1.08); }
+
+  .red { background: radial-gradient(circle at 30% 25%, #ff9a9a, #e60000); }
+  .black { background: radial-gradient(circle at 30% 25%, #777, #111); }
+
+  .selected {
+    outline: 4px solid #fff176;
+    outline-offset: -4px;
+  }
+
+  .possible { background: #6fcf97 !important; }
+
+  button {
+    margin-top: 18px;
+    padding: 12px 24px;
+    border: none;
+    border-radius: 10px;
+    background: #ff6b6b;
+    color: white;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: pointer;
+  }
+
+  button:hover { background: #ff3f3f; }
+</style>
+</head>
+<body>
+
+<div class="game-wrap">
+  <h1>AI 체커 게임</h1>
+  <div class="info" id="turnInfo">빨간 말 차례</div>
+  <div class="board" id="board"></div>
+  <button onclick="resetGame()">다시 시작</button>
+</div>
+
+<script>
+const board = document.getElementById("board");
+const turnInfo = document.getElementById("turnInfo");
+
+let currentTurn = "red";
+let selectedPos = null;
+let gameBoard = [];
+let gameOver = false;
+
+function initBoard() {
+  gameBoard = [];
+  board.innerHTML = "";
+  selectedPos = null;
+  currentTurn = "red";
+  gameOver = false;
+  turnInfo.textContent = "빨간 말 차례 - 내가 움직입니다";
+
+  for (let row = 0; row < 8; row++) {
+    gameBoard[row] = [];
+    for (let col = 0; col < 8; col++) {
+      if ((row + col) % 2 === 1) {
+        if (row < 3) gameBoard[row][col] = "black";
+        else if (row > 4) gameBoard[row][col] = "red";
+        else gameBoard[row][col] = null;
+      } else {
+        gameBoard[row][col] = null;
+      }
+    }
+  }
+
+  drawBoard();
+}
+
+function drawBoard() {
+  board.innerHTML = "";
+
+  for (let row = 0; row < 8; row++) {
+    for (let col = 0; col < 8; col++) {
+      const cell = document.createElement("div");
+      cell.className = "cell " + (((row + col) % 2 === 0) ? "light" : "dark");
+      cell.dataset.row = row;
+      cell.dataset.col = col;
+      cell.addEventListener("click", () => cellClick(row, col));
+
+      const pieceColor = gameBoard[row][col];
+      if (pieceColor) {
+        const piece = document.createElement("div");
+
+        if (pieceColor.includes("red")) {
+          piece.className = "piece red";
+        } else {
+          piece.className = "piece black";
+        }
+
+        // 킹 표시
+        if (pieceColor.includes("king")) {
+          piece.style.border = "4px solid gold";
+        }
+
+        cell.appendChild(piece);
+      }
+
+      board.appendChild(cell);
+    }
+  }
+}
+
+function cellClick(row, col) {
+  if (gameOver) return;
+  if (!currentTurn.includes("red")) return;
+
+  const piece = gameBoard[row][col];
+
+  if (piece && piece.includes("red")) {
+    clearHighlights();
+    selectedPos = { row, col };
+    getCell(row, col).classList.add("selected");
+    showPossibleMoves(row, col);
+    return;
+  }
+
+  if (selectedPos && isPossibleMove(row, col)) {
+    movePiece(selectedPos.row, selectedPos.col, row, col);
+    selectedPos = null;
+    clearHighlights();
+    drawBoard();
+
+    if (!checkWinner()) {
+      currentTurn = "black";
+      turnInfo.textContent = "검은 말 차례 - 컴퓨터 생각 중...";
+      setTimeout(computerMove, 700);
+    }
+  }
+}
+
+function showPossibleMoves(row, col) {
+  const moves = getMoves(row, col);
+  moves.forEach(move => {
+    getCell(move.row, move.col).classList.add("possible");
+  });
+}
+
+function clearHighlights() {
+  document.querySelectorAll(".cell").forEach(cell => {
+    cell.classList.remove("selected", "possible");
+  });
+}
+
+function getMoves(row, col) {
+  const piece = gameBoard[row][col];
+  if (!piece) return [];
+
+  const moves = [];
+
+  let directions = [];
+
+  // 킹 여부 확인
+  const isKing = piece.includes("king");
+
+  if (isKing) {
+    directions = [-1, 1];
+  } else {
+    directions = [piece === "red" ? -1 : 1];
+  }
+
+  directions.forEach(direction => {
+
+    const normalMoves = [
+      { row: row + direction, col: col - 1 },
+      { row: row + direction, col: col + 1 }
+    ];
+
+    normalMoves.forEach(pos => {
+      if (isInside(pos.row, pos.col) && !gameBoard[pos.row][pos.col]) {
+        moves.push(pos);
+      }
+    });
+
+    const jumpMoves = [
+      {
+        enemyRow: row + direction,
+        enemyCol: col - 1,
+        row: row + direction * 2,
+        col: col - 2
+      },
+      {
+        enemyRow: row + direction,
+        enemyCol: col + 1,
+        row: row + direction * 2,
+        col: col + 2
+      }
+    ];
+
+    jumpMoves.forEach(pos => {
+      if (
+        isInside(pos.row, pos.col) &&
+        isInside(pos.enemyRow, pos.enemyCol) &&
+        gameBoard[pos.enemyRow][pos.enemyCol] &&
+        !gameBoard[pos.enemyRow][pos.enemyCol].includes(piece.split("-")[0]) &&
+        !gameBoard[pos.row][pos.col]
+      ) {
+        moves.push({
+          row: pos.row,
+          col: pos.col,
+          capture: {
+            row: pos.enemyRow,
+            col: pos.enemyCol
+          }
+        });
+      }
+    });
+
+  });
+
+  return moves;
+}
+
+function isPossibleMove(row, col) {
+  const moves = getMoves(selectedPos.row, selectedPos.col);
+  return moves.some(move => move.row === row && move.col === col);
+}
+
+function movePiece(fromRow, fromCol, toRow, toCol) {
+  const moves = getMoves(fromRow, fromCol);
+  const move = moves.find(m => m.row === toRow && m.col === toCol);
+
+  gameBoard[toRow][toCol] = gameBoard[fromRow][fromCol];
+  gameBoard[fromRow][fromCol] = null;
+
+  if (move && move.capture) {
+    gameBoard[move.capture.row][move.capture.col] = null;
+  }
+
+  // 빨간말 킹 승급
+  if (toRow === 0 && gameBoard[toRow][toCol] === "red") {
+    gameBoard[toRow][toCol] = "red-king";
+  }
+
+  // 검은말 킹 승급
+  if (toRow === 7 && gameBoard[toRow][toCol] === "black") {
+    gameBoard[toRow][toCol] = "black-king";
+  }
+}
+
+function computerMove() {
+  if (gameOver) return;
+
+  const allMoves = getAllMoves("black");
+
+  if (allMoves.length === 0) {
+    gameOver = true;
+    alert("빨간 말 승리! 검은 말이 움직일 수 없습니다.");
+    return;
+  }
+
+  const captureMoves = allMoves.filter(item => item.move.capture);
+  const candidateMoves = captureMoves.length > 0 ? captureMoves : allMoves;
+  const randomIndex = Math.floor(Math.random() * candidateMoves.length);
+  const selected = candidateMoves[randomIndex];
+
+  movePiece(selected.from.row, selected.from.col, selected.move.row, selected.move.col);
+  drawBoard();
+
+  if (!checkWinner()) {
+    currentTurn = "red";
+    turnInfo.textContent = "빨간 말 차례 - 내가 움직입니다";
+  }
+}
+
+function getAllMoves(color) {
+  const allMoves = [];
+
+  for (let row = 0; row < 8; row++) {
+    for (let col = 0; col < 8; col++) {
+      if (gameBoard[row][col] && gameBoard[row][col].includes(color)) {
+        const moves = getMoves(row, col);
+        moves.forEach(move => {
+          allMoves.push({
+            from: { row, col },
+            move
+          });
+        });
+      }
+    }
+  }
+
+  return allMoves;
+}
+
+function checkWinner() {
+  let redCount = 0;
+  let blackCount = 0;
+
+  for (let row = 0; row < 8; row++) {
+    for (let col = 0; col < 8; col++) {
+      if (gameBoard[row][col] && gameBoard[row][col].includes("red")) redCount++;
+      if (gameBoard[row][col] && gameBoard[row][col].includes("black")) blackCount++;
+    }
+  }
+
+  if (redCount === 0) {
+    gameOver = true;
+    alert("검은 말 승리!");
+    return true;
+  }
+
+  if (blackCount === 0) {
+    gameOver = true;
+    alert("빨간 말 승리!");
+    return true;
+  }
+
+  return false;
+}
+
+function getCell(row, col) {
+  return document.querySelector(`.cell[data-row='${row}'][data-col='${col}']`);
+}
+
+function isInside(row, col) {
+  return row >= 0 && row < 8 && col >= 0 && col < 8;
+}
+
+function resetGame() {
+  initBoard();
+}
+
+initBoard();
+</script>
+
+</body>
+</html>

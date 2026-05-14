@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>자바스크립트 학년 제어</title>
+
+<style>
+  body{
+    font-family: Arial;
+    background:#f5f5f5;
+    padding:50px;
+  }
+
+  .wrap{
+    width:500px;
+    background:white;
+    padding:40px;
+    border-radius:20px;
+    margin:auto;
+    box-shadow:0 5px 20px rgba(0,0,0,0.1);
+  }
+
+  h1{
+    margin-bottom:40px;
+  }
+
+  .row{
+    margin-bottom:30px;
+  }
+
+  label{
+    display:inline-block;
+    width:100px;
+    font-size:30px;
+    font-weight:bold;
+  }
+
+  select{
+    width:300px;
+    padding:12px;
+    font-size:20px;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="wrap">
+
+<h1>자바스크립트 select 제어</h1>
+
+<div class="row">
+  <label>학교</label>
+
+  <select id="school" onchange="changeGrade()">
+
+    <option value="초등학교">초등학교</option>
+    <option value="중학교">중학교</option>
+    <option value="고등학교">고등학교</option>
+
+  </select>
+</div>
+
+<div class="row">
+  <label>학년</label>
+
+  <select id="grade">
+
+  </select>
+</div>
+
+</div>
+
+<script>
+
+/* 페이지 시작시 최초 실행 */
+changeGrade();
+
+/* 학교 선택 변경 */
+function changeGrade(){
+
+    let school = document.getElementById("school").value;
+
+    let grade = document.getElementById("grade");
+
+    /* 기존 option 초기화 */
+    grade.innerHTML = "";
+
+    /* 초등학교 */
+    if(school == "초등학교"){
+
+        for(let i = 1; i <= 6; i++){
+
+            grade.innerHTML +=
+            "<option>" + i + "학년</option>";
+
+        }
+
+    }
+
+    /* 중학교 */
+    else if(school == "중학교"){
+
+        for(let i = 1; i <= 3; i++){
+
+            grade.innerHTML +=
+            "<option>" + i + "학년</option>";
+
+        }
+
+    }
+
+    /* 고등학교 */
+    else if(school == "고등학교"){
+
+        for(let i = 1; i <= 3; i++){
+
+            grade.innerHTML +=
+            "<option>" + i + "학년</option>";
+
+        }
+
+    }
+
+}
+
+</script>
+
+</body>
+</html>

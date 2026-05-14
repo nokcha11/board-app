@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>자바스크립트 함수 형태 연습</title>
+
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    padding: 40px;
+  }
+
+  h1 {
+    margin-bottom: 30px;
+  }
+
+  fieldset {
+    width: 520px;
+    margin-bottom: 24px;
+    padding: 22px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+
+  legend {
+    font-weight: bold;
+    font-size: 18px;
+  }
+
+  input,
+  select,
+  button {
+    padding: 8px;
+    margin-right: 8px;
+  }
+
+  button {
+    cursor: pointer;
+  }
+
+  .result {
+    margin-top: 16px;
+    color: blue;
+    font-weight: bold;
+  }
+</style>
+</head>
+
+<body>
+
+<h1>자바스크립트 함수 형태 연습</h1>
+
+<fieldset>
+  <legend>공통 입력</legend>
+
+  <input type="number" id="num1" placeholder="수1">
+
+  <select id="op">
+    <option value="+">+</option>
+    <option value="-">-</option>
+    <option value="*">*</option>
+    <option value="/">/</option>
+  </select>
+
+  <input type="number" id="num2" placeholder="수2">
+</fieldset>
+
+<fieldset>
+  <legend>실행1 : 전달값 없음 / 리턴값 없음</legend>
+
+  <button onclick="calc1()">실행1</button>
+
+  <div class="result" id="result1">결과 :</div>
+</fieldset>
+
+<fieldset>
+  <legend>실행2 : 전달값 있음 / 리턴값 없음</legend>
+
+  <button onclick="runCalc2()">실행2</button>
+
+  <div class="result" id="result2">결과 :</div>
+</fieldset>
+
+<fieldset>
+  <legend>실행3 : 전달값 있음 / 리턴값 있음</legend>
+
+  <button onclick="runCalc3()">실행3</button>
+
+  <div class="result" id="result3">결과 :</div>
+</fieldset>
+
+<script>
+  /* 계산 공통 처리 */
+  function calculate(num1, num2, op) {
+    if (op === "+") {
+      return num1 + num2;
+    } else if (op === "-") {
+      return num1 - num2;
+    } else if (op === "*") {
+      return num1 * num2;
+    } else if (op === "/") {
+      return num1 / num2;
+    }
+  }
+
+  /* 실행1 : 전달값 없음 / 리턴값 없음 */
+  function calc1() {
+    let num1 = Number(document.getElementById("num1").value);
+    let num2 = Number(document.getElementById("num2").value);
+    let op = document.getElementById("op").value;
+
+    let result = calculate(num1, num2, op);
+
+    document.getElementById("result1").innerHTML = "결과 : " + result;
+  }
+
+  /* 실행2 : 전달값 있음 / 리턴값 없음 */
+  function calc2(num1, num2, op) {
+    let result = calculate(num1, num2, op);
+
+    document.getElementById("result2").innerHTML = "결과 : " + result;
+  }
+
+  function runCalc2() {
+    let num1 = Number(document.getElementById("num1").value);
+    let num2 = Number(document.getElementById("num2").value);
+    let op = document.getElementById("op").value;
+
+    calc2(num1, num2, op);
+  }
+
+  /* 실행3 : 전달값 있음 / 리턴값 있음 */
+  function calc3(num1, num2, op) {
+    let result = calculate(num1, num2, op);
+
+    return result;
+  }
+
+  function runCalc3() {
+    let num1 = Number(document.getElementById("num1").value);
+    let num2 = Number(document.getElementById("num2").value);
+    let op = document.getElementById("op").value;
+
+    let result = calc3(num1, num2, op);
+
+    document.getElementById("result3").innerHTML = "결과 : " + result;
+  }
+</script>
+
+</body>
+</html>

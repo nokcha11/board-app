@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <title>HTML 이벤트 정리 예제</title>
+
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        padding: 40px;
+        background: #f4f4f4;
+        line-height: 1.6;
+      }
+
+      .box {
+        background: white;
+        padding: 20px;
+        margin-bottom: 25px;
+        border-radius: 10px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
+
+      h2 {
+        margin-top: 0;
+        color: #333;
+      }
+
+      button {
+        padding: 10px 15px;
+        cursor: pointer;
+      }
+
+      input,
+      select,
+      textarea {
+        padding: 8px;
+        margin-top: 10px;
+        width: 300px;
+      }
+
+      .result {
+        margin-top: 15px;
+        padding: 10px;
+        background: #eef;
+        border-radius: 5px;
+      }
+
+      .hover-box {
+        width: 200px;
+        height: 100px;
+        background: skyblue;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin-top: 10px;
+        transition: 0.3s;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>HTML 자주 사용하는 이벤트 정리</h1>
+
+    <!-- ===================================================== -->
+    <!-- onclick -->
+    <!-- ===================================================== -->
+    <div class="box">
+      <h2>1. onclick (버튼 클릭)</h2>
+
+      <!-- 버튼 클릭 시 JS 함수 실행 -->
+      <button onclick="clickEvent()">클릭하세요</button>
+
+      <div id="clickResult" class="result"></div>
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- onchange -->
+    <!-- ===================================================== -->
+    <div class="box">
+      <h2>2. onchange (값 변경)</h2>
+
+      <!-- select 값 변경 시 실행 -->
+      <select onchange="changeSelect(this)">
+        <option value="">선택하세요</option>
+        <option value="사과">사과</option>
+        <option value="바나나">바나나</option>
+        <option value="포도">포도</option>
+      </select>
+
+      <div id="selectResult" class="result"></div>
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- checkbox -->
+    <!-- ===================================================== -->
+    <div class="box">
+      <h2>3. checkbox 체크 이벤트</h2>
+
+      <!-- 체크 상태가 바뀔 때 onchange 발생 -->
+      <label>
+        <input type="checkbox" onchange="checkboxEvent(this)" />
+        약관 동의
+      </label>
+
+      <div id="checkboxResult" class="result"></div>
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- radio -->
+    <!-- ===================================================== -->
+    <div class="box">
+      <h2>4. radio 버튼 이벤트</h2>
+
+      <!-- 같은 name이면 하나만 선택 가능 -->
+      <label>
+        <input
+          type="radio"
+          name="gender"
+          value="남자"
+          onchange="radioEvent(this)"
+        />
+        남자
+      </label>
+
+      <label>
+        <input
+          type="radio"
+          name="gender"
+          value="여자"
+          onchange="radioEvent(this)"
+        />
+        여자
+      </label>
+
+      <div id="radioResult" class="result"></div>
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- onkeyup -->
+    <!-- ===================================================== -->
+    <div class="box">
+      <h2>5. onkeyup (키 입력)</h2>
+
+      <!-- 키를 눌렀다 뗄 때 실행 -->
+      <input type="text" placeholder="입력해보세요" onkeyup="keyEvent(this)" />
+
+      <div id="keyResult" class="result"></div>
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- onfocus / onblur -->
+    <!-- ===================================================== -->
+    <div class="box">
+      <h2>6. onfocus / onblur</h2>
+
+      <!-- 포커스 들어오면 -->
+      <input
+        type="text"
+        placeholder="클릭해보세요"
+        onfocus="focusEvent()"
+        onblur="blurEvent()"
+      />
+
+      <div id="focusResult" class="result"></div>
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- mouseover / mouseout -->
+    <!-- ===================================================== -->
+    <div class="box">
+      <h2>7. 마우스 이벤트</h2>
+
+      <div
+        class="hover-box"
+        onmouseover="mouseOverEvent(this)"
+        onmouseout="mouseOutEvent(this)"
+      >
+        마우스를 올려보세요
+      </div>
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- form submit -->
+    <!-- ===================================================== -->
+    <div class="box">
+      <h2>8. form submit</h2>
+
+      <!-- submit 발생 -->
+      <form onsubmit="submitEvent(event)">
+        <input type="text" placeholder="이름 입력" />
+        <br /><br />
+
+        <button type="submit">전송</button>
+      </form>
+
+      <div id="submitResult" class="result"></div>
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- textarea -->
+    <!-- ===================================================== -->
+    <div class="box">
+      <h2>9. textarea 입력 이벤트</h2>
+
+      <textarea
+        rows="5"
+        cols="50"
+        onkeyup="textareaEvent(this)"
+        placeholder="내용 입력"
+      ></textarea>
+
+      <div id="textareaResult" class="result"></div>
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- double click -->
+    <!-- ===================================================== -->
+    <div class="box">
+      <h2>10. ondblclick (더블클릭)</h2>
+
+      <button ondblclick="doubleClickEvent()">더블클릭 해보세요</button>
+
+      <div id="doubleResult" class="result"></div>
+    </div>
+
+    <!-- ===================================================== -->
+    <!-- JavaScript -->
+    <!-- ===================================================== -->
+    <script>
+      /*
+=========================================================
+1. onclick
+=========================================================
+버튼 클릭 시 실행되는 이벤트
+가장 많이 사용하는 이벤트
+*/
+      function clickEvent() {
+        document.getElementById("clickResult").innerHTML =
+          "버튼이 클릭되었습니다.";
+      }
+
+      /*
+=========================================================
+2. onchange
+=========================================================
+값이 변경되었을 때 실행
+
+select
+input
+checkbox
+radio 등에서 자주 사용
+*/
+      function changeSelect(element) {
+        // 선택된 value 가져오기
+        let value = element.value;
+
+        document.getElementById("selectResult").innerHTML =
+          "선택한 값 : " + value;
+      }
+
+      /*
+=========================================================
+3. checkbox
+=========================================================
+체크 여부 확인
+
+checked:
+true / false 반환
+*/
+      function checkboxEvent(element) {
+        if (element.checked) {
+          document.getElementById("checkboxResult").innerHTML =
+            "체크되었습니다.";
+        } else {
+          document.getElementById("checkboxResult").innerHTML =
+            "체크 해제되었습니다.";
+        }
+      }
+
+      /*
+=========================================================
+4. radio button
+=========================================================
+선택된 radio의 value 확인
+*/
+      function radioEvent(element) {
+        document.getElementById("radioResult").innerHTML =
+          "선택한 성별 : " + element.value;
+      }
+
+      /*
+=========================================================
+5. onkeyup
+=========================================================
+키를 입력 후 손을 뗐을 때 실행
+
+실시간 검색창 등에 많이 사용
+*/
+      function keyEvent(element) {
+        document.getElementById("keyResult").innerHTML =
+          "현재 입력값 : " + element.value;
+      }
+
+      /*
+=========================================================
+6. onfocus
+=========================================================
+input 클릭해서 포커스 들어올 때
+*/
+      function focusEvent() {
+        document.getElementById("focusResult").innerHTML =
+          "input에 포커스가 들어왔습니다.";
+      }
+
+      /*
+=========================================================
+7. onblur
+=========================================================
+포커스 빠져나갈 때 실행
+*/
+      function blurEvent() {
+        document.getElementById("focusResult").innerHTML =
+          "input에서 포커스가 빠져나갔습니다.";
+      }
+
+      /*
+=========================================================
+8. mouseover
+=========================================================
+마우스를 올렸을 때
+*/
+      function mouseOverEvent(element) {
+        element.style.background = "orange";
+        element.innerHTML = "마우스 올라감";
+      }
+
+      /*
+=========================================================
+9. mouseout
+=========================================================
+마우스가 벗어났을 때
+*/
+      function mouseOutEvent(element) {
+        element.style.background = "skyblue";
+        element.innerHTML = "마우스를 올려보세요";
+      }
+
+      /*
+=========================================================
+10. form submit
+=========================================================
+폼 전송 시 실행
+
+event.preventDefault()
+:
+기본 submit 동작(페이지 새로고침) 막기
+*/
+      function submitEvent(event) {
+        // 기본 동작 방지
+        event.preventDefault();
+
+        document.getElementById("submitResult").innerHTML =
+          "폼이 전송되었습니다.";
+      }
+
+      /*
+=========================================================
+11. textarea 입력
+=========================================================
+textarea의 현재 글자 수 표시
+*/
+      function textareaEvent(element) {
+        let textLength = element.value.length;
+
+        document.getElementById("textareaResult").innerHTML =
+          "글자 수 : " + textLength;
+      }
+
+      /*
+=========================================================
+12. ondblclick
+=========================================================
+더블 클릭 이벤트
+*/
+      function doubleClickEvent() {
+        document.getElementById("doubleResult").innerHTML =
+          "더블클릭 되었습니다.";
+      }
+    </script>
+  </body>
+</html>

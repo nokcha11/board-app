@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<title>체커 게임 메인</title>
+<style>
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #111, #2b124c);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+  color: white;
+}
+
+.main-box {
+  width: 520px;
+  padding: 50px;
+  text-align: center;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 28px;
+  backdrop-filter: blur(14px);
+  box-shadow: 0 30px 80px rgba(0,0,0,0.45);
+}
+
+h1 {
+  font-size: 46px;
+  margin-bottom: 16px;
+}
+
+p {
+  font-size: 20px;
+  color: #ddd;
+}
+
+.start-btn {
+  margin-top: 36px;
+  padding: 16px 42px;
+  border: none;
+  border-radius: 16px;
+  background: linear-gradient(135deg, #7b2cff, #3d0c8c);
+  color: white;
+  font-size: 22px;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 0 0 24px rgba(123,44,255,0.5);
+}
+
+.modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,0.65);
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-card {
+  width: 420px;
+  padding: 36px;
+  background: white;
+  color: #111;
+  text-align: center;
+  border-radius: 24px;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+}
+
+.modal-card h2 {
+  margin-top: 0;
+}
+
+.modal-card button {
+  margin: 8px;
+  padding: 12px 24px;
+  border: none;
+  border-radius: 12px;
+  background: #4b008f;
+  color: white;
+  font-size: 17px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.modal-card .no {
+  background: #999;
+}
+</style>
+</head>
+
+<body>
+
+<div class="main-box">
+  <h1>AI 체커 게임</h1>
+  <p>세련된 블랙 & 화이트 체커판에서<br>전략 게임을 시작해보세요.</p>
+  <button class="start-btn" onclick="openStartModal()">게임 시작</button>
+</div>
+
+<div class="modal" id="startModal">
+  <div class="modal-card">
+    <h2>게임을 시작하시겠습니까?</h2>
+    <button onclick="openLevelModal()">예</button>
+    <button class="no" onclick="closeAll()">아니오</button>
+  </div>
+</div>
+
+<div class="modal" id="levelModal">
+  <div class="modal-card">
+    <h2>난이도를 선택하세요</h2>
+    <button onclick="selectLevel('easy')">초급</button>
+    <button onclick="selectLevel('normal')">중급</button>
+    <button onclick="selectLevel('hard')">고급</button>
+  </div>
+</div>
+
+<div class="modal" id="modeModal">
+  <div class="modal-card">
+    <h2>플레이 방식을 선택하세요</h2>
+    <button onclick="startGame('one')">1인용</button>
+    <button onclick="startGame('two')">2인용</button>
+  </div>
+</div>
+
+<script>
+let selectedLevel = "easy";
+
+function openStartModal() {
+  document.getElementById("startModal").style.display = "flex";
+}
+
+function openLevelModal() {
+  document.getElementById("startModal").style.display = "none";
+  document.getElementById("levelModal").style.display = "flex";
+}
+
+function selectLevel(level) {
+  selectedLevel = level;
+  document.getElementById("levelModal").style.display = "none";
+  document.getElementById("modeModal").style.display = "flex";
+}
+
+function startGame(mode) {
+  location.href = "checker.html?level=" + selectedLevel + "&mode=" + mode;
+}
+
+function closeAll() {
+  document.querySelectorAll(".modal").forEach(modal => {
+    modal.style.display = "none";
+  });
+}
+</script>
+
+</body>
+</html>

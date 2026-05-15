@@ -1,119 +1,288 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<meta charset="UTF-8">
 <title>AI 체커 게임</title>
+
 <style>
-  * { box-sizing: border-box; }
+* { box-sizing: border-box; }
 
-  body {
-    margin: 0;
-    min-height: 100vh;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background: linear-gradient(135deg, #ffe0e0, #ffc3c3);
-    font-family: Arial, sans-serif;
+body {
+  margin: 0;
+  min-height: 100vh;
+  background: radial-gradient(circle at top, #2a1048, #08040d 70%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-family: Arial, sans-serif;
+}
+
+.game-wrap {
+  text-align: center;
+  color: white;
+}
+
+h1 {
+  font-size: 44px;
+  margin: 0 0 10px;
+}
+
+.info {
+  margin-bottom: 12px;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.level-info {
+  margin-bottom: 14px;
+  color: #d7b7ff;
+  font-size: 17px;
+  font-weight: bold;
+}
+
+.board {
+  display: grid;
+  grid-template-columns: repeat(8, 72px);
+  grid-template-rows: repeat(8, 72px);
+  border: 6px solid #111;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.65);
+}
+
+.cell {
+  width: 72px;
+  height: 72px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.light { background: #f3f3f3; }
+.dark { background: #111; cursor: pointer; }
+
+.selected {
+  outline: 4px solid #8a2cff;
+  outline-offset: -4px;
+}
+
+.possible {
+  background: #4b008f !important;
+}
+
+.piece {
+  width: 66px;
+  height: 66px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: transparent;
+  border-radius: 0;
+  font-size: 62px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: 0.2s ease;
+  filter: drop-shadow(0 12px 10px rgba(0,0,0,0.75));
+}
+
+.piece:hover {
+  transform: translateY(-5px) scale(1.1);
+}
+
+.white-piece {
+  color: #ffffff;
+  text-shadow:
+    0 1px 0 #ddd,
+    0 3px 0 #aaa,
+    0 6px 8px rgba(0,0,0,0.75),
+    0 0 14px rgba(255,255,255,0.45);
+}
+
+.purple-piece {
+  color: #7f27ff;
+  text-shadow:
+    0 1px 0 #a866ff,
+    0 3px 0 #4b008f,
+    0 6px 10px rgba(0,0,0,0.8),
+    0 0 18px rgba(127,39,255,0.85);
+}
+
+.king-piece {
+  color: gold !important;
+  text-shadow:
+    0 0 10px gold,
+    0 3px 0 #8a6500,
+    0 8px 16px rgba(0,0,0,0.8);
+}
+
+.status-box {
+  width: 585px;
+  margin: 18px auto 0;
+  padding: 18px;
+  background: rgba(255,255,255,0.08);
+  border: 1px solid rgba(255,255,255,0.18);
+  border-radius: 16px;
+  text-align: left;
+  font-size: 17px;
+  line-height: 1.7;
+  backdrop-filter: blur(10px);
+}
+
+.status-title {
+  font-weight: bold;
+  color: #d7b7ff;
+}
+
+button {
+  margin-top: 22px;
+  padding: 13px 28px;
+  border: none;
+  border-radius: 14px;
+  background: linear-gradient(135deg, #8a2cff, #5414c8);
+  color: white;
+  font-size: 18px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 0 22px rgba(138,44,255,0.65);
+}
+
+.win-modal {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 999;
+  background: rgba(0,0,0,0.7);
+  justify-content: center;
+  align-items: center;
+}
+
+.win-card {
+  width: 540px;
+  padding: 55px 40px;
+  background: white;
+  border-radius: 32px;
+  text-align: center;
+  color: #111;
+  box-shadow:
+    0 0 40px rgba(138,44,255,0.9),
+    0 30px 90px rgba(0,0,0,0.6);
+}
+
+.win-card h2 {
+  font-size: 52px;
+  color: #5b00b5;
+  margin-bottom: 20px;
+}
+
+.win-card p {
+  font-size: 22px;
+  font-weight: bold;
+}
+
+.particle {
+  position: fixed;
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  pointer-events: none;
+  background: var(--color);
+  box-shadow: 0 0 12px var(--color);
+  animation: particleFly 1.1s ease-out forwards;
+  z-index: 2000;
+}
+
+@keyframes particleFly {
+  to {
+    transform: translate(var(--x), var(--y)) scale(0);
+    opacity: 0;
   }
-
-  .game-wrap { text-align: center; }
-
-  h1 {
-    color: #ff4d4d;
-    margin-bottom: 12px;
-  }
-
-  .info {
-    margin-bottom: 18px;
-    font-size: 20px;
-    font-weight: bold;
-    color: #333;
-  }
-
-  .board {
-    display: grid;
-    grid-template-columns: repeat(8, 70px);
-    grid-template-rows: repeat(8, 70px);
-    border: 6px solid #5b2c2c;
-    box-shadow: 0 18px 35px rgba(0, 0, 0, 0.25);
-  }
-
-  .cell {
-    width: 70px;
-    height: 70px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-
-  .light { background: #f8e0c4; }
-  .dark { background: #9b5a3c; cursor: pointer; }
-
-  .piece {
-    width: 48px;
-    height: 48px;
-    border-radius: 50%;
-    box-shadow: inset 0 4px 8px rgba(255,255,255,0.35), 0 5px 10px rgba(0,0,0,0.3);
-    cursor: pointer;
-    transition: transform 0.2s ease;
-  }
-
-  .piece:hover { transform: scale(1.08); }
-
-  .red { background: radial-gradient(circle at 30% 25%, #ff9a9a, #e60000); }
-  .black { background: radial-gradient(circle at 30% 25%, #777, #111); }
-
-  .selected {
-    outline: 4px solid #fff176;
-    outline-offset: -4px;
-  }
-
-  .possible { background: #6fcf97 !important; }
-
-  button {
-    margin-top: 18px;
-    padding: 12px 24px;
-    border: none;
-    border-radius: 10px;
-    background: #ff6b6b;
-    color: white;
-    font-size: 16px;
-    font-weight: bold;
-    cursor: pointer;
-  }
-
-  button:hover { background: #ff3f3f; }
+}
 </style>
 </head>
+
 <body>
 
 <div class="game-wrap">
   <h1>AI 체커 게임</h1>
-  <div class="info" id="turnInfo">빨간 말 차례</div>
+  <div class="info" id="turnInfo">흰색 말 차례 - 내가 움직입니다</div>
+  <div class="level-info" id="levelInfo"></div>
+
   <div class="board" id="board"></div>
+
+  <div class="status-box">
+    <div class="status-title">게임 상태</div>
+    <div id="killMessage">아직 잡힌 말이 없습니다.</div>
+    <div id="whiteCount">현재 흰색말 12개 남았습니다.</div>
+    <div id="purpleCount">현재 보라색말 12개 남았습니다.</div>
+    <div id="scoreText">현재 0대0입니다.</div>
+  </div>
+
   <button onclick="resetGame()">다시 시작</button>
+  <button onclick="location.href='checker_main.html'">메인으로</button>
+</div>
+
+<div class="win-modal" id="winModal">
+  <div class="win-card">
+    <h2 id="winTitle">승리!</h2>
+    <p id="winMsg">축하합니다!</p>
+    <button onclick="resetGame()">다시 시작</button>
+  </div>
 </div>
 
 <script>
 const board = document.getElementById("board");
 const turnInfo = document.getElementById("turnInfo");
+const levelInfo = document.getElementById("levelInfo");
+const winModal = document.getElementById("winModal");
+const winTitle = document.getElementById("winTitle");
+const winMsg = document.getElementById("winMsg");
+
+const killMessage = document.getElementById("killMessage");
+const whiteCount = document.getElementById("whiteCount");
+const purpleCount = document.getElementById("purpleCount");
+const scoreText = document.getElementById("scoreText");
+
+const params = new URLSearchParams(location.search);
+const mode = params.get("mode") || "one";
+const level = params.get("level") || "easy";
 
 let currentTurn = "red";
 let selectedPos = null;
 let gameBoard = [];
 let gameOver = false;
+let mustContinueCapture = false;
+
+let whiteKill = 0;
+let purpleKill = 0;
+
+function getLevelName() {
+  if (level === "easy") return "초급";
+  if (level === "normal") return "중급";
+  if (level === "hard") return "고급";
+  return "초급";
+}
 
 function initBoard() {
   gameBoard = [];
-  board.innerHTML = "";
   selectedPos = null;
   currentTurn = "red";
   gameOver = false;
-  turnInfo.textContent = "빨간 말 차례 - 내가 움직입니다";
+  mustContinueCapture = false;
+  whiteKill = 0;
+  purpleKill = 0;
+
+  winModal.style.display = "none";
+  turnInfo.textContent = "흰색 말 차례 - 내가 움직입니다";
+  levelInfo.textContent = "현재 난이도 : " + getLevelName();
+
+  killMessage.textContent = "아직 잡힌 말이 없습니다.";
+  updateStatus();
 
   for (let row = 0; row < 8; row++) {
     gameBoard[row] = [];
+
     for (let col = 0; col < 8; col++) {
       if ((row + col) % 2 === 1) {
         if (row < 3) gameBoard[row][col] = "black";
@@ -134,24 +303,27 @@ function drawBoard() {
   for (let row = 0; row < 8; row++) {
     for (let col = 0; col < 8; col++) {
       const cell = document.createElement("div");
-      cell.className = "cell " + (((row + col) % 2 === 0) ? "light" : "dark");
+      cell.className = "cell " + ((row + col) % 2 === 0 ? "light" : "dark");
       cell.dataset.row = row;
       cell.dataset.col = col;
-      cell.addEventListener("click", () => cellClick(row, col));
+      cell.onclick = () => cellClick(row, col);
 
       const pieceColor = gameBoard[row][col];
+
       if (pieceColor) {
         const piece = document.createElement("div");
+        piece.className = "piece";
 
         if (pieceColor.includes("red")) {
-          piece.className = "piece red";
+          piece.classList.add("white-piece");
+          piece.innerHTML = pieceColor.includes("king") ? "♔" : "♘";
         } else {
-          piece.className = "piece black";
+          piece.classList.add("purple-piece");
+          piece.innerHTML = pieceColor.includes("king") ? "♚" : "♞";
         }
 
-        // 킹 표시
         if (pieceColor.includes("king")) {
-          piece.style.border = "4px solid gold";
+          piece.classList.add("king-piece");
         }
 
         cell.appendChild(piece);
@@ -164,11 +336,13 @@ function drawBoard() {
 
 function cellClick(row, col) {
   if (gameOver) return;
-  if (!currentTurn.includes("red")) return;
+  if (mode === "one" && currentTurn === "black") return;
 
   const piece = gameBoard[row][col];
 
-  if (piece && piece.includes("red")) {
+  if (piece && piece.includes(currentTurn)) {
+    if (mustContinueCapture) return;
+
     clearHighlights();
     selectedPos = { row, col };
     getCell(row, col).classList.add("selected");
@@ -177,103 +351,108 @@ function cellClick(row, col) {
   }
 
   if (selectedPos && isPossibleMove(row, col)) {
-    movePiece(selectedPos.row, selectedPos.col, row, col);
-    selectedPos = null;
+    const result = movePiece(selectedPos.row, selectedPos.col, row, col);
+
     clearHighlights();
     drawBoard();
+    updateStatus();
 
-    if (!checkWinner()) {
-      currentTurn = "black";
-      turnInfo.textContent = "검은 말 차례 - 컴퓨터 생각 중...";
-      setTimeout(computerMove, 700);
+    if (checkWinner()) return;
+
+    if (result.captured) {
+      const nextCaptures = getMoves(row, col).filter(move => move.capture);
+
+      if (nextCaptures.length > 0) {
+        mustContinueCapture = true;
+        selectedPos = { row, col };
+        getCell(row, col).classList.add("selected");
+        showPossibleMoves(row, col);
+        turnInfo.textContent = "연속으로 잡을 수 있습니다!";
+        return;
+      }
     }
+
+    mustContinueCapture = false;
+    selectedPos = null;
+    changeTurn();
   }
 }
 
-function showPossibleMoves(row, col) {
-  const moves = getMoves(row, col);
-  moves.forEach(move => {
-    getCell(move.row, move.col).classList.add("possible");
-  });
-}
+function changeTurn() {
+  currentTurn = currentTurn === "red" ? "black" : "red";
 
-function clearHighlights() {
-  document.querySelectorAll(".cell").forEach(cell => {
-    cell.classList.remove("selected", "possible");
-  });
+  if (mode === "one" && currentTurn === "black") {
+    turnInfo.textContent = "보라색 말 차례 - 컴퓨터 생각 중...";
+    setTimeout(computerMove, 700);
+  } else {
+    turnInfo.textContent = currentTurn === "red"
+      ? "흰색 말 차례"
+      : "보라색 말 차례";
+  }
 }
 
 function getMoves(row, col) {
   const piece = gameBoard[row][col];
   if (!piece) return [];
 
-  const moves = [];
-
-  let directions = [];
-
-  // 킹 여부 확인
+  const color = piece.includes("red") ? "red" : "black";
   const isKing = piece.includes("king");
 
-  if (isKing) {
-    directions = [-1, 1];
-  } else {
-    directions = [piece === "red" ? -1 : 1];
-  }
+  const directions = isKing ? [-1, 1] : [color === "red" ? -1 : 1];
+  const moves = [];
 
   directions.forEach(direction => {
+    [-1, 1].forEach(side => {
+      const normalRow = row + direction;
+      const normalCol = col + side;
 
-    const normalMoves = [
-      { row: row + direction, col: col - 1 },
-      { row: row + direction, col: col + 1 }
-    ];
-
-    normalMoves.forEach(pos => {
-      if (isInside(pos.row, pos.col) && !gameBoard[pos.row][pos.col]) {
-        moves.push(pos);
+      if (isInside(normalRow, normalCol) && !gameBoard[normalRow][normalCol]) {
+        moves.push({ row: normalRow, col: normalCol });
       }
-    });
 
-    const jumpMoves = [
-      {
-        enemyRow: row + direction,
-        enemyCol: col - 1,
-        row: row + direction * 2,
-        col: col - 2
-      },
-      {
-        enemyRow: row + direction,
-        enemyCol: col + 1,
-        row: row + direction * 2,
-        col: col + 2
-      }
-    ];
+      const enemyRow = row + direction;
+      const enemyCol = col + side;
+      const jumpRow = row + direction * 2;
+      const jumpCol = col + side * 2;
 
-    jumpMoves.forEach(pos => {
       if (
-        isInside(pos.row, pos.col) &&
-        isInside(pos.enemyRow, pos.enemyCol) &&
-        gameBoard[pos.enemyRow][pos.enemyCol] &&
-        !gameBoard[pos.enemyRow][pos.enemyCol].includes(piece.split("-")[0]) &&
-        !gameBoard[pos.row][pos.col]
+        isInside(jumpRow, jumpCol) &&
+        isInside(enemyRow, enemyCol) &&
+        gameBoard[enemyRow][enemyCol] &&
+        !gameBoard[enemyRow][enemyCol].includes(color) &&
+        !gameBoard[jumpRow][jumpCol]
       ) {
         moves.push({
-          row: pos.row,
-          col: pos.col,
-          capture: {
-            row: pos.enemyRow,
-            col: pos.enemyCol
-          }
+          row: jumpRow,
+          col: jumpCol,
+          capture: { row: enemyRow, col: enemyCol }
         });
       }
     });
-
   });
 
   return moves;
 }
 
+function showPossibleMoves(row, col) {
+  let moves = getMoves(row, col);
+
+  if (mustContinueCapture) {
+    moves = moves.filter(move => move.capture);
+  }
+
+  moves.forEach(move => {
+    getCell(move.row, move.col).classList.add("possible");
+  });
+}
+
 function isPossibleMove(row, col) {
-  const moves = getMoves(selectedPos.row, selectedPos.col);
+  let moves = getMoves(selectedPos.row, selectedPos.col);
+
+  if (mustContinueCapture) {
+    moves = moves.filter(move => move.capture);
+  }
+
   return moves.some(move => move.row === row && move.col === col);
 }
 
@@ -281,23 +460,44 @@ function movePiece(fromRow, fromCol, toRow, toCol) {
   const moves = getMoves(fromRow, fromCol);
   const move = moves.find(m => m.row === toRow && m.col === toCol);
 
-  gameBoard[toRow][toCol] = gameBoard[fromRow][fromCol];
+  const movingPiece = gameBoard[fromRow][fromCol];
+
+  gameBoard[toRow][toCol] = movingPiece;
   gameBoard[fromRow][fromCol] = null;
 
+  let captured = false;
+
   if (move && move.capture) {
+    const deadPiece = gameBoard[move.capture.row][move.capture.col];
+
+    if (deadPiece && deadPiece.includes("black")) {
+      whiteKill++;
+      killMessage.textContent = "흰색말이 보라색말 하나를 죽였습니다!";
+    }
+
+    if (deadPiece && deadPiece.includes("red")) {
+      purpleKill++;
+      killMessage.textContent = "보라색말이 흰색말 하나를 죽였습니다!";
+    }
+
     gameBoard[move.capture.row][move.capture.col] = null;
+    captured = true;
   }
 
-  // 빨간말 킹 승급
   if (toRow === 0 && gameBoard[toRow][toCol] === "red") {
     gameBoard[toRow][toCol] = "red-king";
   }
 
-  // 검은말 킹 승급
   if (toRow === 7 && gameBoard[toRow][toCol] === "black") {
     gameBoard[toRow][toCol] = "black-king";
   }
+
+  return { captured };
 }
+
+/* =============================
+   AI 난이도 적용 핵심 부분
+============================= */
 
 function computerMove() {
   if (gameOver) return;
@@ -305,34 +505,179 @@ function computerMove() {
   const allMoves = getAllMoves("black");
 
   if (allMoves.length === 0) {
-    gameOver = true;
-    alert("빨간 말 승리! 검은 말이 움직일 수 없습니다.");
+    showWin("흰색 승리!", "보라색 말이 움직일 수 없습니다!");
     return;
   }
 
-  const captureMoves = allMoves.filter(item => item.move.capture);
-  const candidateMoves = captureMoves.length > 0 ? captureMoves : allMoves;
-  const randomIndex = Math.floor(Math.random() * candidateMoves.length);
-  const selected = candidateMoves[randomIndex];
+  const selected = chooseComputerMove(allMoves);
 
-  movePiece(selected.from.row, selected.from.col, selected.move.row, selected.move.col);
+  const result = movePiece(
+    selected.from.row,
+    selected.from.col,
+    selected.move.row,
+    selected.move.col
+  );
+
   drawBoard();
+  updateStatus();
 
-  if (!checkWinner()) {
+  if (checkWinner()) return;
+
+  if (result.captured) {
+    const nextCaptures = getMoves(selected.move.row, selected.move.col)
+      .filter(move => move.capture);
+
+    if (nextCaptures.length > 0) {
+      setTimeout(() => {
+        computerContinueCapture(selected.move.row, selected.move.col);
+      }, 600);
+      return;
+    }
+  }
+
+  currentTurn = "red";
+  turnInfo.textContent = "흰색 말 차례 - 내가 움직입니다";
+}
+
+function chooseComputerMove(allMoves) {
+  if (level === "easy") {
+    return randomMove(allMoves);
+  }
+
+  if (level === "normal") {
+    const captureMoves = allMoves.filter(item => item.move.capture);
+
+    if (captureMoves.length > 0) {
+      return randomMove(captureMoves);
+    }
+
+    return randomMove(allMoves);
+  }
+
+  if (level === "hard") {
+    let bestMove = allMoves[0];
+    let bestScore = -9999;
+
+    allMoves.forEach(item => {
+      const score = evaluateMove(item);
+
+      if (score > bestScore) {
+        bestScore = score;
+        bestMove = item;
+      }
+    });
+
+    return bestMove;
+  }
+
+  return randomMove(allMoves);
+}
+
+function evaluateMove(item) {
+  let score = 0;
+
+  const fromRow = item.from.row;
+  const fromCol = item.from.col;
+  const toRow = item.move.row;
+  const toCol = item.move.col;
+
+  const piece = gameBoard[fromRow][fromCol];
+
+  if (item.move.capture) {
+    score += 100;
+  }
+
+  if (toRow === 7 && piece === "black") {
+    score += 80;
+  }
+
+  if (piece.includes("king")) {
+    score += 20;
+  }
+
+  if (toCol === 0 || toCol === 7) {
+    score += 15;
+  }
+
+  if (isDangerAfterMove(fromRow, fromCol, toRow, toCol)) {
+    score -= 80;
+  }
+
+  score += Math.floor(Math.random() * 10);
+
+  return score;
+}
+
+function isDangerAfterMove(fromRow, fromCol, toRow, toCol) {
+  const originalFrom = gameBoard[fromRow][fromCol];
+  const originalTo = gameBoard[toRow][toCol];
+
+  gameBoard[toRow][toCol] = originalFrom;
+  gameBoard[fromRow][fromCol] = null;
+
+  let danger = false;
+
+  for (let row = 0; row < 8; row++) {
+    for (let col = 0; col < 8; col++) {
+      if (gameBoard[row][col] && gameBoard[row][col].includes("red")) {
+        const moves = getMoves(row, col);
+
+        if (moves.some(move => move.capture && move.capture.row === toRow && move.capture.col === toCol)) {
+          danger = true;
+        }
+      }
+    }
+  }
+
+  gameBoard[fromRow][fromCol] = originalFrom;
+  gameBoard[toRow][toCol] = originalTo;
+
+  return danger;
+}
+
+function randomMove(moves) {
+  return moves[Math.floor(Math.random() * moves.length)];
+}
+
+function computerContinueCapture(row, col) {
+  const captureMoves = getMoves(row, col).filter(move => move.capture);
+
+  if (captureMoves.length === 0) {
     currentTurn = "red";
-    turnInfo.textContent = "빨간 말 차례 - 내가 움직입니다";
+    turnInfo.textContent = "흰색 말 차례 - 내가 움직입니다";
+    return;
+  }
+
+  let selectedMove;
+
+  if (level === "hard") {
+    selectedMove = captureMoves[0];
+  } else {
+    selectedMove = captureMoves[Math.floor(Math.random() * captureMoves.length)];
+  }
+
+  const result = movePiece(row, col, selectedMove.row, selectedMove.col);
+
+  drawBoard();
+  updateStatus();
+
+  if (checkWinner()) return;
+
+  if (result.captured) {
+    setTimeout(() => {
+      computerContinueCapture(selectedMove.row, selectedMove.col);
+    }, 600);
   }
 }
 
 function getAllMoves(color) {
-  const allMoves = [];
+  const result = [];
 
   for (let row = 0; row < 8; row++) {
     for (let col = 0; col < 8; col++) {
       if (gameBoard[row][col] && gameBoard[row][col].includes(color)) {
-        const moves = getMoves(row, col);
-        moves.forEach(move => {
-          allMoves.push({
+        getMoves(row, col).forEach(move => {
+          result.push({
             from: { row, col },
             move
           });
@@ -341,33 +686,79 @@ function getAllMoves(color) {
     }
   }
 
-  return allMoves;
+  return result;
+}
+
+function updateStatus() {
+  let white = 0;
+  let purple = 0;
+
+  gameBoard.flat().forEach(piece => {
+    if (piece && piece.includes("red")) white++;
+    if (piece && piece.includes("black")) purple++;
+  });
+
+  whiteCount.textContent = "현재 흰색말 " + white + "개 남았습니다.";
+  purpleCount.textContent = "현재 보라색말 " + purple + "개 남았습니다.";
+  scoreText.textContent = "현재 " + whiteKill + "대" + purpleKill + "입니다.";
 }
 
 function checkWinner() {
-  let redCount = 0;
-  let blackCount = 0;
+  let white = 0;
+  let purple = 0;
 
-  for (let row = 0; row < 8; row++) {
-    for (let col = 0; col < 8; col++) {
-      if (gameBoard[row][col] && gameBoard[row][col].includes("red")) redCount++;
-      if (gameBoard[row][col] && gameBoard[row][col].includes("black")) blackCount++;
-    }
-  }
+  gameBoard.flat().forEach(piece => {
+    if (piece && piece.includes("red")) white++;
+    if (piece && piece.includes("black")) purple++;
+  });
 
-  if (redCount === 0) {
-    gameOver = true;
-    alert("검은 말 승리!");
+  if (white === 0) {
+    showWin("보라색 승리!", "축하합니다!");
     return true;
   }
 
-  if (blackCount === 0) {
-    gameOver = true;
-    alert("빨간 말 승리!");
+  if (purple === 0) {
+    showWin("흰색 승리!", "축하합니다!");
     return true;
   }
 
   return false;
+}
+
+function showWin(title, msg) {
+  gameOver = true;
+  winTitle.textContent = title;
+  winMsg.textContent = msg;
+  winModal.style.display = "flex";
+  fireworks();
+}
+
+function fireworks() {
+  const colors = ["#ffffff", "#7f27ff", "#ffd700", "#ff4dff", "#00d9ff"];
+
+  for (let i = 0; i < 180; i++) {
+    const particle = document.createElement("div");
+    particle.className = "particle";
+
+    particle.style.left = Math.random() * window.innerWidth + "px";
+    particle.style.top = Math.random() * window.innerHeight + "px";
+
+    particle.style.setProperty("--x", (Math.random() * 500 - 250) + "px");
+    particle.style.setProperty("--y", (Math.random() * 500 - 250) + "px");
+    particle.style.setProperty("--color", colors[Math.floor(Math.random() * colors.length)]);
+
+    document.body.appendChild(particle);
+
+    setTimeout(() => {
+      particle.remove();
+    }, 1200);
+  }
+}
+
+function clearHighlights() {
+  document.querySelectorAll(".cell").forEach(cell => {
+    cell.classList.remove("selected", "possible");
+  });
 }
 
 function getCell(row, col) {

@@ -7,6 +7,7 @@ try {
     $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8";
     $pdo = new PDO($dsn, $user, $password);
     $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+
 } catch (PDOException $e) {
     echo "
     <script>
@@ -32,7 +33,9 @@ if ($id == '' || $pw == '') {
 }
 
 // DB조회 회원 확인
-$sql = "SELECT * FROM tb_member WHERE id = :id AND pw = :pw";
+$sql = "SELECT * FROM tb_member 
+        WHERE id = :id AND pw = :pw";
+
 $stmt = $pdo->prepare($sql);
 $stmt->bindValue(':id', $id);
 $stmt->bindValue(':pw', $pw);
@@ -41,7 +44,12 @@ $stmt->execute();
 $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
 if ($row) {
-    $_SESSION['loginid'] = $id;
+
+    // 회원 고유번호 저장
+    $_SESSION['idx'] = $row['idx'];
+
+    // 로그인 아이디 저장
+    $_SESSION['loginid'] = $row['id'];
 
     echo "
     <script>
@@ -49,6 +57,8 @@ if ($row) {
         location.href='index.php';
     </script>
     ";
+    exit;
+
 } else {
     echo "
     <script>
@@ -56,5 +66,6 @@ if ($row) {
         location.href='login.php';
     </script>
     ";
+    exit;
 }
 ?>

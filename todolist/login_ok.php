@@ -1,71 +1,46 @@
 <?php
 session_start();
-
 require_once "dbcon.php";
 
-try {
-    $dsn = "mysql:host=$host;dbname=$dbname;charset=utf8";
-    $pdo = new PDO($dsn, $user, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$conn = new mysqli($host, $user, $password, $dbname);
 
-} catch (PDOException $e) {
-    echo "
-    <script>
-        alert('DB 연결 오류가 발생했습니다.');
-        history.back();
-    </script>
-    ";
-    exit;
+if ($conn->connect_error) {
+  echo "<script>alert('DB 연결 오류가 발생했습니다.'); history.back();</script>";
+  exit;
 }
 
-// POST 값 받기
-$id = $_POST['id'] ?? '';
-$pw = $_POST['pw'] ?? '';
+$conn->set_charset("utf8mb4");
 
-if ($id == '' || $pw == '') {
-    echo "
-    <script>
-        alert('아이디와 비밀번호를 입력해주세요.');
-        location.href='login.php';
-    </script>
-    ";
-    exit;
+$id = trim($_POST['id'] ?? '');
+$pw = trim($_POST['pw'] ?? '');
+
+if ($id === '' || $pw === '') {
+  echo "<script>alert('아이디와 비밀번호를 입력해주세요.'); location.href='login.php';</script>";
+  exit;
 }
 
-// DB조회 회원 확인
-$sql = "SELECT * FROM tb_member 
-        WHERE id = :id AND pw = :pw";
+$sql = "SELECT idx, id FROM tb_member WHERE id = ? AND pw = ? LIMIT 1";
+$stmt = $conn->prepare($sql);
 
-$stmt = $pdo->prepare($sql);
-$stmt->bindValue(':id', $id);
-$stmt->bindValue(':pw', $pw);
+if (!$stmt) {
+  echo "<script>alert('로그인 처리 중 오류가 발생했습니다.'); history.back();</script>";
+  exit;
+}
+
+$stmt->bind_param("ss", $id, $pw);
 $stmt->execute();
-
-$row = $stmt->fetch(PDO::FETCH_ASSOC);
+$result = $stmt->get_result();
+$row = $result->fetch_assoc();
 
 if ($row) {
+  $_SESSION['idx'] = (int)$row['idx'];
+  $_SESSION['loginid'] = $row['id'];
 
-    // 회원 고유번호 저장
-    $_SESSION['idx'] = $row['idx'];
-
-    // 로그인 아이디 저장
-    $_SESSION['loginid'] = $row['id'];
-
-    echo "
-    <script>
-        alert('로그인 성공');
-        location.href='index.php';
-    </script>
-    ";
-    exit;
-
+  echo "<script>alert('로그인 성공'); location.href='index.php';</script>";
 } else {
-    echo "
-    <script>
-        alert('로그인 실패');
-        location.href='login.php';
-    </script>
-    ";
-    exit;
+  echo "<script>alert('로그인 실패'); location.href='login.php';</script>";
 }
+
+$stmt->close();
+$conn->close();
 ?>

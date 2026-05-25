@@ -1,0 +1,250 @@
+/* ===== header ===== */
+header {
+  position: sticky;
+  top: 0;
+  z-index: 1000;
+  width: 100%;
+  background: #ff4d4d;
+  padding: 18px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  box-shadow: 0 4px 14px rgba(255, 77, 77, 0.35);
+  max-width: 100%;
+  overflow-x: hidden;
+
+}
+
+/* 제목 영역 */
+.header-top {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+  flex-shrink: 0;
+}
+
+header h1 {
+  margin: 0;
+  color: #fff;
+  font-size: 26px;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+/* 환영문구 */
+.welcome-header {
+  font-size: 14px;
+  background: #ffffff;
+  color: #ff4d4d;
+  padding: 6px 12px;
+  border-radius: 20px;
+  font-weight: bold;
+  white-space: nowrap;
+}
+
+/* 메뉴 */
+nav {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 14px;
+  flex-wrap: wrap;
+}
+
+nav a {
+  background: linear-gradient(135deg, #ff1a1a, #ff6b6b);
+  color: #fff;
+  margin-left: 0;
+  text-decoration: none;
+  font-weight: 700;
+  position: relative;
+  padding: 7px 14px;
+  border-radius: 10px;
+  transition: 0.25s;
+  text-shadow: 0 0 8px rgba(255,255,255,0.95);
+  box-shadow: 0 6px 16px rgba(120, 0, 0, 0.35);
+  outline: 2px solid rgba(255,255,255,0.8);
+  white-space: nowrap;
+}
+
+nav a:hover {
+  background: #ff1a1a;
+  font-weight: 900;
+  color: #fff;
+  transform: translateY(-2px);
+  box-shadow:
+    0 0 8px rgba(255,255,255,0.7),
+    0 0 16px rgba(255,80,80,0.9),
+    0 0 28px rgba(255,0,0,0.8),
+    0 0 40px rgba(255,0,0,1);
+  text-shadow:
+    0 0 6px rgba(255,255,255,0.9),
+    0 0 12px rgba(255,100,100,0.9);
+}
+
+/* 밑줄 제거 */
+nav a::after {
+  display: none;
+}
+
+/* 작은 별 효과 */
+.star {
+  position: absolute;
+  pointer-events: none;
+  width: 0;
+  height: 0;
+  background: #fff5f5;
+  border-radius: 50%;
+  z-index: 9999;
+  opacity: 0.95;
+  animation: star-pop 0.7s ease-out forwards;
+  box-shadow: 0 0 8px currentColor;
+  filter: blur(0.2px);
+}
+
+.star::before {
+  content: "✦";
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 8px;
+  line-height: 14px;
+  color: currentColor;
+  text-shadow:
+    0 0 4px currentColor,
+    0 0 8px currentColor,
+    0 0 12px currentColor;
+}
+
+@keyframes star-pop {
+  0% {
+    transform: scale(0.4) translate(0, 0);
+    opacity: 1;
+  }
+
+  45% {
+    transform: scale(1.1) translate(calc(var(--x) * 0.5), calc(var(--y) * 0.5));
+    opacity: 1;
+  }
+
+  100% {
+    transform: scale(0.5) translate(var(--x), var(--y));
+    opacity: 0;
+  }
+}
+
+/* ===== 태블릿 ===== */
+@media (max-width: 900px) {
+  header {
+    padding: 16px 24px;
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .header-top {
+    justify-content: center;
+    width: 100%;
+  }
+
+  header h1 {
+    font-size: 26px;
+    text-align: center;
+  }
+
+  nav {
+    width: 100%;
+    justify-content: center;
+    gap: 10px;
+  }
+
+  nav a {
+    margin: 0;
+    font-size: 15px;
+    padding: 7px 13px;
+  }
+}
+
+/* ===== 모바일 ===== */
+@media (max-width: 480px) {
+  header {
+    padding: 14px 12px;
+    gap: 12px;
+  }
+
+  .header-top {
+    flex-direction: column;
+    gap: 8px;
+  }
+
+  header h1 {
+    font-size: 30px;
+    line-height: 1.05;
+  }
+
+  .welcome-header {
+    font-size: 12px;
+    padding: 5px 10px;
+  }
+
+  nav {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(100px, 1fr));
+    gap: 10px;
+    width: 100%;
+  }
+
+  nav a {
+    text-align: center;
+    font-size: 14px;
+    padding: 8px 10px;
+    border-radius: 10px;
+  }
+}
+
+/* ===== 아주 작은 화면 ===== */
+@media (max-width: 340px) {
+  nav {
+    grid-template-columns: 1fr;
+  }
+
+  header h1 {
+    font-size: 26px;
+  }
+}
+/* =========================================================
+   HEADER VERSION 1: Mood Glass Photo Light
+========================================================= */
+header {
+  background: rgba(31, 29, 38, 0.54) !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+  box-shadow: 0 12px 34px rgba(12, 8, 18, 0.26) !important;
+  backdrop-filter: blur(22px) saturate(150%) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(150%) !important;
+}
+
+header h1,
+.welcome-header {
+  color: #fff !important;
+}
+
+.welcome-header {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+}
+
+nav a {
+  color: #fff !important;
+  background: rgba(255, 255, 255, 0.13) !important;
+  border: 1px solid rgba(255, 255, 255, 0.18) !important;
+  outline: none !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 8px 18px rgba(20, 8, 18, 0.14) !important;
+  text-shadow: none !important;
+  backdrop-filter: blur(14px) !important;
+  -webkit-backdrop-filter: blur(14px) !important;
+}
+
+nav a:hover {
+  background: linear-gradient(135deg, #ff8eb6, #ee5f94) !important;
+  box-shadow: 0 10px 24px rgba(238, 95, 148, 0.26) !important;
+}

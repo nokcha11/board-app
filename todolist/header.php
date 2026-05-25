@@ -1,61 +1,70 @@
-
+<?php
+$isLoggedIn = isset($_SESSION['idx'], $_SESSION['loginid']);
+$loginId = $isLoggedIn ? (string)$_SESSION['loginid'] : '';
+$isAdmin = $isLoggedIn && $loginId === 'admin';
+?>
 
 <link rel="stylesheet" href="css/header.css">
 
 <header class="main-header">
+  <div class="header-top">
+    <h1>MY TODO</h1>
 
-    <div class="header-top">
-        <h1>MY TODO</h1>
+    <?php if ($isLoggedIn) { ?>
+      <div class="welcome-header">
+        <?= htmlspecialchars($loginId, ENT_QUOTES, 'UTF-8') ?>님, 반갑습니다
+      </div>
+    <?php } ?>
+  </div>
 
-        <!-- 환영문구 -->
-        <?php if (isset($_SESSION['loginid'])) { ?>
-            <div class="welcome-header">
-                <?php echo $_SESSION['loginid']; ?>님 반갑습니다!
-            </div>
-        <?php } ?>
-    </div>
+  <nav>
+    <a href="index.php">메인</a>
 
-    <nav>
-        <a href="index.php">메인</a>
-
-        <?php if (!isset($_SESSION['loginid'])) { ?>
-            <a href="login.php">로그인</a>
-        <?php } else { ?>
-            <a href="logout.php">로그아웃</a>
-        <?php } ?>
-
-        <a href="myinfo.php">내정보</a>
-        <a href="ToDo_list.php">월별계획표</a>
-
-        <?php if (isset($_SESSION['loginid']) && $_SESSION['loginid'] == 'admin') { ?>
-            <a href="admin.php">회원관리</a>
-        <?php } ?>
-    </nav>
-
+    <?php if ($isLoggedIn) { ?>
+      <a href="ToDo_list.php">월별계획표</a>
+      <?php if ($isAdmin) { ?>
+        <a href="admin.php">회원관리</a>
+      <?php } else { ?>
+        <a href="member_info.php">나의 정보</a>
+      <?php } ?>
+      <a href="logout.php">로그아웃</a>
+    <?php } else { ?>
+      <a href="login.php">로그인</a>
+      <a href="join.php">회원가입</a>
+      <a href="ToDo_list.php">월별계획표</a>
+    <?php } ?>
+  </nav>
 </header>
 
 <script>
-document.querySelectorAll("nav a").forEach(link => {
+(function() {
+  function applySavedTheme() {
+    const savedTheme = localStorage.getItem("todoTheme");
+    document.body.classList.toggle("dark-mode", savedTheme === "dark");
+    document.body.classList.toggle("light-mode", savedTheme === "light");
+  }
+
+  if (document.body) {
+    applySavedTheme();
+  } else {
+    document.addEventListener("DOMContentLoaded", applySavedTheme);
+  }
+})();
+
+document.querySelectorAll("nav a").forEach(function(link) {
   link.addEventListener("mouseenter", function(e) {
-    const colors = ["#fff176", "#ff80ab", "#80d8ff", "#b388ff", "#ffffff", "#ffb74d"];
+    const colors = ["#fff5f8", "#ff9fbd", "#ffd1dc", "#f7b2c4", "#ffffff", "#ffb8c6"];
 
     for (let i = 0; i < 8; i++) {
       const star = document.createElement("div");
       star.className = "star";
-
-      const x = (Math.random() * 70 - 35) + "px";
-      const y = (Math.random() * 55 - 45) + "px";
-      const color = colors[Math.floor(Math.random() * colors.length)];
-
-      star.style.setProperty("--x", x);
-      star.style.setProperty("--y", y);
+      star.style.setProperty("--x", (Math.random() * 70 - 35) + "px");
+      star.style.setProperty("--y", (Math.random() * 55 - 45) + "px");
       star.style.left = e.pageX + "px";
       star.style.top = (e.pageY + 12) + "px";
-      star.style.color = color;
-
+      star.style.color = colors[Math.floor(Math.random() * colors.length)];
       document.body.appendChild(star);
-
-      setTimeout(() => {
+      setTimeout(function() {
         star.remove();
       }, 750);
     }

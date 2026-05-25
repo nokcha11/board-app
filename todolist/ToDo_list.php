@@ -1,15 +1,33 @@
 <?php
+date_default_timezone_set('Asia/Seoul');
 session_start();
 require_once "dbcon.php";
 
+if (!isset($_SESSION['idx'])) {
+  echo "<script>alert('로그인이 필요합니다.'); location.href='login.php';</script>";
+  exit;
+}
+
+$memberIdx = (int)$_SESSION['idx'];
 $conn = new mysqli($host, $user, $password, $dbname);
 
 if ($conn->connect_error) {
   die("DB 연결 실패: " . $conn->connect_error);
 }
 
-$year = isset($_GET['year']) ? intval($_GET['year']) : date('Y');
-$month = isset($_GET['month']) ? intval($_GET['month']) : date('m');
+$conn->set_charset("utf8mb4");
+
+$columnResult = $conn->query("SHOW COLUMNS FROM tb_todolist LIKE 'member_idx'");
+if (!$columnResult || $columnResult->num_rows === 0) {
+  echo "<script>alert('tb_todolist.member_idx 컬럼이 필요합니다. 먼저 DB SQL을 실행해주세요.'); location.href='index.php';</script>";
+  exit;
+}
+
+$endDateResult = $conn->query("SHOW COLUMNS FROM tb_todolist LIKE 'end_date'");
+$hasEndDateColumn = ($endDateResult && $endDateResult->num_rows > 0);
+
+$year = isset($_GET['year']) ? (int)$_GET['year'] : (int)date('Y');
+$month = isset($_GET['month']) ? (int)$_GET['month'] : (int)date('m');
 
 if ($month < 1) {
   $month = 12;
@@ -21,13 +39,12 @@ if ($month > 12) {
   $year++;
 }
 
-$firstDay = "$year-" . sprintf("%02d", $month) . "-01";
-$startWeek = date('w', strtotime($firstDay));
-$lastDate = date('t', strtotime($firstDay));
+$firstDay = sprintf("%04d-%02d-01", $year, $month);
+$startWeek = (int)date('w', strtotime($firstDay));
+$lastDate = (int)date('t', strtotime($firstDay));
 
 $prevMonth = $month - 1;
 $prevYear = $year;
-
 if ($prevMonth < 1) {
   $prevMonth = 12;
   $prevYear--;
@@ -35,7 +52,6 @@ if ($prevMonth < 1) {
 
 $nextMonth = $month + 1;
 $nextYear = $year;
-
 if ($nextMonth > 12) {
   $nextMonth = 1;
   $nextYear++;
@@ -43,45 +59,78 @@ if ($nextMonth > 12) {
 
 $weekNames = ["일", "월", "화", "수", "목", "금", "토"];
 
-/* 월별 일정 */
-$sql = "SELECT * FROM tb_todolist 
-        WHERE YEAR(due_date) = ? AND MONTH(due_date) = ?
-        ORDER BY due_date ASC, todo_time ASC, status ASC, idx DESC";
+$dateSelect = $hasEndDateColumn ? "idx, due_date, end_date, todo_time, title, goal, status" : "idx, due_date, todo_time, title, goal, status";
+$monthStart = sprintf("%04d-%02d-01", $year, $month);
+$monthEnd = sprintf("%04d-%02d-%02d", $year, $month, $lastDate);
 
+$sql = $hasEndDateColumn
+  ? "SELECT $dateSelect
+     FROM tb_todolist
+     WHERE member_idx = ? AND due_date <= ? AND COALESCE(end_date, due_date) >= ?
+     ORDER BY due_date ASC, todo_time ASC, status ASC, idx DESC"
+  : "SELECT $dateSelect
+     FROM tb_todolist
+     WHERE member_idx = ? AND YEAR(due_date) = ? AND MONTH(due_date) = ?
+     ORDER BY due_date ASC, todo_time ASC, status ASC, idx DESC";
 $stmt = $conn->prepare($sql);
-$stmt->bind_param("ii", $year, $month);
+if ($hasEndDateColumn) {
+  $stmt->bind_param("iss", $memberIdx, $monthEnd, $monthStart);
+} else {
+  $stmt->bind_param("iii", $memberIdx, $year, $month);
+}
 $stmt->execute();
 $result = $stmt->get_result();
 
 $todos = [];
-
 while ($row = $result->fetch_assoc()) {
-  $day = intval(date('j', strtotime($row['due_date'])));
-  $todos[$day][] = $row;
+  $startDay = (int)date('j', strtotime($row['due_date']));
+  $endDay = $startDay;
+
+  if ($hasEndDateColumn && !empty($row['end_date'])) {
+    $endDay = (int)date('j', strtotime($row['end_date']));
+  }
+
+  for ($day = max(1, $startDay); $day <= min($lastDate, $endDay); $day++) {
+    $todos[$day][] = $row;
+  }
 }
 
-/* 오늘 일정 */
 $today = date("Y-m-d");
-
-$todaySql = "SELECT * FROM tb_todolist 
-             WHERE due_date = ?
-             ORDER BY todo_time ASC, status ASC, idx DESC";
-
+$todaySql = $hasEndDateColumn
+  ? "SELECT $dateSelect
+     FROM tb_todolist
+     WHERE member_idx = ? AND due_date <= ? AND COALESCE(end_date, due_date) >= ?
+     ORDER BY todo_time ASC, status ASC, idx DESC"
+  : "SELECT $dateSelect
+     FROM tb_todolist
+     WHERE member_idx = ? AND due_date = ?
+     ORDER BY todo_time ASC, status ASC, idx DESC";
 $todayStmt = $conn->prepare($todaySql);
-$todayStmt->bind_param("s", $today);
+if ($hasEndDateColumn) {
+  $todayStmt->bind_param("iss", $memberIdx, $today, $today);
+} else {
+  $todayStmt->bind_param("is", $memberIdx, $today);
+}
 $todayStmt->execute();
 $todayResult = $todayStmt->get_result();
 
-/* 주간 일정 */
 $weekStart = date("Y-m-d", strtotime("monday this week"));
 $weekEnd = date("Y-m-d", strtotime("sunday this week"));
-
-$weekSql = "SELECT * FROM tb_todolist 
-            WHERE due_date BETWEEN ? AND ?
-            ORDER BY due_date ASC, todo_time ASC, status ASC, idx DESC";
-
+$weekSql = $hasEndDateColumn
+  ? "SELECT $dateSelect
+     FROM tb_todolist
+     WHERE member_idx = ? AND due_date <= ? AND COALESCE(end_date, due_date) >= ?
+     ORDER BY due_date ASC, todo_time ASC, status ASC, idx DESC"
+  : "SELECT $dateSelect
+     FROM tb_todolist
+     WHERE member_idx = ? AND due_date BETWEEN ? AND ?
+     ORDER BY due_date ASC, todo_time ASC, status ASC, idx DESC";
 $weekStmt = $conn->prepare($weekSql);
-$weekStmt->bind_param("ss", $weekStart, $weekEnd);
+if ($hasEndDateColumn) {
+  $weekStmt->bind_param("iss", $memberIdx, $weekEnd, $weekStart);
+} else {
+  $weekStmt->bind_param("iss", $memberIdx, $weekStart, $weekEnd);
+}
 $weekStmt->execute();
 $weekResult = $weekStmt->get_result();
 ?>
@@ -90,39 +139,32 @@ $weekResult = $weekStmt->get_result();
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ToDoList 달력</title>
   <link rel="stylesheet" href="css/calendar.css">
   <link rel="stylesheet" href="css/seasonEffect.css">
   <script src="js/seasonEffect.js" defer></script>
 </head>
 
-<script>
-  const calendarMonth = <?= $month ?>;
-</script>
-
 <body>
-
 <?php include "header.php"; ?>
 
 <main class="calendar-main">
-
-  <!-- 왼쪽: 오늘의 일정 -->
   <aside class="side-box">
     <h3>오늘의 일정</h3>
 
     <?php if ($todayResult->num_rows > 0) { ?>
       <?php while ($row = $todayResult->fetch_assoc()) {
-        $checked = $row['status'] == 1 ? "checked" : "";
-        $doneClass = $row['status'] == 1 ? "done" : "";
+        $checked = ((int)$row['status'] === 1) ? "checked" : "";
+        $doneClass = ((int)$row['status'] === 1) ? "done" : "";
         $timeText = !empty($row['todo_time']) ? date("H:i", strtotime($row['todo_time'])) : "";
       ?>
         <div class="side-todo today-side-todo <?= $doneClass ?>">
           <?php if ($timeText !== "") { ?>
-            <span class="side-time"><?= $timeText ?></span>
+            <span class="side-time"><?= htmlspecialchars($timeText, ENT_QUOTES, 'UTF-8') ?></span>
           <?php } ?>
-
           <input type="checkbox" <?= $checked ?> disabled>
-          <span class="side-title"><?= htmlspecialchars($row['title']) ?></span>
+          <span class="side-title"><?= htmlspecialchars($row['title'], ENT_QUOTES, 'UTF-8') ?></span>
         </div>
       <?php } ?>
     <?php } else { ?>
@@ -130,14 +172,11 @@ $weekResult = $weekStmt->get_result();
     <?php } ?>
   </aside>
 
-
-  <!-- 가운데: 월별 달력 -->
   <div class="calendar-wrap">
-
     <div class="calendar-header">
-      <a href="?year=<?= $prevYear ?>&month=<?= $prevMonth ?>">◀</a>
+      <a href="?year=<?= $prevYear ?>&month=<?= $prevMonth ?>" aria-label="이전 달">&lt;</a>
       <h2><?= $year ?>.<?= sprintf("%02d", $month) ?></h2>
-      <a href="?year=<?= $nextYear ?>&month=<?= $nextMonth ?>">▶</a>
+      <a href="?year=<?= $nextYear ?>&month=<?= $nextMonth ?>" aria-label="다음 달">&gt;</a>
     </div>
 
     <div class="top-btn">
@@ -156,7 +195,6 @@ $weekResult = $weekStmt->get_result();
           <th class="sat">토</th>
         </tr>
       </thead>
-
       <tbody>
         <tr>
         <?php
@@ -165,11 +203,11 @@ $weekResult = $weekStmt->get_result();
         }
 
         for ($day = 1; $day <= $lastDate; $day++) {
-          $week = date('w', strtotime("$year-$month-$day"));
+          $week = (int)date('w', strtotime(sprintf("%04d-%02d-%02d", $year, $month, $day)));
           $class = "";
 
-          if ($week == 0) $class = "sun";
-          if ($week == 6) $class = "sat";
+          if ($week === 0) $class = "sun";
+          if ($week === 6) $class = "sat";
 
           $dateParam = sprintf("%04d-%02d-%02d", $year, $month, $day);
 
@@ -178,8 +216,8 @@ $weekResult = $weekStmt->get_result();
 
           if (isset($todos[$day])) {
             foreach ($todos[$day] as $todo) {
-              $doneClass = $todo['status'] == 1 ? "done" : "";
-              $checked = $todo['status'] == 1 ? "checked" : "";
+              $doneClass = ((int)$todo['status'] === 1) ? "done" : "";
+              $checked = ((int)$todo['status'] === 1) ? "checked" : "";
               $timeText = !empty($todo['todo_time']) ? date("H:i", strtotime($todo['todo_time'])) : "";
 
               echo "<div class='todo-item $doneClass'>";
@@ -187,10 +225,10 @@ $weekResult = $weekStmt->get_result();
               echo "<input type='checkbox' $checked onclick='event.stopPropagation()' disabled>";
 
               if ($timeText !== "") {
-                echo "<span class='todo-time'>$timeText</span>";
+                echo "<span class='todo-time'>" . htmlspecialchars($timeText, ENT_QUOTES, 'UTF-8') . "</span>";
               }
 
-              echo "<span>" . htmlspecialchars($todo['title']) . "</span>";
+              echo "<span>" . htmlspecialchars($todo['title'], ENT_QUOTES, 'UTF-8') . "</span>";
               echo "</div>";
               echo "</div>";
             }
@@ -198,12 +236,12 @@ $weekResult = $weekStmt->get_result();
 
           echo "</td>";
 
-          if ($week == 6 && $day != $lastDate) {
+          if ($week === 6 && $day !== $lastDate) {
             echo "</tr><tr>";
           }
         }
 
-        $lastWeek = date('w', strtotime("$year-$month-$lastDate"));
+        $lastWeek = (int)date('w', strtotime(sprintf("%04d-%02d-%02d", $year, $month, $lastDate)));
 
         for ($i = $lastWeek; $i < 6; $i++) {
           echo "<td></td>";
@@ -212,55 +250,39 @@ $weekResult = $weekStmt->get_result();
         </tr>
       </tbody>
     </table>
-
   </div>
 
-
-  <!-- 오른쪽: 주간 일정표 -->
   <aside class="side-box">
-    <h3>주간 일정표</h3>
+    <h3>주간 일정</h3>
 
     <?php if ($weekResult->num_rows > 0) { ?>
       <?php while ($row = $weekResult->fetch_assoc()) {
-        $checked = $row['status'] == 1 ? "checked" : "";
-        $doneClass = $row['status'] == 1 ? "done" : "";
-
+        $checked = ((int)$row['status'] === 1) ? "checked" : "";
+        $doneClass = ((int)$row['status'] === 1) ? "done" : "";
         $dateText = date("m/d", strtotime($row['due_date']));
-        $dayText = $weekNames[date("w", strtotime($row['due_date']))];
+        $dayText = $weekNames[(int)date("w", strtotime($row['due_date']))];
         $timeText = !empty($row['todo_time']) ? date("H:i", strtotime($row['todo_time'])) : "";
       ?>
         <div class="side-todo week-side-todo <?= $doneClass ?>">
           <span class="side-date"><?= $dateText ?>(<?= $dayText ?>)</span>
-
-          <?php if ($timeText !== "") { ?>
-            <span class="side-time"><?= $timeText ?></span>
-          <?php } else { ?>
-            <span class="side-time"></span>
-          <?php } ?>
-
+          <span class="side-time"><?= htmlspecialchars($timeText, ENT_QUOTES, 'UTF-8') ?></span>
           <input type="checkbox" <?= $checked ?> disabled>
-          <span class="side-title"><?= htmlspecialchars($row['title']) ?></span>
+          <span class="side-title"><?= htmlspecialchars($row['title'], ENT_QUOTES, 'UTF-8') ?></span>
         </div>
       <?php } ?>
     <?php } else { ?>
       <p class="empty">이번 주 일정이 없습니다.</p>
     <?php } ?>
   </aside>
-
 </main>
 
-
-<!-- 모달 / 모바일 바텀시트 -->
 <div class="modal-wrap" id="todoModal" onclick="closeTodoModal()">
   <div class="modal-box" onclick="event.stopPropagation()">
     <div class="modal-header">
       <h3 id="modalDateTitle">일정</h3>
       <button type="button" class="modal-close" onclick="closeTodoModal()">×</button>
     </div>
-
-    <div id="modalContent" class="modal-content">
-      불러오는 중...
-    </div>
+    <div id="modalContent" class="modal-content">불러오는 중...</div>
   </div>
 </div>
 
@@ -276,10 +298,14 @@ function openTodoModal(date) {
 
   fetch("todo_modal_data.php?date=" + encodeURIComponent(date))
     .then(function(response) {
+      if (response.status === 401) {
+        location.href = "login.php";
+        return "";
+      }
       return response.text();
     })
     .then(function(data) {
-      content.innerHTML = data;
+      if (data) content.innerHTML = data;
     })
     .catch(function() {
       content.innerHTML = "<p class='empty'>일정을 불러오지 못했습니다.</p>";

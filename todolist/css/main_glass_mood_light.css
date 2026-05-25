@@ -1338,32 +1338,17 @@ body.weather-mist .mini-calendar-box {
   }
 }
 
-/* =========================
-   Theme toggle fix
-   - light/dark 버튼 우선순위 복구
-   - time-night가 다크모드처럼 덮어쓰는 문제 방지
-========================= */
+/* =========================================================
+   Theme Safety Patch
+   - 버튼 클릭용 클래스 우선 적용
+   - 날씨 time-night가 라이트 모드 색상을 강제하지 않도록 제한
+========================================================= */
 body.light-mode {
-  color: #412531;
-  background:
-    radial-gradient(circle at top left, rgba(255, 238, 244, 0.95), transparent 34%),
-    linear-gradient(135deg, #ffe4eb 0%, #ffd1dc 42%, #fff8fb 100%);
-}
-
-body.light-mode.time-dawn {
-  background: linear-gradient(180deg, #fff7fb 0%, #ffeef6 100%);
-}
-
-body.light-mode.time-day {
-  background: linear-gradient(180deg, #fffafd 0%, #fff0f6 100%);
-}
-
-body.light-mode.time-evening {
-  background: linear-gradient(180deg, #fff1f7 0%, #ffe1ed 100%);
+  color: #412531 !important;
 }
 
 body.light-mode.time-night {
-  background: linear-gradient(180deg, #fff0f7 0%, #ffe2ee 100%);
+  color: #412531 !important;
 }
 
 body.light-mode.time-night .mini-widget,
@@ -1371,70 +1356,238 @@ body.light-mode.time-night .mini-calendar-box,
 body.light-mode.time-night .dashboard-desc,
 body.light-mode.time-night .dash-card,
 body.light-mode.time-night .guest-box,
-body.light-mode.time-night .record-section {
-  color: #412531;
-  background: rgba(255, 255, 255, 0.54);
-  border-color: rgba(255, 203, 218, 0.76);
+body.light-mode.time-night .setup-box,
+body.light-mode.time-night .record-section,
+body.light-mode.time-night .feature-card {
+  color: #412531 !important;
 }
 
-body.light-mode.time-night .mini-widget h3,
-body.light-mode.time-night .dash-label,
-body.light-mode.time-night .mini-calendar-header h2 {
-  color: #b9365e;
+@media (prefers-color-scheme: dark) {
+  body.light-mode {
+    color: #412531 !important;
+  }
 }
 
-body.dark-mode,
-body.dark-mode.time-dawn,
-body.dark-mode.time-day,
-body.dark-mode.time-evening,
-body.dark-mode.time-night {
-  color: #ffe6ef;
+body.light-mode .mode-toggle button[data-mode="light"],
+body.dark-mode .mode-toggle button[data-mode="dark"] {
+  color: #fff !important;
+  background: #f86f9f !important;
+  border-color: rgba(248, 111, 159, 0.95) !important;
+}
+
+
+/* =========================================================
+   VERSION 1: Mood Glass Photo Light
+   느낌: 첫 번째 시안처럼 사진 위에 진한 유리판을 살짝 덮은 고급 무드
+   사용법: body에 light-mode가 붙어도 이 라이트 테마가 유지됩니다.
+========================================================= */
+:root {
+  --app-bg-image: url("images/todo-bg-soft.jpg");
+  --glass-bg: rgba(255, 244, 249, 0.32);
+  --glass-bg-strong: rgba(255, 238, 246, 0.42);
+  --glass-border: rgba(255, 255, 255, 0.32);
+  --pink-main: #f47ca7;
+  --pink-deep: #c84b78;
+  --pink-soft: #ffc1d7;
+  --ink-main: #fff8fb;
+  --ink-soft: rgba(255, 248, 251, 0.76);
+  --shadow-mood: rgba(35, 14, 28, 0.34);
+}
+
+body,
+body.light-mode,
+body.light-mode.time-dawn,
+body.light-mode.time-day,
+body.light-mode.time-evening,
+body.light-mode.time-night {
+  color: var(--ink-main) !important;
   background:
-    radial-gradient(circle at 18% 12%, rgba(255, 160, 198, 0.18), transparent 34%),
-    radial-gradient(circle at 86% 18%, rgba(182, 109, 196, 0.14), transparent 30%),
-    linear-gradient(135deg, #24152d 0%, #3a1d3a 46%, #512940 100%);
+    linear-gradient(90deg, rgba(26, 24, 31, 0.58), rgba(65, 43, 58, 0.22)),
+    linear-gradient(180deg, rgba(255, 190, 211, 0.25), rgba(45, 31, 42, 0.38)),
+    var(--app-bg-image) center / cover fixed no-repeat !important;
 }
 
-body.dark-mode.weather-rain .mini-widget,
-body.dark-mode.weather-rain .mini-calendar-box,
-body.dark-mode.weather-rain .dashboard-desc,
-body.dark-mode.weather-rain .dash-card {
-  background: rgba(255, 214, 229, 0.085);
-  border-color: rgba(255, 221, 235, 0.24);
-  backdrop-filter: blur(24px) saturate(155%);
-  -webkit-backdrop-filter: blur(24px) saturate(155%);
+body::before {
+  width: 560px;
+  height: 560px;
+  top: -150px;
+  right: -120px;
+  background: rgba(255, 168, 199, 0.30) !important;
+  filter: blur(130px);
 }
 
-body.dark-mode.weather-thunder {
-  background:
-    radial-gradient(circle at 18% 12%, rgba(255, 160, 198, 0.16), transparent 34%),
-    linear-gradient(135deg, #21162b 0%, #30203a 48%, #49304a 100%);
+body::after {
+  width: 460px;
+  height: 460px;
+  left: -130px;
+  bottom: -150px;
+  background: rgba(255, 219, 235, 0.22) !important;
+  filter: blur(120px);
 }
 
-body.dark-mode .mode-toggle button[data-theme="dark"],
-body.light-mode .mode-toggle button[data-theme="light"] {
-  color: #3a1732;
-  background: rgba(255, 190, 211, 0.95);
-  border-color: rgba(255, 231, 239, 0.5);
-}
-
-body.light-mode .mode-toggle button[data-theme="light"] {
-  color: white;
-  background: #df5b81;
-  border-color: rgba(223, 91, 129, 0.92);
-}
-
-body.dark-mode .mode-toggle button[data-theme="light"] {
-  color: #ffd8e5;
-  background: rgba(255, 235, 244, 0.1);
-}
-
-.weather-effect-layer {
+main {
+  position: relative;
   z-index: 2;
 }
 
-main,
-header {
-  position: relative;
+.hero-banner,
+.mini-widget,
+.mini-calendar-box,
+.dashboard-desc,
+.dash-card,
+.guest-box,
+.setup-box,
+.record-section,
+.feature-card,
+.member-info-list div {
+  background: var(--glass-bg) !important;
+  border: 1px solid var(--glass-border) !important;
+  box-shadow:
+    0 20px 48px var(--shadow-mood),
+    inset 0 1px 0 rgba(255, 255, 255, 0.20),
+    inset 0 0 28px rgba(255, 255, 255, 0.05) !important;
+  backdrop-filter: blur(24px) saturate(150%) !important;
+  -webkit-backdrop-filter: blur(24px) saturate(150%) !important;
+}
+
+.hero-banner {
+  min-height: 300px;
+  border-radius: 28px;
+}
+
+.hero-banner img {
+  opacity: 0.88;
+  filter: saturate(0.95) contrast(0.9);
+}
+
+.hero-banner::after {
+  background:
+    linear-gradient(90deg, rgba(116, 49, 76, 0.54), rgba(255, 194, 217, 0.18)) !important;
+}
+
+.hero-overlay {
+  background: rgba(255, 246, 250, 0.20) !important;
+  border: 1px solid rgba(255, 255, 255, 0.35) !important;
+  border-radius: 24px !important;
+  box-shadow: 0 18px 42px rgba(45, 18, 36, 0.24) !important;
+  backdrop-filter: blur(22px) saturate(145%) !important;
+  -webkit-backdrop-filter: blur(22px) saturate(145%) !important;
+}
+
+.hero-label {
+  color: #fff;
+  background: rgba(244, 124, 167, 0.38) !important;
+  border-color: rgba(255, 255, 255, 0.34) !important;
+}
+
+.hero-overlay h2,
+.hero-overlay span,
+.mini-widget h3,
+.dashboard-desc strong,
+.mini-calendar-header h2,
+.guest-box h2,
+.setup-box h2,
+.record-section h3,
+.dash-card strong,
+.member-info-list strong {
+  color: #ffffff !important;
+  text-shadow: 0 4px 16px rgba(40, 16, 32, 0.28);
+}
+
+.mini-widget span,
+.dashboard-desc span,
+.dash-card p,
+.feature-card span,
+.guest-box p,
+.setup-box p,
+.record-section p,
+.empty,
+.navigator-message,
+.quote-widget p,
+.weather-current p,
+.book-current p,
+.api-fallback,
+.member-info-list span {
+  color: var(--ink-soft) !important;
+}
+
+.clock-widget strong,
+.progress-widget strong,
+.weather-widget strong,
+.book-widget strong,
+.weather-current strong,
+.book-current strong,
+.dash-label,
+.api-label,
+.mini-calendar th {
+  color: #ffc8da !important;
+}
+
+.navigator-tabs button,
+.mode-toggle button,
+.join-btn,
+.cover-picker button {
+  color: #fff !important;
+  background: rgba(255, 255, 255, 0.16) !important;
+  border: 1px solid rgba(255, 255, 255, 0.24) !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 8px 18px rgba(40, 16, 32, 0.16) !important;
+  backdrop-filter: blur(16px) !important;
+  -webkit-backdrop-filter: blur(16px) !important;
+}
+
+.navigator-tabs button.active,
+.mode-toggle button.active,
+.small-link,
+.guest-btn {
+  color: #ffffff !important;
+  background: linear-gradient(135deg, #ff8eb6, #ee5f94) !important;
+  border-color: rgba(255, 226, 238, 0.45) !important;
+  box-shadow: 0 12px 28px rgba(238, 95, 148, 0.28) !important;
+}
+
+.progress-bar {
+  background: rgba(255, 255, 255, 0.24) !important;
+}
+
+.progress-fill {
+  background: linear-gradient(90deg, #ffd36e, #ff7dad) !important;
+}
+
+.mini-calendar td {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.10) !important;
+  border-color: rgba(255, 255, 255, 0.16) !important;
+}
+
+.mini-calendar td a {
+  color: #fff !important;
+}
+
+.today-cell {
+  background: rgba(255, 142, 182, 0.34) !important;
+  box-shadow: inset 0 0 0 2px rgba(255, 202, 221, 0.60) !important;
+}
+
+.mini-calendar td em,
+.range-pink,
+.book-cover-placeholder {
+  background: #ff7dad !important;
+}
+
+.todo {
+  border-bottom-color: rgba(255, 255, 255, 0.18) !important;
+}
+
+.weather-icon-wrap,
+.weather-current img {
+  background: rgba(255, 255, 255, 0.18) !important;
+  border-color: rgba(255, 255, 255, 0.22) !important;
+}
+
+.weather-effect-layer {
   z-index: 3;
+}
+
+@media (max-width: 620px) {
+  .hero-banner { min-height: 260px; }
 }

@@ -1382,7 +1382,7 @@ body.dark-mode .mode-toggle button[data-mode="dark"] {
    사용법: body에 light-mode가 붙어도 이 라이트 테마가 유지됩니다.
 ========================================================= */
 :root {
-  --app-bg-image: url("images/todo-bg-soft.jpg");
+  --app-bg-image: url("../images/cover1.jpg");
   --glass-bg: rgba(255, 244, 249, 0.32);
   --glass-bg-strong: rgba(255, 238, 246, 0.42);
   --glass-border: rgba(255, 255, 255, 0.32);
@@ -1590,4 +1590,53 @@ main {
 
 @media (max-width: 620px) {
   .hero-banner { min-height: 260px; }
+}
+
+.theme-bg{
+  position:fixed;
+  inset:0;
+
+  z-index:-10;
+
+  background:
+    linear-gradient(
+      rgba(255,245,250,.55),
+      rgba(255,238,246,.72)
+    ),
+
+    url("../images/cover1.jpg")
+    center / cover
+    no-repeat;
+
+  pointer-events:none;
+}
+
+body.dark-mode .theme-bg{
+  background:
+    linear-gradient(
+      rgba(28,18,28,.72),
+      rgba(28,18,28,.82)
+    ),
+
+    url("../images/cover1.jpg")
+    center / cover
+    no-repeat;
+}
+
+.mode-widget {
+  display: none !important;
+}
+
+.weather-widget {
+  min-height: 330px !important;
+  justify-content: center;
+}
+
+.weather-widget .api-widget-body {
+  min-height: 220px;
+  align-items: center;
+}
+
+.right-widgets {
+  gap: 18px;
 }

@@ -7,473 +7,776 @@ session_start();
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>회원가입</title>
+
   <link rel="stylesheet" href="css/header.css">
-  <link rel="stylesheet" href="css/seasonEffect.css">
-  <script src="js/seasonEffect.js" defer></script>
+
   <style>
-  * {
-    box-sizing: border-box;
-  }
 
-  body {
-    margin: 0;
-    min-height: 100vh;
-    color: #472536;
-    font-family: Arial, sans-serif;
-    background:
-      radial-gradient(circle at 14% 18%, rgba(255, 255, 255, 0.74), transparent 24%),
-      radial-gradient(circle at 88% 10%, rgba(255, 180, 205, 0.42), transparent 28%),
-      linear-gradient(135deg, #ffe4ec 0%, #ffd1dc 42%, #fff8fb 100%);
-  }
+    *{
+      box-sizing:border-box;
+    }
 
-  .join-main {
-    width: min(1180px, calc(100% - 32px));
-    min-height: calc(100vh - 92px);
-    margin: 0 auto;
-    padding: 54px 0 70px;
-    display: flex;
-    align-items: center;
-  }
+    html,
+    body{
+      margin:0;
+      min-height:100%;
+    }
 
-  .join-shell {
-    width: 100%;
-    display: grid;
-    grid-template-columns: minmax(0, 1.18fr) minmax(360px, 0.82fr);
-    gap: 22px;
-    align-items: stretch;
-  }
+    body{
 
-  .intro-panel,
-  .join-box,
-  .intro-card {
-    background: rgba(255, 255, 255, 0.52);
-    border: 1px solid rgba(255, 203, 218, 0.76);
-    box-shadow:
-      0 18px 44px rgba(204, 82, 111, 0.15),
-      inset 0 1px 0 rgba(255, 255, 255, 0.24);
-    backdrop-filter: blur(22px) saturate(150%);
-    -webkit-backdrop-filter: blur(22px) saturate(150%);
-  }
+      min-height:100vh;
 
-  .intro-panel,
-  .join-box {
-    border-radius: 24px;
-    padding: clamp(28px, 4vw, 46px);
-  }
+      display:flex;
+      flex-direction:column;
 
-  .intro-panel {
-    position: relative;
-    overflow: hidden;
-    min-height: 620px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-  }
+      color:#412531;
 
-  .intro-panel::before {
-    content: "";
-    position: absolute;
-    inset: 0;
-    background:
-      radial-gradient(circle at 12% 10%, rgba(255, 130, 170, 0.2), transparent 26%),
-      radial-gradient(circle at 76% 72%, rgba(255, 255, 255, 0.34), transparent 24%);
-    pointer-events: none;
-  }
+      font-family:Arial,sans-serif;
 
-  .intro-content,
-  .intro-cards {
-    position: relative;
-    z-index: 1;
-  }
+      overflow-x:hidden;
 
-  .intro-badge {
-    display: inline-flex;
-    width: fit-content;
-    align-items: center;
-    min-height: 34px;
-    margin-bottom: 26px;
-    padding: 8px 14px;
-    color: #a9345b;
-    background: rgba(255, 255, 255, 0.54);
-    border: 1px solid rgba(255, 190, 208, 0.8);
-    border-radius: 999px;
-    font-size: 12px;
-    font-weight: 800;
-    letter-spacing: 0;
-  }
-
-  .intro-panel h2 {
-    margin: 0 0 22px;
-    color: #8f254d;
-    font-size: clamp(34px, 4.4vw, 56px);
-    line-height: 1.12;
-    letter-spacing: 0;
-  }
-
-  .intro-panel p {
-    margin: 0;
-    max-width: 520px;
-    color: #765465;
-    font-size: 18px;
-    font-weight: 700;
-    line-height: 1.7;
-  }
-
-  .intro-tags {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 10px;
-    margin-top: 28px;
-  }
-
-  .intro-tags span {
-    display: inline-flex;
-    min-height: 38px;
-    align-items: center;
-    padding: 9px 15px;
-    color: #9d3157;
-    background: rgba(255, 255, 255, 0.54);
-    border: 1px solid rgba(255, 190, 208, 0.82);
-    border-radius: 999px;
-    font-size: 13px;
-    font-weight: 800;
-  }
-
-  .intro-cards {
-    display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
-    gap: 14px;
-    margin-top: 46px;
-  }
-
-  .intro-card {
-    min-height: 150px;
-    padding: 20px 18px;
-    border-radius: 18px;
-  }
-
-  .intro-card strong {
-    display: block;
-    margin-bottom: 12px;
-    color: #bd3d65;
-    font-size: 13px;
-    font-weight: 900;
-  }
-
-  .intro-card span {
-    display: block;
-    color: #68475a;
-    font-size: 14px;
-    font-weight: 700;
-    line-height: 1.6;
-  }
-
-  .join-box {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-
-  .join-box h2 {
-    margin: 0 0 10px;
-    color: #a9345b;
-    font-size: 30px;
-    text-align: left;
-  }
-
-  .join-lead {
-    margin: 0 0 28px;
-    color: #765465;
-    font-size: 14px;
-    font-weight: 700;
-    line-height: 1.6;
-  }
-
-  .form-field {
-    margin-bottom: 14px;
-  }
-
-  .form-field label {
-    display: block;
-    margin-bottom: 7px;
-    color: #9d3157;
-    font-size: 13px;
-    font-weight: 800;
-  }
-
-  .join-box input {
-    width: 100%;
-    min-height: 48px;
-    padding: 12px 14px;
-    border: 1px solid rgba(255, 183, 203, 0.9);
-    border-radius: 14px;
-    background: rgba(255, 255, 255, 0.72);
-    color: #412531;
-    outline: none;
-    font-size: 15px;
-    font-weight: 700;
-  }
-
-  .join-box input::placeholder {
-    color: rgba(118, 84, 101, 0.62);
-  }
-
-  .join-box input:focus {
-    border-color: #df5b81;
-    box-shadow: 0 0 0 3px rgba(223, 91, 129, 0.14);
-  }
-
-  .join-box button {
-    width: 100%;
-    min-height: 48px;
-    padding: 13px;
-    margin-top: 10px;
-    border: none;
-    border-radius: 999px;
-    background: #df5b81;
-    color: white;
-    font-size: 16px;
-    font-weight: 800;
-    cursor: pointer;
-    box-shadow: 0 10px 24px rgba(204, 82, 111, 0.24);
-  }
-
-  .login-link {
-    margin-top: 18px;
-    text-align: center;
-    font-size: 14px;
-    color: #765465;
-    font-weight: 700;
-  }
-
-  .login-link a {
-    color: #bd3d65;
-    font-weight: 900;
-    text-decoration: none;
-  }
-
-  footer {
-    text-align: center;
-    color: #a9345b;
-    font-weight: 700;
-    padding: 0 20px 22px;
-  }
-
-  body.dark-mode {
-    color: #ffe6ef;
-    background:
-      radial-gradient(circle at 18% 12%, rgba(255, 160, 198, 0.18), transparent 34%),
-      radial-gradient(circle at 86% 18%, rgba(182, 109, 196, 0.14), transparent 30%),
-      linear-gradient(135deg, #24152d 0%, #3a1d3a 46%, #512940 100%);
-  }
-
-  body.dark-mode .intro-panel,
-  body.dark-mode .join-box,
-  body.dark-mode .intro-card {
-    background: rgba(255, 214, 229, 0.075);
-    border-color: rgba(255, 221, 235, 0.22);
-    box-shadow:
-      0 18px 44px rgba(9, 4, 18, 0.32),
-      inset 0 1px 0 rgba(255, 255, 255, 0.12),
-      inset 0 0 24px rgba(255, 193, 217, 0.035);
-    backdrop-filter: blur(24px) saturate(155%);
-    -webkit-backdrop-filter: blur(24px) saturate(155%);
-  }
-
-  body.dark-mode .intro-badge,
-  body.dark-mode .intro-tags span {
-    color: #ffd8e5;
-    background: rgba(255, 235, 244, 0.1);
-    border-color: rgba(255, 226, 238, 0.22);
-  }
-
-  body.dark-mode .intro-panel h2,
-  body.dark-mode .join-box h2,
-  body.dark-mode footer {
-    color: #ffd1df;
-  }
-
-  body.dark-mode .intro-panel p,
-  body.dark-mode .intro-card span,
-  body.dark-mode .join-lead,
-  body.dark-mode .login-link {
-    color: #e7bdcf;
-  }
-
-  body.dark-mode .intro-card strong,
-  body.dark-mode .form-field label,
-  body.dark-mode .login-link a {
-    color: #ffbfd2;
-  }
-
-  body.dark-mode .join-box input {
-    color: #ffe6ef;
-    background: rgba(255, 236, 244, 0.08);
-    border-color: rgba(255, 226, 238, 0.18);
-    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.08);
-  }
-
-  body.dark-mode .join-box input::placeholder {
-    color: rgba(255, 230, 240, 0.48);
-  }
-
-  body.dark-mode .join-box button {
-    color: #3a1732;
-    background: rgba(255, 190, 211, 0.9);
-    border: 1px solid rgba(255, 231, 239, 0.44);
-  }
-
-  @media (prefers-color-scheme: dark) {
-    body:not(.light-mode) {
-      color: #ffe6ef;
       background:
-        radial-gradient(circle at 18% 12%, rgba(255, 160, 198, 0.18), transparent 34%),
-        radial-gradient(circle at 86% 18%, rgba(182, 109, 196, 0.14), transparent 30%),
-        linear-gradient(135deg, #24152d 0%, #3a1d3a 46%, #512940 100%);
+        linear-gradient(
+          rgba(255,245,250,0.46),
+          rgba(255,232,242,0.66)
+        ),
+        url("images/cover1.jpg")
+        center / cover fixed no-repeat;
     }
 
-    body:not(.light-mode) .intro-panel,
-    body:not(.light-mode) .join-box,
-    body:not(.light-mode) .intro-card {
-      background: rgba(255, 214, 229, 0.075);
-      border-color: rgba(255, 221, 235, 0.22);
+    /* =========================
+       BLUR BUBBLE
+    ========================= */
+
+    body::before,
+    body::after{
+
+      content:"";
+
+      position:fixed;
+
+      border-radius:50%;
+
+      pointer-events:none;
+
+      z-index:-1;
+    }
+
+    body::before{
+
+      width:520px;
+      height:520px;
+
+      right:-140px;
+      top:-160px;
+
+      background:
+        rgba(255,165,200,0.28);
+
+      filter:blur(120px);
+    }
+
+    body::after{
+
+      width:460px;
+      height:460px;
+
+      left:-120px;
+      bottom:-140px;
+
+      background:
+        rgba(255,230,240,0.42);
+
+      filter:blur(110px);
+    }
+
+    /* =========================
+       MAIN
+    ========================= */
+
+    main{
+
+      flex:1;
+
+      display:flex;
+      justify-content:center;
+      align-items:center;
+
+      padding:70px 20px;
+    }
+
+    .join-wrapper{
+
+      width:100%;
+      max-width:1200px;
+
+      display:grid;
+
+      grid-template-columns:
+        minmax(0,1.15fr)
+        minmax(380px,0.85fr);
+
+      gap:28px;
+    }
+
+    /* =========================
+       LEFT HERO
+    ========================= */
+
+    .join-hero{
+
+      padding:60px 50px;
+
+      border-radius:34px;
+
+      background:
+        rgba(255,255,255,0.06);
+
+      border:
+        1px solid rgba(255,255,255,0.26);
+
+      backdrop-filter:
+        blur(18px)
+        saturate(150%);
+
+      -webkit-backdrop-filter:
+        blur(18px)
+        saturate(150%);
+
       box-shadow:
-        0 18px 44px rgba(9, 4, 18, 0.32),
-        inset 0 1px 0 rgba(255, 255, 255, 0.12);
-      backdrop-filter: blur(24px) saturate(155%);
-      -webkit-backdrop-filter: blur(24px) saturate(155%);
-    }
-  }
-
-  @media (max-width: 980px) {
-    .join-main {
-      align-items: flex-start;
-      padding-top: 34px;
+        inset 0 1px 0 rgba(255,255,255,0.18),
+        0 20px 52px rgba(120,50,80,0.10);
     }
 
-    .join-shell {
-      grid-template-columns: 1fr;
+    .hero-badge{
+
+      display:inline-flex;
+
+      align-items:center;
+
+      padding:10px 18px;
+
+      border-radius:999px;
+
+      font-size:13px;
+      font-weight:800;
+
+      color:#d94f83;
+
+      background:
+        rgba(255,255,255,0.12);
+
+      border:
+        1px solid rgba(255,255,255,0.22);
+
+      backdrop-filter:blur(10px);
     }
 
-    .intro-panel {
-      min-height: auto;
-    }
-  }
+    .join-hero h2{
 
-  @media (max-width: 680px) {
-    .join-main {
-      width: min(100% - 24px, 1180px);
-      padding: 26px 0 46px;
-    }
+       margin:22px 0 18px;
 
-    .intro-panel,
-    .join-box {
-      border-radius: 18px;
-      padding: 24px 20px;
+      line-height:1.08;
+
+      font-size:58px;
+      font-weight:900;
+
+      color:#992c57;
     }
 
-    .intro-cards {
-      grid-template-columns: 1fr;
-      margin-top: 30px;
+    .join-hero p{
+
+      margin:0;
+
+      line-height:1.7;
+
+      font-size:18px;
+      font-weight:700;
+
+      color:#6b4957;
     }
 
-    .intro-tags span {
-      width: 100%;
-      justify-content: center;
+    .hero-buttons{
+
+      display:flex;
+      flex-wrap:wrap;
+
+      gap:12px;
+
+      margin-top:34px;
     }
-  }
+
+    .hero-buttons button{
+
+      min-height:44px;
+
+      padding:0 22px;
+
+      border-radius:999px;
+
+      cursor:pointer;
+
+      font-weight:800;
+
+      border:none;
+    }
+
+    .hero-primary{
+
+      color:#fff;
+
+      background:
+        linear-gradient(
+          135deg,
+          #ff8eb6,
+          #f45f98
+        );
+
+      box-shadow:
+        0 10px 24px rgba(244,95,149,0.25);
+    }
+
+    .hero-secondary{
+
+      color:#c54875;
+
+      background:
+        rgba(255,255,255,0.12);
+
+      border:
+        1px solid rgba(255,255,255,0.24) !important;
+
+      backdrop-filter:blur(10px);
+    }
+
+    /* =========================
+       FEATURE
+    ========================= */
+
+    .feature-grid{
+
+      display:grid;
+
+      grid-template-columns:
+        repeat(3,minmax(0,1fr));
+
+      gap:16px;
+
+      margin-top:48px;
+    }
+
+    .feature-card{
+
+      padding:24px 20px;
+
+      border-radius:22px;
+
+      background:
+        rgba(255,255,255,0.10);
+
+      border:
+        1px solid rgba(255,255,255,0.24);
+
+      backdrop-filter:
+        blur(12px)
+        saturate(140%);
+
+      -webkit-backdrop-filter:
+        blur(12px)
+        saturate(140%);
+
+      box-shadow:none;
+    }
+
+    .feature-card h4{
+
+      margin:0 0 16px;
+
+      color:#c03f70;
+
+      font-size:15px;
+      font-weight:900;
+    }
+
+    .feature-card p{
+
+      margin:0;
+
+      line-height:1.7;
+
+      color:#664753;
+
+      font-size:15px;
+      font-weight:700;
+    }
+
+    /* =========================
+       JOIN FORM
+    ========================= */
+
+    .join-box{
+
+      padding:46px 38px;
+
+      border-radius:30px;
+
+      background:
+        rgba(255,255,255,0.07);
+
+      border:
+        1px solid rgba(255,255,255,0.28);
+
+      backdrop-filter:
+        blur(18px)
+        saturate(150%);
+
+      -webkit-backdrop-filter:
+        blur(18px)
+        saturate(150%);
+
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.18),
+        0 20px 50px rgba(120,50,80,0.10);
+    }
+
+    .join-box h2{
+
+      margin:0 0 12px;
+
+      color:#b03c69;
+
+      font-size:28px;
+      font-weight:900;
+    }
+
+    .join-sub{
+
+      margin:0 0 34px;
+
+      line-height:1.6;
+
+      color:#7a5a67;
+
+      font-size:16px;
+      font-weight:700;
+    }
+
+    .join-box label{
+
+      display:block;
+
+      margin-bottom:10px;
+
+      color:#c24976;
+
+      font-size:14px;
+      font-weight:800;
+    }
+
+    .join-box input{
+
+      width:100%;
+
+      min-height:50px;
+
+      margin-bottom:18px;
+
+      padding:12px 16px;
+
+      border-radius:14px;
+
+      outline:none;
+
+      font-size:15px;
+
+      color:#412531;
+
+      background:
+        rgba(255,255,255,0.14);
+
+      border:
+        1px solid rgba(255,255,255,0.30);
+
+      backdrop-filter:blur(10px);
+    }
+
+    .join-box input::placeholder{
+
+      color:
+        rgba(90,60,72,0.52);
+    }
+
+    .join-box input:focus{
+
+      border-color:
+        rgba(255,120,168,0.72);
+
+      box-shadow:
+        0 0 0 4px rgba(255,120,168,0.16);
+    }
+
+    .join-submit{
+
+      width:100%;
+
+      min-height:50px;
+
+      margin-top:12px;
+
+      border:none;
+
+      border-radius:999px;
+
+      cursor:pointer;
+
+      font-size:16px;
+      font-weight:900;
+
+      color:#fff;
+
+      background:
+        linear-gradient(
+          135deg,
+          #ff8eb6,
+          #f05f95
+        );
+
+      box-shadow:
+        0 12px 28px rgba(240,95,149,0.25);
+    }
+
+    .join-footer{
+
+      margin-top:20px;
+
+      text-align:center;
+
+      color:#7a5a67;
+
+      font-weight:700;
+    }
+
+    .join-footer a{
+
+      color:#d94f83;
+
+      text-decoration:none;
+
+      font-weight:900;
+    }
+
+    footer{
+
+        position:relative;
+        margin-top:auto;
+        padding:22px 20px;
+        text-align:center;
+        color:#b33d69;
+        font-weight:800;
+
+        background:
+          rgba(255,255,255,0.03);
+
+        border-top:
+          1px solid rgba(255,255,255,0.18);
+
+        backdrop-filter:
+          blur(10px)
+          saturate(145%);
+
+        -webkit-backdrop-filter:
+          blur(10px)
+          saturate(145%);
+
+        box-shadow:
+          inset 0 1px 0 rgba(255,255,255,0.10);
+      }
+
+    /* =========================
+       DARK MODE
+    ========================= */
+
+    body.dark-mode{
+
+      color:#ffe6ef;
+
+      background:
+        linear-gradient(
+          rgba(28,18,28,0.72),
+          rgba(28,18,28,0.84)
+        ),
+        url("images/cover1.jpg")
+        center / cover fixed no-repeat;
+    }
+
+    body.dark-mode footer{
+
+      color:#ffd5e3;
+      background:
+        rgba(255,255,255,0.03);
+      border-top:
+        1px solid rgba(255,255,255,0.08);
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.04);
+    }
+
+    body.dark-mode::before{
+
+      background:
+        rgba(255,120,180,0.18);
+    }
+
+    body.dark-mode::after{
+
+      background:
+        rgba(120,70,150,0.22);
+    }
+
+    body.dark-mode .join-hero,
+    body.dark-mode .join-box{
+
+      background:
+        rgba(255,235,244,0.08);
+
+      border-color:
+        rgba(255,230,240,0.18);
+
+      box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.10),
+        0 24px 54px rgba(5,2,12,0.34);
+    }
+
+    body.dark-mode .join-hero h2,
+    body.dark-mode .join-box h2,
+    body.dark-mode footer{
+
+      color:#ffd4e2;
+    }
+
+    body.dark-mode .join-hero p,
+    body.dark-mode .join-sub,
+    body.dark-mode .feature-card p,
+    body.dark-mode .join-footer{
+
+      color:#e6c4d1;
+    }
+
+    body.dark-mode .feature-card{
+
+      background:
+        rgba(255,255,255,0.06);
+
+      border-color:
+        rgba(255,255,255,0.14);
+    }
+
+    body.dark-mode .join-box input{
+
+      color:#ffe6ef;
+
+      background:
+        rgba(255,235,244,0.08);
+
+      border-color:
+        rgba(255,226,238,0.18);
+    }
+
+    body.dark-mode .join-box input::placeholder{
+
+      color:
+        rgba(255,230,240,0.56);
+    }
+
+    body.dark-mode .hero-secondary{
+
+      color:#ffd7e5;
+
+      background:
+        rgba(255,255,255,0.06);
+    }
+
+    @media(max-width:1200px){
+
+      .join-wrapper{
+        grid-template-columns:1fr;
+      }
+
+      .join-hero h2{
+        font-size:48px;
+      }
+    }
+
+    @media(max-width:768px){
+
+      main{
+        padding:40px 16px;
+      }
+
+      .join-hero,
+      .join-box{
+        padding:34px 24px;
+      }
+
+      .join-hero h2{
+        font-size:38px;
+      }
+
+      .feature-grid{
+        grid-template-columns:1fr;
+      }
+    }
+
   </style>
 </head>
 
 <body>
+
 <?php include "header.php"; ?>
 
-<main class="join-main">
-  <section class="join-shell">
-    <div class="intro-panel">
-      <div class="intro-content">
-        <span class="intro-badge">MY TODO PLANNER</span>
-        <h2>오늘을 기록하고,<br>루틴을 만들고,<br>나만의 하루를 완성하세요</h2>
-        <p>
-          일정, 목표, 감정 기록까지<br>
-          하루의 흐름을 감성적으로 관리할 수 있습니다.
-        </p>
+<main>
 
-        <div class="intro-tags">
-          <span>오늘 일정 보기</span>
-          <span>루틴 관리 시작</span>
-          <span>기록 아카이브 열기</span>
-        </div>
+  <div class="join-wrapper">
+
+    <!-- LEFT -->
+
+    <section class="join-hero">
+
+      <span class="hero-badge">
+        MY TODO PLANNER
+      </span>
+
+      <h2>
+        오늘을 기록하고,<br>
+        루틴을 만들고,<br>
+        나만의 하루를 완성하세요
+      </h2>
+
+      <p>
+        일정, 목표, 감정 기록까지<br>
+        하루의 흐름을 감성적으로 관리할 수 있습니다.
+      </p>
+
+      <div class="hero-buttons">
+
+        <button class="hero-primary">
+          오늘 일정 보기
+        </button>
+
+        <button class="hero-secondary">
+          루틴 관리 시작
+        </button>
+
+        <button class="hero-secondary">
+          기록 아카이브 열기
+        </button>
+
       </div>
 
-      <div class="intro-cards">
-        <div class="intro-card">
-          <strong>DAILY ROUTINE</strong>
-          <span>오늘의 목표와 할 일을<br>하루 흐름에 맞게 관리합니다.</span>
-        </div>
-        <div class="intro-card">
-          <strong>MEMORY NOTE</strong>
-          <span>감정과 기록을 남기며<br>나만의 아카이브를 만들어갑니다.</span>
-        </div>
-        <div class="intro-card">
-          <strong>MONTHLY PLAN</strong>
-          <span>월별 계획표와 주간 목표를<br>한눈에 정리할 수 있습니다.</span>
-        </div>
-      </div>
-    </div>
+      <div class="feature-grid">
 
-    <div class="join-box">
+        <div class="feature-card">
+          <h4>DAILY ROUTINE</h4>
+          <p>
+            오늘의 목표와 할 일을
+            하루 흐름에 맞게 관리합니다.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <h4>MEMORY NOTE</h4>
+          <p>
+            감정과 기록을 남기며
+            나만의 아카이브를 만들어갑니다.
+          </p>
+        </div>
+
+        <div class="feature-card">
+          <h4>MONTHLY PLAN</h4>
+          <p>
+            월별 계획표와 주간 목표를
+            한눈에 정리할 수 있습니다.
+          </p>
+        </div>
+
+      </div>
+
+    </section>
+
+    <!-- RIGHT -->
+
+    <section class="join-box">
+
       <h2>회원가입</h2>
-      <p class="join-lead">MY TODO에서 나만의 기록과 계획을 시작해보세요.</p>
 
-      <form method="post" action="join_ok.php" onsubmit="return checkForm()">
-        <div class="form-field">
-          <label for="id">아이디</label>
-          <input type="text" placeholder="아이디 입력" name="id" id="id" required>
-        </div>
-        <div class="form-field">
-          <label for="pw">비밀번호</label>
-          <input type="password" placeholder="비밀번호" name="pw" id="pw" required>
-        </div>
-        <div class="form-field">
-          <label for="pw2">비밀번호 확인</label>
-          <input type="password" placeholder="비밀번호 확인" name="pw2" id="pw2" required>
-        </div>
-        <div class="form-field">
-          <label for="name">이름</label>
-          <input type="text" placeholder="이름" name="name" id="name" required>
-        </div>
-        <div class="form-field">
-          <label for="email">이메일</label>
-          <input type="email" placeholder="이메일 입력" name="email" id="email" required>
-        </div>
+      <p class="join-sub">
+        MY TODO에서 나만의 기록과 계획을 시작해보세요.
+      </p>
 
-        <button type="submit">회원가입</button>
+      <form method="post" action="join_ok.php">
+
+        <label>아이디</label>
+        <input
+          type="text"
+          name="id"
+          placeholder="아이디 입력"
+          required
+        >
+
+        <label>비밀번호</label>
+        <input
+          type="password"
+          name="pw"
+          placeholder="비밀번호"
+          required
+        >
+
+        <label>비밀번호 확인</label>
+        <input
+          type="password"
+          name="pw2"
+          placeholder="비밀번호 확인"
+          required
+        >
+
+        <label>이름</label>
+        <input
+          type="text"
+          name="name"
+          placeholder="이름"
+          required
+        >
+
+        <label>이메일</label>
+        <input
+          type="email"
+          name="email"
+          placeholder="이메일 입력"
+          required
+        >
+
+        <button
+          type="submit"
+          class="join-submit"
+        >
+          회원가입
+        </button>
+
       </form>
 
-      <div class="login-link">
-        이미 계정이 있으신가요? <a href="login.php">로그인</a>
+      <div class="join-footer">
+        이미 계정이 있으신가요?
+        <a href="login.php">로그인</a>
       </div>
-    </div>
-  </section>
+
+    </section>
+
+  </div>
+
 </main>
 
 <footer>
   © 2026 MY TODO | All Rights Reserved
 </footer>
 
-<script>
-function checkForm() {
-  const pw = document.getElementById("pw").value;
-  const pw2 = document.getElementById("pw2").value;
-
-  if (pw !== pw2) {
-    alert("비밀번호가 일치하지 않습니다.");
-    return false;
-  }
-
-  return true;
-}
-</script>
 </body>
 </html>

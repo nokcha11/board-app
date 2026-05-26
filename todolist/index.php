@@ -1,7 +1,16 @@
 <?php
-date_default_timezone_set('Asia/Seoul');
+ini_set('display_errors', 1);
+error_reporting(E_ALL);
+
 session_start();
 require_once "dbcon.php";
+require_once "config/api.php";
+
+// <?php
+// date_default_timezone_set('Asia/Seoul');
+// session_start();
+// require_once "dbcon.php";
+// require_once "./config/api.php";
 
 $isLogin = isset($_SESSION['idx'], $_SESSION['loginid']);
 $todayData = [];
@@ -220,17 +229,32 @@ if ($isLogin && !$needsTodoMemberColumn) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MY TODO MAIN</title>
   <!-- 라이트 모드 CSS -->
-  <link id="header-light-theme" rel="stylesheet" href="css/header_bright_pastel_light.css">
   <link id="main-light-theme" rel="stylesheet" href="css/main_bright_pastel_light.css">
 
   <!-- 다크 모드 CSS: 처음에는 꺼두고 버튼 클릭 시 JS로 켭니다 -->
-  <link id="header-dark-theme" rel="stylesheet" href="css/header_glass_mood_light.css" disabled>
   <link id="main-dark-theme" rel="stylesheet" href="css/main_glass_mood_light.css" disabled>
 
+  <!-- define 넘겨주는 곳 -->
+  <?php include "config/api.php"; ?>
+
+  <script>
+  window.TODO_CONFIG = {
+    OPENWEATHER_KEY: "<?= OPENWEATHER_KEY ?>",
+    WEATHER_CITY: "Seoul",
+    KAKAO_REST_KEY: "<?= KAKAO_REST_KEY ?>",
+  };
+  </script>
+
+<script src="js/theme-mode.js" defer></script>
+<script src="js/weather-widget.js" defer></script>
+<script src="js/book-widget.js" defer></script>
+<script src="js/dashboard-ui.js" defer></script>
   <script src="js/seasonEffect.js" defer></script>
 </head>
 
 <body>
+  <div class="theme-bg"></div>
+
 <?php include "header.php"; ?>
 
 <main>
@@ -417,13 +441,6 @@ UPDATE tb_todolist SET member_idx = 1 WHERE member_idx IS NULL;</code></pre>
         </section>
 
         <aside class="right-widgets">
-          <div class="mini-widget mode-widget">
-            <h3>Mode</h3>
-            <div class="mode-toggle" aria-label="화면 모드 선택">
-              <button type="button" data-theme="light">Light</button>
-              <button type="button" data-theme="dark">Dark</button>
-            </div>
-          </div>
 
           <div class="mini-widget weather-widget">
             <h3>Seoul Weather</h3>
@@ -432,17 +449,24 @@ UPDATE tb_todolist SET member_idx = 1 WHERE member_idx IS NULL;</code></pre>
             </div>
           </div>
 
-          <div class="mini-widget book-widget">
+          <div class="mini-widget book-widget glass-card">
             <h3>Book</h3>
-            <div id="bookBox" class="api-widget-body">
-              <p class="api-fallback">추천 도서를 불러올 수 없습니다.</p>
+
+            <div class="book-content" id="bookBox">
+              <div class="book-cover">BOOK</div>
+
+              <div class="book-info">
+                <p>Book Recommend</p>
+                <strong>불러오는 중...</strong>
+                <span>잠시만 기다려주세요</span>
+              </div>
             </div>
           </div>
 
           <div class="mini-widget playlist-widget">
             <h3>Playlist</h3>
             <iframe
-              src="https://www.youtube.com/embed/jfKfPfyJRdk"
+              src="https://www.youtube.com/embed/MjGpFF-4l80"
               title="playlist"
               allow="autoplay; encrypted-media"
               allowfullscreen>
@@ -472,8 +496,8 @@ UPDATE tb_todolist SET member_idx = 1 WHERE member_idx IS NULL;</code></pre>
             <span>오늘의 할 일과 완료율을 한눈에 봅니다.</span>
           </div>
           <div class="feature-card">
-            <strong>핑크 글래스 UI</strong>
-            <span>부드러운 파스텔 톤으로 편안하게 기록해요.</span>
+            <strong>좋아하는 음악과 책을 기록하세요</strong>
+            <span>독서노트 정리를 하면서 음악을 들을 수 있어요.</span>
           </div>
         </div>
 
@@ -486,246 +510,7 @@ UPDATE tb_todolist SET member_idx = 1 WHERE member_idx IS NULL;</code></pre>
   </div>
 </main>
 
-<script>
-  // 도서
-const OPENWEATHER_KEY = ""; // 여기에_발급받은_API_KEY
-const WEATHER_CITY = "Seoul";
 
-const weatherBox = document.getElementById("weatherBox");
-const themeButtons = document.querySelectorAll(".mode-toggle button[data-theme]");
-
-function applyTheme(theme) {
-  const headerLight = document.getElementById("header-light-theme");
-  const mainLight = document.getElementById("main-light-theme");
-  const headerDark = document.getElementById("header-dark-theme");
-  const mainDark = document.getElementById("main-dark-theme");
-
-  const isDark = theme === "dark";
-
-  if (headerLight) headerLight.disabled = isDark;
-  if (mainLight) mainLight.disabled = isDark;
-  if (headerDark) headerDark.disabled = !isDark;
-  if (mainDark) mainDark.disabled = !isDark;
-
-  document.body.classList.remove("light-mode", "dark-mode");
-  document.body.classList.add(theme + "-mode");
-
-  localStorage.setItem("todo-theme", theme);
-
-  themeButtons.forEach(function(button) {
-    button.classList.toggle("active", button.dataset.theme === theme);
-  });
-}
-
-function initTheme() {
-  const savedTheme = localStorage.getItem("todo-theme") || "light";
-  applyTheme(savedTheme);
-
-  themeButtons.forEach(function(button) {
-    button.addEventListener("click", function() {
-      applyTheme(button.dataset.theme);
-    });
-  });
-}
-
-function setTimeTheme() {
-  const hour = new Date().getHours();
-
-  document.body.classList.remove(
-    "time-dawn",
-    "time-day",
-    "time-evening",
-    "time-night"
-  );
-
-  if (hour >= 5 && hour < 11) {
-    document.body.classList.add("time-dawn");
-  } else if (hour >= 11 && hour < 17) {
-    document.body.classList.add("time-day");
-  } else if (hour >= 17 && hour < 21) {
-    document.body.classList.add("time-evening");
-  } else {
-    document.body.classList.add("time-night");
-  }
-}
-
-function resetWeatherTheme() {
-  document.body.classList.remove(
-    "weather-clear",
-    "weather-clouds",
-    "weather-rain",
-    "weather-snow",
-    "weather-thunder",
-    "weather-mist"
-  );
-
-  const oldEffect = document.querySelector(".weather-effect-layer");
-  if (oldEffect) oldEffect.remove();
-}
-
-function createWeatherParticles(type) {
-  const layer = document.createElement("div");
-  layer.className = "weather-effect-layer " + type;
-
-  const count = type === "snow-effect" ? 42 : 34;
-
-  for (let i = 0; i < count; i++) {
-    const particle = document.createElement("span");
-    particle.style.left = Math.random() * 100 + "%";
-    particle.style.animationDelay = Math.random() * 4 + "s";
-    particle.style.animationDuration = 3 + Math.random() * 5 + "s";
-    particle.style.opacity = 0.35 + Math.random() * 0.55;
-    layer.appendChild(particle);
-  }
-
-  document.body.appendChild(layer);
-}
-
-function applyWeatherTheme(main) {
-  resetWeatherTheme();
-
-  switch (main) {
-    case "Clear":
-      document.body.classList.add("weather-clear");
-      break;
-    case "Clouds":
-      document.body.classList.add("weather-clouds");
-      break;
-    case "Rain":
-    case "Drizzle":
-      document.body.classList.add("weather-rain");
-      createWeatherParticles("rain-effect");
-      break;
-    case "Snow":
-      document.body.classList.add("weather-snow");
-      createWeatherParticles("snow-effect");
-      break;
-    case "Thunderstorm":
-      document.body.classList.add("weather-thunder");
-      createWeatherParticles("rain-effect");
-      break;
-    case "Mist":
-    case "Fog":
-    case "Haze":
-      document.body.classList.add("weather-mist");
-      break;
-    default:
-      document.body.classList.add("weather-clouds");
-  }
-}
-
-function getWeatherEmoji(main) {
-  const icons = {
-    Clear: "☀️",
-    Clouds: "☁️",
-    Rain: "🌧️",
-    Drizzle: "🌦️",
-    Snow: "❄️",
-    Thunderstorm: "⛈️",
-    Mist: "🌫️",
-    Fog: "🌫️",
-    Haze: "🌫️"
-  };
-
-  return icons[main] || "🌸";
-}
-
-function initWeather() {
-  setTimeTheme();
-
-  if (!weatherBox) return;
-
-  if (!OPENWEATHER_KEY || OPENWEATHER_KEY === "여기에_발급받은_API_KEY") {
-    weatherBox.innerHTML =
-      "<p class='api-fallback'>API 키를 넣으면 날씨가 표시됩니다.</p>";
-    return;
-  }
-
-  fetch(
-    "https://api.openweathermap.org/data/2.5/weather?q=" +
-    WEATHER_CITY +
-    "&appid=" +
-    OPENWEATHER_KEY +
-    "&units=metric&lang=kr"
-  )
-    .then(function(res) {
-      if (!res.ok) throw new Error("weather api error");
-      return res.json();
-    })
-    .then(function(data) {
-      const temp = Math.round(data.main.temp);
-      const desc = data.weather[0].description;
-      const main = data.weather[0].main;
-      const icon = data.weather[0].icon;
-      const emoji = getWeatherEmoji(main);
-
-      applyWeatherTheme(main);
-
-      weatherBox.innerHTML =
-        "<div class='weather-current pretty-weather'>" +
-          "<div class='weather-icon-wrap'>" +
-            "<img src='https://openweathermap.org/img/wn/" + icon + "@2x.png' alt='" + desc + "'>" +
-            "<b>" + emoji + "</b>" +
-          "</div>" +
-          "<div>" +
-            "<span class='api-label'>" + WEATHER_CITY + " Weather</span>" +
-            "<strong>" + temp + "°C</strong>" +
-            "<p>" + desc + "</p>" +
-          "</div>" +
-        "</div>";
-    })
-    .catch(function() {
-      weatherBox.innerHTML =
-        "<p class='api-fallback'>날씨 정보를 불러올 수 없습니다.</p>";
-    });
-}
-
-initTheme();
-initWeather();
-
-const bookBox = document.getElementById("bookBox");
-
-function initBook() {
-  if (!bookBox) return;
-
-  fetch("https://www.googleapis.com/books/v1/volumes?q=time%20management&maxResults=1")
-    .then(function(res) {
-      if (!res.ok) throw new Error("books api error");
-      return res.json();
-    })
-    .then(function(data) {
-      if (!data.items || !data.items[0]) {
-        throw new Error("book not found");
-      }
-
-      const book = data.items[0].volumeInfo;
-      const title = book.title || "추천 도서";
-      const authors = book.authors ? book.authors.join(", ") : "저자 정보 없음";
-      const thumb = book.imageLinks
-        ? book.imageLinks.thumbnail.replace("http://", "https://")
-        : "";
-
-      bookBox.innerHTML =
-        "<div class='book-current'>" +
-          (thumb
-            ? "<img src='" + thumb + "' alt='" + title + "'>"
-            : "<div class='book-cover-placeholder'>BOOK</div>"
-          ) +
-          "<div>" +
-            "<span class='api-label'>Book Recommend</span>" +
-            "<strong>" + title + "</strong>" +
-            "<p>" + authors + "</p>" +
-          "</div>" +
-        "</div>";
-    })
-    .catch(function() {
-      bookBox.innerHTML =
-        "<p class='api-fallback'>추천 도서를 불러올 수 없습니다.</p>";
-    });
-}
-
-initBook();
-</script>
 
 </body>
 </html>

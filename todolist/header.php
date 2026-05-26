@@ -32,6 +32,13 @@ $isAdmin = $isLoggedIn && $loginId === 'admin';
       <a href="login.php">로그인</a>
       <a href="join.php">회원가입</a>
       <a href="ToDo_list.php">월별계획표</a>
+      <button type="button" class="theme-toggle" id="themeToggle">
+        <span class="toggle-text">
+          LIGHT 
+        </span>
+        <span class="theme-toggle-knob"></span>
+
+      </button>
     <?php } ?>
   </nav>
 </header>

@@ -279,3 +279,53 @@ body.dark-mode .minus-btn {
     -webkit-backdrop-filter: blur(24px) saturate(155%);
   }
 }
+
+.todo-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.todo-title {
+  flex: 1;
+  min-width: 0;
+}
+
+.time-details {
+  flex-shrink: 0;
+  position: relative;
+}
+
+.time-details summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 12px 16px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.16);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  color: inherit;
+  font-weight: 700;
+}
+
+.time-details summary::-webkit-details-marker {
+  display: none;
+}
+
+.time-range {
+  position: absolute;
+  right: 0;
+  top: 52px;
+  z-index: 20;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px;
+  border-radius: 16px;
+  background: rgba(70, 35, 65, 0.92);
+  border: 1px solid rgba(255, 190, 220, 0.35);
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+}
+
+.todo-time {
+  width: 115px;
+}

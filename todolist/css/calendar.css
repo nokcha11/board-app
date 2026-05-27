@@ -551,3 +551,50 @@ body.dark-mode .modal-add-btn a {
     -webkit-backdrop-filter: blur(24px) saturate(155%);
   }
 }
+
+/* =========================
+   Calendar page background
+   index와 같은 배경 레이어
+========================= */
+
+body {
+  position: relative;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: transparent;
+}
+
+.theme-bg {
+  position: fixed;
+  inset: 0;
+  z-index: -10;
+  pointer-events: none;
+
+  background:
+    linear-gradient(
+      rgba(255, 245, 250, 0.50),
+      rgba(255, 235, 244, 0.68)
+    ),
+    url("../images/cover1.jpg") center / cover fixed no-repeat;
+}
+
+body.dark-mode .theme-bg {
+  background:
+    linear-gradient(
+      rgba(28, 18, 28, 0.72),
+      rgba(28, 18, 28, 0.86)
+    ),
+    url("../images/cover1.jpg") center / cover fixed no-repeat;
+}
+
+/* 카드가 배경 위에 오도록 */
+.calendar-wrap,
+.calendar-container,
+.month-calendar,
+.today-box,
+.week-box,
+.todo-panel,
+main {
+  position: relative;
+  z-index: 1;
+}

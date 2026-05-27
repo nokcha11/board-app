@@ -18,6 +18,15 @@ $date = $_GET['date'] ?? "";
   <title>ToDo 입력</title>
   <link rel="stylesheet" href="css/header.css">
   <link rel="stylesheet" href="css/list.css">
+  <!-- LIGHT -->
+  <link id="header-light-theme" rel="stylesheet"href="css/header_bright_pastel_light.css">
+  <link id="main-light-theme" rel="stylesheet" href="css/todo_light.css">
+
+  <!--  DARK -->
+  <link id="header-dark-theme" rel="stylesheet" href="css/header_glass_mood_light.css" disabled>
+  <link id="main-dark-theme" rel="stylesheet" href="css/todo_dark.css" disabled>
+
+  <script src="js/theme-mode.js" defer></script>
 </head>
 
 <body>
@@ -41,8 +50,17 @@ $date = $_GET['date'] ?? "";
         <label>할 일</label>
         <div id="todoList">
           <div class="todo-row">
-            <input type="time" name="times[]" class="todo-time">
-            <input type="text" name="titles[]" placeholder="할 일을 입력하세요" required>
+            <input type="text" name="titles[]" class="todo-title" placeholder="할 일을 입력하세요" required>
+
+            <details class="time-details">
+              <summary>시간</summary>
+              <div class="time-range">
+                <input type="time" name="times[]" class="todo-time">
+                <span>~</span>
+                <input type="time" name="end_times[]" class="todo-time">
+              </div>
+            </details>
+
             <button type="button" class="plus-btn" onclick="addTodoInput()">+</button>
           </div>
         </div>
@@ -60,18 +78,69 @@ $date = $_GET['date'] ?? "";
     </form>
   </div>
 
-  <script>
-  function addTodoInput() {
-    const todoList = document.getElementById("todoList");
-    const row = document.createElement("div");
-    row.className = "todo-row";
-    row.innerHTML = `
-      <input type="time" name="times[]" class="todo-time">
-      <input type="text" name="titles[]" placeholder="할 일을 입력하세요" required>
-      <button type="button" class="minus-btn" onclick="this.parentElement.remove()">-</button>
-    `;
-    todoList.appendChild(row);
+ <script>
+function normalizeHourTime(value) {
+  if (!value) return "";
+
+  let hour = value.split(":")[0];
+
+  if (hour.length === 1) {
+    hour = "0" + hour;
   }
-  </script>
+
+  return hour + ":00";
+}
+
+function applyTimeInputs() {
+  document.querySelectorAll(".todo-time").forEach(function (input) {
+    if (input.dataset.timeReady) return;
+
+    input.dataset.timeReady = "true";
+    input.step = 3600;
+
+    input.addEventListener("focus", function () {
+      if (!this.value) this.value = "00:00";
+    });
+
+    input.addEventListener("click", function () {
+      if (!this.value) this.value = "00:00";
+    });
+
+    input.addEventListener("change", function () {
+      this.value = normalizeHourTime(this.value);
+    });
+
+    input.addEventListener("blur", function () {
+      this.value = normalizeHourTime(this.value);
+    });
+  });
+}
+
+function addTodoInput() {
+  const todoList = document.getElementById("todoList");
+  const row = document.createElement("div");
+  row.className = "todo-row";
+
+  row.innerHTML = `
+    <input type="text" name="titles[]" class="todo-title" placeholder="할 일을 입력하세요" required>
+
+    <details class="time-details">
+      <summary>시간</summary>
+      <div class="time-range">
+        <input type="time" name="times[]" class="todo-time">
+        <span>~</span>
+        <input type="time" name="end_times[]" class="todo-time">
+      </div>
+    </details>
+
+    <button type="button" class="minus-btn" onclick="this.parentElement.remove()">-</button>
+  `;
+
+  todoList.appendChild(row);
+  applyTimeInputs();
+}
+
+applyTimeInputs();
+</script>
 </body>
 </html>

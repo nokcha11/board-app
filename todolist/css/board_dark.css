@@ -1,0 +1,94 @@
+@import url("board_light.css");
+
+:root {
+  --board-bg: rgba(255, 235, 244, 0.08);
+  --board-card: rgba(255, 214, 229, 0.075);
+  --board-card-strong: rgba(255, 235, 244, 0.12);
+  --board-border: rgba(255, 221, 235, 0.22);
+  --board-line: rgba(255, 226, 238, 0.16);
+  --board-text: #fff3f8;
+  --board-muted: #e7c2d1;
+  --board-point: #ffbfd2;
+  --board-point-deep: #ffd1e3;
+  --board-shadow: rgba(9, 4, 18, 0.34);
+}
+
+body {
+  color: var(--board-text);
+  background:
+    linear-gradient(rgba(28, 18, 28, 0.76), rgba(28, 18, 28, 0.86)),
+    url("../images/cover1.jpg") center / cover fixed no-repeat;
+}
+
+.theme-bg {
+  background:
+    radial-gradient(circle at 16% 12%, rgba(255, 160, 198, 0.18), transparent 34%),
+    radial-gradient(circle at 86% 18%, rgba(182, 109, 196, 0.14), transparent 30%);
+}
+
+.notice-stats article,
+.board-panel,
+.quick-card,
+.question-card,
+.chat-card,
+.side-card {
+  box-shadow:
+    0 18px 44px var(--board-shadow),
+    inset 0 1px 0 rgba(255, 255, 255, 0.12),
+    inset 0 0 24px rgba(255, 193, 217, 0.035);
+}
+
+.search-field input,
+.board-tools select,
+.question-form input,
+.question-form textarea,
+.side-card input,
+.quick-item,
+.chat-item.question,
+.category-list a,
+.pagination a,
+.login-message {
+  color: var(--board-text);
+  background: rgba(255, 235, 244, 0.08);
+  border-color: rgba(255, 226, 238, 0.18);
+}
+
+.search-field input::placeholder,
+.question-form input::placeholder,
+.question-form textarea::placeholder,
+.side-card input::placeholder {
+  color: rgba(255, 230, 240, 0.62);
+}
+
+.icon-btn,
+.write-btn,
+.question-form button,
+.pagination a.active,
+.category-list a.active,
+.badge.important {
+  color: #3a1732;
+  background: rgba(255, 190, 211, 0.92);
+  border-color: rgba(255, 231, 239, 0.44);
+}
+
+.badge {
+  color: var(--board-point-deep);
+  background: rgba(255, 235, 244, 0.10);
+  border-color: rgba(255, 226, 238, 0.20);
+}
+
+.notice-head {
+  color: var(--board-point-deep);
+  background: rgba(255, 235, 244, 0.07);
+}
+
+.chat-item.answer {
+  background: rgba(255, 196, 216, 0.14);
+}
+
+.chat-item span,
+.quick-item span,
+.status-dot {
+  color: #3a1732;
+  background: rgba(255, 190, 211, 0.92);
+}

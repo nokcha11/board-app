@@ -143,11 +143,26 @@ $weekResult = $weekStmt->get_result();
   <title>ToDoList 달력</title>
   <link rel="stylesheet" href="css/calendar.css">
   <link rel="stylesheet" href="css/seasonEffect.css">
-  <script src="js/seasonEffect.js" defer></script>
+  <!-- LIGHT -->
+  <link id="header-light-theme" rel="stylesheet"href="css/header_bright_pastel_light.css">
+  <link id="main-light-theme" rel="stylesheet" href="css/todo_light.css">
+
+  <!--  DARK -->
+  <link id="header-dark-theme" rel="stylesheet" href="css/header_glass_mood_light.css" disabled>
+  <link id="main-dark-theme" rel="stylesheet" href="css/todo_dark.css" disabled>
+
+  <script src="js/theme-mode.js" defer></script>
+
+  <!-- 테마 JS -->
+    <script src="js/seasonEffect.js" defer></script>
+  <!-- ToDo 체크 JS -->
+    <script src="js/todo-check.js" defer></script>
+
 </head>
 
 <body>
-<?php include "header.php"; ?>
+  <div class="theme-bg"></div>
+  <?php include "header.php"; ?>
 
 <main class="calendar-main">
   <aside class="side-box">

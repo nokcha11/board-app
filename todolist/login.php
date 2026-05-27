@@ -7,7 +7,10 @@ session_start();
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>로그인</title>
-  <link rel="stylesheet" href="css/header.css">
+  <link id="header-light-theme" rel="stylesheet" href="css/header_bright_pastel_light.css">
+  <link id="header-dark-theme" rel="stylesheet" href="css/header_glass_mood_light.css" disabled>
+
+  <script src="js/theme-mode.js" defer></script>
 
   <style>
     * {

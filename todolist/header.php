@@ -22,16 +22,20 @@ $isAdmin = $isLoggedIn && $loginId === 'admin';
 
     <?php if ($isLoggedIn) { ?>
       <a href="ToDo_list.php">월별계획표</a>
+      
       <?php if ($isAdmin) { ?>
         <a href="admin.php">회원관리</a>
       <?php } else { ?>
         <a href="member_info.php">나의 정보</a>
       <?php } ?>
+      
       <a href="logout.php">로그아웃</a>
     <?php } else { ?>
       <a href="login.php">로그인</a>
       <a href="join.php">회원가입</a>
       <a href="ToDo_list.php">월별계획표</a>
+      <?php } ?>
+
       <button type="button" class="theme-toggle" id="themeToggle">
         <span class="toggle-text">
           LIGHT 
@@ -39,7 +43,6 @@ $isAdmin = $isLoggedIn && $loginId === 'admin';
         <span class="theme-toggle-knob"></span>
 
       </button>
-    <?php } ?>
   </nav>
 </header>
 

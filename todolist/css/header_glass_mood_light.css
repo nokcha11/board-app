@@ -248,3 +248,33 @@ nav a:hover {
   background: linear-gradient(135deg, #ff8eb6, #ee5f94) !important;
   box-shadow: 0 10px 24px rgba(238, 95, 148, 0.26) !important;
 }
+
+.logo-image {
+  width: 320px;
+  height: 96px;
+  padding: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  overflow: hidden;
+}
+
+.logo-image img {
+  width: 280px;
+  height: auto;
+
+  object-fit: contain;
+  display: block;
+
+  transform: scale(1.35);
+}
+@media (max-width: 768px) {
+
+  .logo-image {
+    padding-left: 18px;
+    padding-right: 18px;
+  }
+
+}

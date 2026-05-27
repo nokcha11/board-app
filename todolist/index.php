@@ -24,6 +24,9 @@ $playlistTitle = "";
 $playlistUrl = "";
 $playlistEmbedUrl = "";
 
+$coverTitle = "독서 하면서\n느낀 감정들을 정리해요";
+$coverSub = "작은 기록이 내일의 나를 만듭니다.";
+
 $year = (int)date("Y");
 $month = (int)date("m");
 $firstDay = sprintf("%04d-%02d-01", $year, $month);
@@ -163,6 +166,17 @@ if ($isLogin && !$needsTodoMemberColumn) {
   $playlistUrl = $playlistRow['playlist_url'] ?? "";
   $playlistEmbedUrl = youtubeEmbedUrl($playlistUrl);
 
+  $coverSql = "SELECT title_text, sub_text FROM user_cover_texts WHERE user_idx = ? LIMIT 1";
+  $stmtCover = $conn->prepare($coverSql);
+  $stmtCover->bind_param("i", $memberIdx);
+  $stmtCover->execute();
+  $coverRow = $stmtCover->get_result()->fetch_assoc();
+
+  if ($coverRow) {
+    $coverTitle = $coverRow['title_text'] ?: $coverTitle;
+    $coverSub = $coverRow['sub_text'] ?: $coverSub;
+  }
+
   $dateSelect = $hasEndDateColumn
     ? "idx, due_date, end_date, todo_time, title, goal, status"
     : "idx, due_date, todo_time, title, goal, status";
@@ -295,7 +309,7 @@ if ($isLogin && !$needsTodoMemberColumn) {
   <script src="js/weather-widget.js" defer></script>
   <script src="js/book-widget.js" defer></script>
   <script src="js/dashboard-ui.js" defer></script>
-  <script src="js/seasonEffect.js" defer></script>
+  
   <script src="js/todo-check.js" defer></script>
 </head>
 
@@ -313,17 +327,17 @@ if ($isLogin && !$needsTodoMemberColumn) {
           <p class="hero-label">MY TODO</p>
 
           <h2 id="coverTitle">
-            오늘의 기록을<br>부드럽게 정리해요
+            <?= nl2br(htmlspecialchars($coverTitle, ENT_QUOTES, 'UTF-8')) ?>
           </h2>
 
           <span id="coverSub">
-            작은 기록이 내일의 나를 만듭니다.
+            <?= htmlspecialchars($coverSub, ENT_QUOTES, 'UTF-8') ?>
           </span>
 
           <?php if (isset($_SESSION["idx"])) { ?>
             <form class="cover-edit-form" method="post" action="cover_save.php">
-              <input type="text" name="title_text" placeholder="커버 제목 입력" required>
-              <input type="text" name="sub_text" placeholder="커버 설명 입력" required>
+              <input type="text" name="title_text" placeholder="자신만의 슬로건 입력" value="<?= htmlspecialchars(str_replace("\n", " ", $coverTitle), ENT_QUOTES, 'UTF-8') ?>" required>
+              <input type="text" name="sub_text" placeholder="오늘 하루 좌우명 입력" value="<?= htmlspecialchars($coverSub, ENT_QUOTES, 'UTF-8') ?>" required>
               <button type="submit">저장</button>
             </form>
           <?php } ?>
@@ -335,9 +349,8 @@ if ($isLogin && !$needsTodoMemberColumn) {
           <h2>일정 테이블 설정이 필요합니다</h2>
           <p>회원별 일정 관리를 위해 <strong>tb_todolist.member_idx</strong> 컬럼을 먼저 추가해주세요.</p>
           <pre><code>ALTER TABLE tb_todolist ADD member_idx INT NULL AFTER idx;
-
-SELECT idx, id FROM tb_member;
-UPDATE tb_todolist SET member_idx = 1 WHERE member_idx IS NULL;</code></pre>
+              SELECT idx, id FROM tb_member;
+              UPDATE tb_todolist SET member_idx = 1 WHERE member_idx IS NULL;</code></pre>
         </section>
       <?php } elseif ($isLogin) { ?>
         <section class="widget-layout">
@@ -352,11 +365,11 @@ UPDATE tb_todolist SET member_idx = 1 WHERE member_idx IS NULL;</code></pre>
               <h3>Navigator</h3>
 
               <div class="navigator-tabs" role="tablist" aria-label="기록 네비게이터">
-                <button type="button" class="active" data-target="memo-section" data-message="오늘의 짧은 메모를 남겨보세요.">기록 메모</button>
+                <button type="button" class="active" data-target="memo-section" data-message="오늘의 짧은 메모를 남겨보세요.">독서 정리노트</button>
                 <button type="button" data-target="weekly-section" data-message="이번 주의 흐름을 가볍게 돌아보세요.">주간 기록</button>
                 <button type="button" data-target="monthly-section" data-message="이번 달의 계획과 결과를 정리해보세요.">월별 기록</button>
-                <button type="button" data-target="qna-section" data-message="궁금한 점을 모아두는 공간입니다.">QnA</button>
-                <button type="button" data-target="notice-section" data-message="새로운 안내를 확인하는 공간입니다.">공지사항</button>
+                <button type="button" onclick="window.location.href='QnA.php';">QnA</button>
+                <button type="button" onclick="window.location.href='notice.php';">공지사항</button>
               </div>
 
               <p id="navigatorMessage" class="navigator-message">오늘의 짧은 메모를 남겨보세요.</p>
@@ -465,6 +478,26 @@ UPDATE tb_todolist SET member_idx = 1 WHERE member_idx IS NULL;</code></pre>
                       }
                     }
 
+                    if (isset($calendarTodos[$day])) {
+
+                      echo "<div class='calendar-preview-list'>";
+
+                      foreach (array_slice($calendarTodos[$day], 0, 2) as $todo) {
+
+                        echo "<p class='calendar-preview-item'>";
+
+                        echo htmlspecialchars(
+                          $todo['title'],
+                          ENT_QUOTES,
+                          'UTF-8'
+                        );
+
+                        echo "</p>";
+                      }
+
+                      echo "</div>";
+                    }
+
                     if (isset($monthTodos[$day])) {
                       echo "<em>{$monthTodos[$day]}</em>";
                     }
@@ -489,8 +522,8 @@ UPDATE tb_todolist SET member_idx = 1 WHERE member_idx IS NULL;</code></pre>
             </div>
 
             <section class="record-section" id="memo-section">
-              <h3>기록 메모</h3>
-              <p>오늘 느낀 점과 준비할 내용을 짧게 정리하는 공간입니다.</p>
+              <h3>독서 정리 노트</h3>
+              <p>독서하면서 느낀 점과 소감을 짧게 정리하는 공간입니다.</p>
             </section>
 
             <section class="record-section" id="weekly-section">
@@ -615,6 +648,7 @@ if ($isLogin && !$needsTodoMemberColumn) {
   $stmtTotal->close();
   $stmtMonth->close();
   $stmtPlaylist->close();
+  $stmtCover->close();
 }
 
 $conn->close();

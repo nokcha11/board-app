@@ -31,129 +31,9 @@
   animation: springFall var(--duration) linear forwards;
 }
 
-/* ================= 여름 비눗방울 ================= */
-.rain {
-  top: -140px;
-  width: var(--size);
-  height: var(--size);
-  border-radius: 50%;
-  opacity: var(--opacity);
-  pointer-events: auto;
 
-  background:
-    radial-gradient(
-      circle at 25% 22%,
-      rgba(255,255,255,0.95) 0%,
-      rgba(255,255,255,0.65) 10%,
-      rgba(180,235,255,0.32) 34%,
-      rgba(200,180,255,0.22) 55%,
-      rgba(255,230,145,0.18) 72%,
-      rgba(255,255,255,0.06) 100%
-    );
 
-  border: 2px solid rgba(255,255,255,0.45);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
 
-  box-shadow:
-    inset -18px -18px 35px rgba(255,255,255,0.22),
-    inset 10px 10px 26px rgba(120,220,255,0.14),
-    0 0 30px rgba(170,230,255,0.28),
-    0 0 65px rgba(190,170,255,0.16);
-
-  animation: bubbleFall var(--duration) linear forwards;
-}
-
-.rain::before {
-  content: "";
-  position: absolute;
-  top: 15%;
-  left: 18%;
-  width: 28%;
-  height: 28%;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(255,255,255,0.9), rgba(255,255,255,0));
-  filter: blur(2px);
-}
-
-.rain.pop {
-  animation: bubblePop 0.32s ease-out forwards !important;
-}
-
-.splash-dot {
-  position: fixed;
-  width: var(--dot-size);
-  height: var(--dot-size);
-  border-radius: 50%;
-  pointer-events: none;
-  z-index: 10000;
-  background: rgba(190, 235, 255, 0.78);
-  box-shadow: 0 0 8px rgba(180, 230, 255, 0.65);
-  animation: splashPop 0.45s ease-out forwards;
-}
-
-/* ================= 가을 기본 잎사귀 ================= */
-.leaf {
-  top: -50px;
-
-  width: calc(var(--size) * 1.25);
-  height: calc(var(--size) * 0.75);
-
-  opacity: var(--opacity);
-
-  border-radius:
-    8% 82% 8% 82% /
-    18% 82% 18% 82%;
-
-  transform-origin: center center;
-
-  box-shadow: 0 3px 6px rgba(60, 40, 0, 0.12);
-
-  animation: autumnFall var(--duration) linear forwards;
-}
-
-/* 단풍색 */
-.leaf-red {
-  background: linear-gradient(
-    145deg,
-    #ffcf5c 0%,
-    #ff7a1a 45%,
-    #d63b17 100%
-  );
-}
-
-/* 은행잎색 */
-.leaf-yellow {
-  background: linear-gradient(
-    145deg,
-    #fff27a 0%,
-    #ffd338 48%,
-    #e7a600 100%
-  );
-}
-
-/* 딥그린 */
-.leaf-green {
-  background: linear-gradient(
-    145deg,
-    #6f8f52 0%,
-    #47683b 45%,
-    #2f4a28 100%
-  );
-}
-
-/* 잎맥만 남김 */
-.leaf::after {
-  content: "";
-  position: absolute;
-  left: 18%;
-  top: 48%;
-  width: 66%;
-  height: 1.5px;
-  background: rgba(255,255,255,0.18);
-  transform: rotate(-12deg);
-  border-radius: 10px;
-}
 
 /* ================= 겨울 눈결정 ================= */
 .snow {
@@ -194,73 +74,6 @@
   }
 }
 
-@keyframes autumnFall {
-  0% {
-    transform: translate(0, 0) rotate(var(--start-rotate));
-  }
-
-  25% {
-    transform: translate(calc(var(--wind) * 0.35), 28vh)
-      rotate(calc(var(--start-rotate) + 85deg));
-  }
-
-  55% {
-    transform: translate(calc(var(--wind) * -0.2), 62vh)
-      rotate(calc(var(--start-rotate) + 200deg));
-  }
-
-  100% {
-    transform: translate(var(--wind), 118vh)
-      rotate(calc(var(--start-rotate) + 420deg));
-    opacity: 0;
-  }
-}
-
-@keyframes bubbleFall {
-  0% {
-    transform: translate(0, 0) scale(0.78);
-    opacity: 0;
-  }
-
-  8% {
-    opacity: var(--opacity);
-  }
-
-  100% {
-    transform: translate(var(--wind), 135vh) scale(1.18);
-    opacity: 0;
-  }
-}
-
-@keyframes bubblePop {
-  0% {
-    transform: scale(1);
-    opacity: 0.9;
-  }
-
-  55% {
-    transform: scale(1.45);
-    opacity: 0.45;
-    filter: blur(1px);
-  }
-
-  100% {
-    transform: scale(0);
-    opacity: 0;
-  }
-}
-
-@keyframes splashPop {
-  0% {
-    transform: translate(0, 0) scale(1);
-    opacity: 0.9;
-  }
-
-  100% {
-    transform: translate(var(--sx), var(--sy)) scale(0.2);
-    opacity: 0;
-  }
-}
 
 @keyframes snowCrystalFall {
   0% {
@@ -274,7 +87,7 @@
 }
 
 .mouse-petal {
-  animation: mousePetal 1.6s ease-out forwards !important;
+  animation: mousePetal 1.6s ease-out forwards ;
 }
 
 @keyframes mousePetal {
@@ -290,27 +103,11 @@
   }
 }
 
-.mouse-bubble {
-  top: auto;
-  animation: mouseBubble 1.4s ease-out forwards !important;
-}
 
-@keyframes mouseBubble {
-  0% {
-    transform: translate(0, 0) scale(0.6);
-    opacity: 0.8;
-  }
-
-  100% {
-    transform: translate(calc(var(--wind) * 1.4), -70px)
-      scale(1.2);
-    opacity: 0;
-  }
-}
 
 .mouse-snow {
   top: auto;
-  animation: mouseSnow 1.5s ease-out forwards !important;
+  animation: mouseSnow 1.5s ease-out forwards ;
 }
 
 @keyframes mouseSnow {
@@ -325,4 +122,23 @@
       scale(1.15);
     opacity: 0;
   }
+}
+
+.rain,
+.season-particle.rain,
+.mouse-bubble,
+.snow,
+.season-particle.snow,
+.mouse-snow,
+.leaf,
+.season-particle.leaf {
+  display: none !important;
+}
+
+body.weather-rain::before,
+body.weather-rain::after{
+
+  display:none !important;
+  background:none !important;
+  animation:none !important;
 }

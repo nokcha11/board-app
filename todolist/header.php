@@ -8,8 +8,9 @@ $isAdmin = $isLoggedIn && $loginId === 'admin';
 
 <header class="main-header">
   <div class="header-top">
-    <h1>MY TODO</h1>
-
+    <a href="index.php" class="logo logo-image">
+      <img src="images/logo.png" alt="MY TODO 로고">
+    </a>
     <?php if ($isLoggedIn) { ?>
       <div class="welcome-header">
         <?= htmlspecialchars($loginId, ENT_QUOTES, 'UTF-8') ?>님, 반갑습니다

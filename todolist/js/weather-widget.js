@@ -30,7 +30,7 @@ document.addEventListener("DOMContentLoaded", function () {
     document.body.classList.remove(
       "weather-clear",
       "weather-clouds",
-      "weather-rain",
+      //"weather-rain",
       "weather-snow",
       "weather-thunder",
       "weather-mist"
@@ -70,12 +70,10 @@ document.addEventListener("DOMContentLoaded", function () {
         break;
       case "Rain":
       case "Drizzle":
-        document.body.classList.add("weather-rain");
-        createWeatherParticles("rain-effect");
+        document.body.classList.add("weather-clear");
         break;
       case "Snow":
-        document.body.classList.add("weather-snow");
-        createWeatherParticles("snow-effect");
+        document.body.classList.add("weather-clear");
         break;
       case "Thunderstorm":
         document.body.classList.add("weather-thunder");

@@ -1234,21 +1234,18 @@ body.weather-mist .mini-calendar-box {
 }
 
 .weather-icon-wrap {
-  position: relative;
-  width: 74px;
-  height: 74px;
-  flex-shrink: 0;
-  display: grid;
-  place-items: center;
-  border-radius: 24px;
-  background: rgba(255, 255, 255, 0.62);
-  border: 1px solid rgba(255, 214, 231, 0.75);
-  box-shadow: 0 10px 24px rgba(255, 143, 188, 0.16);
+  width: 180px;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 32px;
 }
 
 .weather-icon-wrap img {
-  width: 68px;
-  height: 68px;
+  width: 150px;
+  height: 150px;
+  object-fit: contain;
 }
 
 .weather-icon-wrap b {
@@ -1274,11 +1271,8 @@ body.weather-mist .mini-calendar-box {
 }
 
 .weather-current strong {
-  display: block;
-  color: #ff5c9a;
-  font-size: 30px;
-  line-height: 1;
-  margin-bottom: 6px;
+  font-size: 54px;
+  margin: 6px 0;
 }
 
 .weather-current p {
@@ -2230,4 +2224,132 @@ body:not(.dark-mode) .book-info span {
     line-through;
 
   opacity:.45;
+}
+
+
+.progress-widget {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  gap: 20px;
+}
+
+.progress-widget strong {
+  font-size: 54px;
+  font-weight: 900;
+  color: #ffc3da;
+
+  line-height: 1;
+}
+
+.progress-track {
+  width: 100%;
+  height: 18px;
+
+  border-radius: 999px;
+
+  overflow: hidden;
+
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.progress-fill {
+  height: 100%;
+
+  border-radius: 999px;
+
+  background: linear-gradient(
+    90deg,
+    #ffb7d2,
+    #ff6fa8
+  );
+
+  transition: width 0.4s ease;
+}
+
+.calendar-preview-list {
+  margin-top: 10px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.calendar-preview-item {
+  margin: 0;
+  padding: 3px 6px;
+  border-radius: 999px;
+  background: rgba(255, 105, 160, 0.28);
+  color: #fff;
+  font-size: 11px;
+  font-weight: 800;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.cover-edit-form button {
+  border: 0;
+  border-radius: 12px;
+  padding: 8px 16px;
+  background: linear-gradient(135deg, #ff8eb6, #f45f98);
+  color: #fff;
+  font-weight: 900;
+  cursor: pointer;
+  box-shadow: 0 10px 22px rgba(244, 95, 152, 0.28);
+  transition: 0.22s ease;
+}
+
+.cover-edit-form button:hover {
+  transform: translateY(-2px);
+  background: linear-gradient(135deg, #ff6fa8, #d94e83);
+  box-shadow: 0 14px 28px rgba(244, 95, 152, 0.38);
+}
+
+
+/* LIGHT WEATHER WIDGET LAYOUT FIX */
+.weather-widget {
+  min-height: 330px !important;
+  justify-content: center;
+}
+
+.weather-widget .api-widget-body {
+  min-height: 220px;
+  align-items: center;
+  justify-content: center;
+}
+
+.weather-current {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  gap: 18px;
+}
+
+/* LIGHT HERO FORM LAYOUT FIX */
+body.light-mode .hero-overlay,
+body:not(.dark-mode) .hero-overlay {
+  max-width: none;
+  border-radius: 32px;
+}
+
+body.light-mode .cover-edit-form,
+body:not(.dark-mode) .cover-edit-form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+body.light-mode .cover-edit-form input,
+body:not(.dark-mode) .cover-edit-form input {
+  font-size: 16px;
+}
+
+body.light-mode .cover-edit-form button,
+body:not(.dark-mode) .cover-edit-form button {
+  border-radius: 18px;
 }

@@ -7,6 +7,13 @@ session_start();
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>로그인</title>
+
+  <!-- Pretendard -->
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+
+  <!-- Cafe24 -->
+  <link href="https://webfontworld.github.io/cafe24/Cafe24Ssurround.css" rel="stylesheet">
+
   <link id="header-light-theme" rel="stylesheet" href="css/header_bright_pastel_light.css">
   <link id="header-dark-theme" rel="stylesheet" href="css/header_glass_mood_light.css" disabled>
 

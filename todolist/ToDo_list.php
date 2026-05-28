@@ -141,6 +141,13 @@ $weekResult = $weekStmt->get_result();
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>ToDoList 달력</title>
+
+  <!-- Pretendard -->
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+
+  <!-- Cafe24 -->
+  <link href="https://webfontworld.github.io/cafe24/Cafe24Ssurround.css" rel="stylesheet">
+
   <link rel="stylesheet" href="css/calendar.css">
   <link rel="stylesheet" href="css/seasonEffect.css">
   <!-- LIGHT -->

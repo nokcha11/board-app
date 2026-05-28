@@ -6,7 +6,7 @@ body {
   margin: 0;
   min-height: 100vh;
   color: #412531;
-  font-family: Arial, sans-serif;
+  font-family: 'Pretendard', sans-serif;
   background:
     radial-gradient(circle at top left, rgba(255, 238, 244, 0.95), transparent 34%),
     linear-gradient(135deg, #ffe4eb 0%, #ffd1dc 42%, #fff8fb 100%);
@@ -23,6 +23,10 @@ main {
 .main-wrap {
   width: min(1380px, 100%);
   margin: 0 auto;
+}
+
+h1,h2,h3{
+  font-family:'Cafe24Ssurround';
 }
 
 .hero-banner {
@@ -2352,4 +2356,11 @@ body:not(.dark-mode) .cover-edit-form input {
 body.light-mode .cover-edit-form button,
 body:not(.dark-mode) .cover-edit-form button {
   border-radius: 18px;
+}
+
+.logo-text,
+.hero-overlay h2,
+.widget-title,
+.cover-title{
+  font-family:'Cafe24Ssurround';
 }

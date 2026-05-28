@@ -294,6 +294,12 @@ if ($isLogin && !$needsTodoMemberColumn) {
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>MY TODO MAIN</title>
 
+  <!-- Pretendard -->
+  <link rel="stylesheet" as="style" crossorigin href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css" />
+
+  <!-- Cafe24 -->
+  <link href="https://webfontworld.github.io/cafe24/Cafe24Ssurround.css" rel="stylesheet">
+
   <link id="main-light-theme" rel="stylesheet" href="css/main_bright_pastel_light.css">
   <link id="main-dark-theme" rel="stylesheet" href="css/main_glass_mood_light.css" disabled>
 

@@ -6,7 +6,7 @@ body {
   margin: 0;
   min-height: 100vh;
   color: #412531;
-  font-family: Arial, sans-serif;
+  font-family:'Pretendard',sans-serif;
   background:
     radial-gradient(circle at top left, rgba(255, 238, 244, 0.95), transparent 34%),
     linear-gradient(135deg, #ffe4eb 0%, #ffd1dc 42%, #fff8fb 100%);
@@ -23,6 +23,10 @@ main {
 .main-wrap {
   width: min(1380px, 100%);
   margin: 0 auto;
+}
+
+h1,h2,h3{
+  font-family:'Cafe24Ssurround';
 }
 
 .hero-banner {
@@ -1980,7 +1984,7 @@ body.dark-mode .theme-bg{
 .cover-edit-form button {
   border: 0;
   border-radius: 12px;
-  padding: 8px 16px;
+  padding: 3px 8px;
   background: linear-gradient(135deg, #ff8eb6, #f45f98);
   color: #fff;
   font-weight: 900;
@@ -1995,3 +1999,34 @@ body.dark-mode .theme-bg{
   box-shadow: 0 14px 28px rgba(244, 95, 152, 0.38);
 }
 
+* LIGHT HERO FORM LAYOUT FIX */
+body.light-mode .hero-overlay,
+body:not(.dark-mode) .hero-overlay {
+  max-width: none;
+  border-radius: 32px;
+}
+
+body.light-mode .cover-edit-form,
+body:not(.dark-mode) .cover-edit-form {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+body.light-mode .cover-edit-form input,
+body:not(.dark-mode) .cover-edit-form input {
+  font-size: 16px;
+}
+
+body.light-mode .cover-edit-form button,
+body:not(.dark-mode) .cover-edit-form button {
+  border-radius: 18px;
+}
+
+.logo-text,
+.hero-overlay h2,
+.widget-title,
+.cover-title{
+  font-family:'Cafe24Ssurround';
+}
